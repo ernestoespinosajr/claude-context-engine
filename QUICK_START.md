@@ -14,9 +14,12 @@
 
 ## ⚡ Step 1: Clone and Setup (1 minute)
 
+### 1. Clonar el Repositorio
+
+Abre tu terminal y clona este repositorio en tu máquina local:
+
 ```bash
-# Clone the system
-git clone https://github.com/[username]/claude-code-react-native-system.git
+git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git
 cd claude-code-react-native-system
 
 # Copy to your project directory

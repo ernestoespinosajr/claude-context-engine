@@ -35,7 +35,7 @@ This comprehensive guide covers all aspects of setting up and configuring the Cl
 ### Method 1: Automated Setup (Recommended)
 ```bash
 # Clone the system
-git clone https://github.com/[username]/claude-code-react-native-system.git
+git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git
 cd claude-code-react-native-system
 
 # Run automated setup
@@ -47,7 +47,7 @@ cd claude-code-react-native-system
 ### Method 2: Manual Setup
 ```bash
 # 1. Clone repository
-git clone https://github.com/[username]/claude-code-react-native-system.git
+git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git
 
 # 2. Navigate to your project
 cd /path/to/your/react-native-project
