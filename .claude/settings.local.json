@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(npx expo start:*)",
+      "Bash(npx expo install:*)",
+      "Bash(grep:*)",
+      "Bash(pkill:*)",
+      "Bash(true)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:callstackincubator.github.io)",
+      "Bash(npx expo prebuild:*)",
+      "Bash(pod install:*)",
+      "Bash(rm:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(curl:*)",
+      "Bash(touch:*)"
+    ],
+    "deny": []
+  }
+}
