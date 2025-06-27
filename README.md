@@ -25,44 +25,56 @@ En resumen, convierte a Claude en un compañero de equipo que nunca olvida el co
 - **Flujo de Desarrollo Guiado**: Un conjunto de comandos (`/start-task`, `/complete-task`, etc.) que estructuran el ciclo de desarrollo diario.
 - **Filosofía de "Frontend Primero"**: Asegura que la UI/UX se construya de forma aislada con datos de prueba antes de la integración con el backend.
 
-## 🏁 Instalación Rápida (2 minutos)
+## 🏁 Instalación Súper Simple (1 minuto)
 
-### ⚠️ IMPORTANTE: Este sistema debe instalarse DENTRO de tu proyecto existente
+### 🚀 Un solo método para TODOS los casos
 
-**NO clones este repo por separado**. El sistema Claude Code debe estar integrado en tu proyecto React Native.
+**Ya no importa si tienes un proyecto nuevo o existente** - el script se encarga de todo automáticamente.
 
-### Opción 1: Proyecto Nuevo (Recomendado)
+### Pasos Únicos:
 
-1. **Clona este repositorio donde quieres tu proyecto:**
+1. **Clona el repositorio (en cualquier ubicación):**
    ```bash
-   git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git mi-proyecto-app
-   cd mi-proyecto-app
+   git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git mi-proyecto
+   cd mi-proyecto
    ```
 
-2. **Ejecuta el setup automático:**
+2. **Ejecuta el setup universal:**
    ```bash
    ./scripts/setup-project.sh
    ```
 
-3. **El script hará todo automáticamente:**
-   - ✅ Configurará la estructura del proyecto
-   - ✅ Inicializará Expo/React Native (opcional)
-   - ✅ Configurará Git con commit inicial
-   - ✅ Te dará instrucciones finales
+3. **¡Listo!** El script automáticamente:
+   - 🧹 Limpia todos los archivos del template (git, LICENSE, etc.)
+   - 📝 Personaliza el proyecto con tu nombre
+   - 🚀 Inicializa Expo/React Native (opcional)
+   - 🗂️ Configura Git con tu proyecto
+   - 📚 Crea documentación personalizada
 
-### Opción 2: Proyecto Existente
+### ✨ **Lo Genial de Este Método:**
 
-1. **Ve a tu proyecto React Native existente:**
-   ```bash
-   cd mi-proyecto-existente
-   ```
+- **Sin conflictos de Git**: El script elimina el `.git` del template
+- **Sin decisiones complicadas**: Funciona para proyectos nuevos Y existentes
+- **Sin archivos innecesarios**: Solo conserva lo que necesitas
+- **Setup personalizado**: Todo adaptado a tu proyecto específico
 
-2. **Clona el sistema dentro de tu proyecto:**
-   ```bash
-   git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git .claude-system
-   cd .claude-system
-   ./scripts/setup-project.sh
-   ```
+### 🤔 **¿Tienes un proyecto React Native existente?**
+
+¡No hay problema! Simplemente clona en una nueva carpeta y luego mueve los archivos:
+
+```bash
+# Clona en carpeta temporal
+git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git temp-claude
+cd temp-claude
+
+# Ejecuta setup
+./scripts/setup-project.sh
+
+# Mueve archivos a tu proyecto existente
+cp -r .claude/ ../mi-proyecto-existente/
+cp CLAUDE.md claude_tasks.md ../mi-proyecto-existente/
+cp -r project-docs/ help-docs/ ../mi-proyecto-existente/
+```
 
 ### 🎯 Próximos Pasos
 

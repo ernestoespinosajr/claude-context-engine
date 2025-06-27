@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Claude Code React Native System - Project Kickstart Script
-# Version: 2.0.0
-# Description: Interactive setup for a new React Native project using the Claude Code system.
+# Claude Code React Native System - Universal Setup Script
+# Version: 3.0.0
+# Description: Universal setup that works for new and existing projects by cleaning up the cloned repo
 
 set -e # Exit on any error
 
@@ -25,11 +25,12 @@ FILE="📝"
 MAGIC="✨"
 GIT_ICON="🗂️"
 PROMPT="💬"
+CLEAN="🧹"
 
 print_header() {
     echo -e "${BLUE}╔══════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${BLUE}║${NC}  ${ROCKET} ${PURPLE}Claude Code React Native Project Kickstart${NC}           ${BLUE}║${NC}"
-    echo -e "${BLUE}║${NC}      ${CYAN}Your new AI-powered project in under a minute${NC}     ${BLUE}║${NC}"
+    echo -e "${BLUE}║${NC}  ${ROCKET} ${PURPLE}Claude Code React Native - Universal Setup${NC}           ${BLUE}║${NC}"
+    echo -e "${BLUE}║${NC}      ${CYAN}Works for new and existing projects!${NC}              ${BLUE}║${NC}"
     echo -e "${BLUE}╚══════════════════════════════════════════════════════════════╝${NC}"
     echo ""
 }
@@ -40,8 +41,6 @@ print_error() { echo -e "${RED}${CROSS} ${1}${NC}"; }
 print_warning() { echo -e "${YELLOW}${WARNING} ${1}${NC}"; }
 print_info() { echo -e "${BLUE}> ${1}${NC}"; }
 prompt_user() { echo -en "${PURPLE}${PROMPT} ${1}${NC}"; }
-
-# --- Helper Functions ---
 
 # Function to ask Yes/No questions
 ask_yes_no() {
@@ -65,151 +64,297 @@ ask_yes_no() {
     fi
 }
 
-
-# --- Main Setup Logic ---
-
-main() {
-    print_header
-
-    # --- 1. Get Project Name ---
-    local project_name
-    while true; do
-        prompt_user "What is the name of your project? "
-        read -r project_name
-        if [[ -z "$project_name" ]]; then
-            print_error "Project name cannot be empty."
-        elif [[ "$project_name" =~ [^a-zA-Z0-9_-] ]]; then
-            print_error "Project name can only contain letters, numbers, hyphens, and underscores."
+# Detect project type and get name
+detect_and_setup_project() {
+    print_step "${GEAR}" "Detecting project type..."
+    
+    # Check if we're in a cloned claude-system repo
+    if [[ -d ".git" ]] && git remote -v 2>/dev/null | grep -q "claude-code-react-native-system"; then
+        print_success "Claude Code system repository detected."
+        
+        # Check if there's already a React Native project here
+        if [[ -f "package.json" ]] && grep -q "react-native\|expo" package.json 2>/dev/null; then
+            print_info "Existing React Native project detected in this directory."
+            SETUP_TYPE="existing_in_clone"
         else
-            break
+            print_info "This appears to be a fresh clone of the Claude Code system."
+            SETUP_TYPE="new_project"
         fi
-    done
-    print_success "Project name set to: $project_name"
-    echo ""
-
-    # --- 2. Create Project Directory ---
-    print_step "${FOLDER}" "Creating project directory..."
-    local system_dir
-    system_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-    local parent_dir
-    parent_dir=$(dirname "$system_dir")
-    local project_dir="$parent_dir/$project_name"
-
-    if [ -d "$project_dir" ]; then
-        print_error "Directory '$project_dir' already exists. Aborting."
+    else
+        print_error "This script must be run from a cloned claude-code-react-native-system repository."
+        echo ""
+        print_info "Please run:"
+        echo -e "  ${YELLOW}git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git${NC}"
+        echo -e "  ${YELLOW}cd claude-code-react-native-system${NC}"
+        echo -e "  ${YELLOW}./scripts/setup-project.sh${NC}"
         exit 1
     fi
-    mkdir -p "$project_dir"
-    print_success "Created project directory at: $project_dir"
-    echo ""
+}
 
-    # --- 3. Copy System Files ---
-    print_step "${FILE}" "Copying Claude Code system files..."
-    # Use rsync to copy files, excluding the .git directory of the template repo
-    rsync -av --quiet --exclude=".git" "$system_dir/" "$project_dir/"
-    print_success "System files copied successfully."
-    echo ""
-    
-    # Change into the new project directory for subsequent operations
-    cd "$project_dir"
-
-    # --- 4. Customize project files ---
-    print_step "${MAGIC}" "Customizing project..."
-    
-    # Keep project-docs folder name (don't rename)
-    print_success "Keeping 'project-docs' folder structure."
-    
-    # Remove the setup script from the new project
-    rm "scripts/setup-project.sh" 2>/dev/null || true
-    print_success "Cleaned up setup script."
-    echo ""
-
-    # --- 5. Install Expo React Native ---
-    if ask_yes_no "Do you want to initialize a new React Native Expo project here?"; then
-        print_step "${ROCKET}" "Initializing Expo project. This might take a few minutes..."
-        
-        # Non-interactive Expo setup. Installs in the current directory.
-        if npx create-expo-app@latest . --template blank --no-install > /dev/null 2>&1; then
-            print_success "Expo project structure created."
-            print_step "${GEAR}" "Installing Node dependencies..."
-            if npm install > /dev/null 2>&1; then
-                print_success "Dependencies installed successfully."
+# Get project name from user
+get_project_name() {
+    if [[ "$SETUP_TYPE" == "new_project" ]]; then
+        local project_name
+        while true; do
+            prompt_user "What is the name of your project? "
+            read -r project_name
+            if [[ -z "$project_name" ]]; then
+                print_error "Project name cannot be empty."
+            elif [[ "$project_name" =~ [^a-zA-Z0-9_-] ]]; then
+                print_error "Project name can only contain letters, numbers, hyphens, and underscores."
             else
-                print_error "npm install failed. Please run 'npm install' manually."
+                break
+            fi
+        done
+        PROJECT_NAME="$project_name"
+        print_success "Project name set to: $PROJECT_NAME"
+    else
+        # Extract project name from package.json
+        if [[ -f "package.json" ]]; then
+            PROJECT_NAME=$(grep '"name"' package.json | cut -d'"' -f4)
+            print_success "Existing project detected: $PROJECT_NAME"
+        else
+            PROJECT_NAME="MyApp"
+            print_warning "Could not detect project name, using: $PROJECT_NAME"
+        fi
+    fi
+}
+
+# Clean up the cloned repository
+cleanup_cloned_repo() {
+    print_step "${CLEAN}" "Cleaning up cloned repository files..."
+    
+    # Remove git history of the template
+    if [[ -d ".git" ]]; then
+        rm -rf .git
+        print_success "Removed template git history"
+    fi
+    
+    # Remove template-specific files
+    local files_to_remove=(
+        "LICENSE"
+        "README.md"
+        "scripts/setup-project.sh"
+        "scripts/install-existing-project.sh"
+        ".DS_Store"
+    )
+    
+    for file in "${files_to_remove[@]}"; do
+        if [[ -f "$file" ]]; then
+            rm -f "$file"
+            print_success "Removed $file"
+        fi
+    done
+    
+    # Create a project-specific README
+    create_project_readme
+    
+    print_success "Repository cleanup completed"
+}
+
+# Create project-specific README
+create_project_readme() {
+    cat > README.md << EOF
+# $PROJECT_NAME
+
+React Native application powered by Claude Code system.
+
+## 🚀 Development Workflow
+
+This project uses the Claude Code system for structured development with AI assistance.
+
+### Quick Start
+
+1. **Get project status:**
+   \`\`\`bash
+   /task-status
+   \`\`\`
+
+2. **Start development:**
+   \`\`\`bash
+   /start-task
+   \`\`\`
+
+3. **Add new tasks:**
+   \`\`\`bash
+   /add-discovered-task
+   \`\`\`
+
+### Development Commands
+
+- \`/task-status\` - Get current project status and next task
+- \`/start-task\` - Main development workflow
+- \`/parse-prd\` - Generate initial tasks from PRD
+- \`/project-audit\` - Technical assessment
+- \`/emergency-context\` - Recover full context
+
+### Documentation
+
+- \`project-docs/PRD.md\` - Product Requirements Document
+- \`CLAUDE.md\` - Development rules and guidelines
+- \`help-docs/\` - Complete documentation
+
+### Project Structure
+
+\`\`\`
+$PROJECT_NAME/
+├── project-docs/          # Project documentation
+├── src/                   # Source code
+├── assets/               # Images and assets
+├── .claude/              # Claude Code system
+├── claude_tasks.md       # Task management
+└── CLAUDE.md            # Development rules
+\`\`\`
+
+## 📱 Tech Stack
+
+- **Framework**: React Native + Expo
+- **Language**: TypeScript
+- **Navigation**: Expo Router
+- **State**: Zustand + TanStack Query
+- **UI**: React Native Reanimated
+- **AI Assistant**: Claude Code System
+
+---
+
+*This project follows a structured two-phase development approach: Phase 1 (Frontend with dummy data) → Phase 2 (Backend integration)*
+EOF
+}
+
+# Customize project files
+customize_project_files() {
+    print_step "${MAGIC}" "Customizing project files..."
+    
+    local current_date=$(date +"%Y-%m-%d")
+    
+    # Update PRD.md with project name
+    if [[ -f "project-docs/PRD.md" ]]; then
+        sed -i.bak "s/\[NOMBRE_DEL_PROYECTO\]/$PROJECT_NAME/g" project-docs/PRD.md
+        sed -i.bak "s/\[Fecha actual\]/$current_date/g" project-docs/PRD.md
+        rm -f project-docs/PRD.md.bak
+        print_success "Updated PRD.md with project name"
+    fi
+    
+    # Update claude_tasks.md
+    if [[ -f "claude_tasks.md" ]]; then
+        sed -i.bak "s/\[NOMBRE_DEL_PROYECTO\]/$PROJECT_NAME/g" claude_tasks.md
+        sed -i.bak "s/\[Fecha\]/$current_date/g" claude_tasks.md
+        rm -f claude_tasks.md.bak
+        print_success "Updated claude_tasks.md"
+    fi
+    
+    # Update functional requirements
+    if [[ -f "project-docs/functional-requirements.md" ]]; then
+        sed -i.bak "s/\[NOMBRE_DEL_PROYECTO\]/$PROJECT_NAME/g" project-docs/functional-requirements.md
+        sed -i.bak "s/\[Fecha actual\]/$current_date/g" project-docs/functional-requirements.md
+        rm -f project-docs/functional-requirements.md.bak
+        print_success "Updated functional-requirements.md"
+    fi
+}
+
+# Initialize React Native project (if needed)
+init_react_native() {
+    if [[ "$SETUP_TYPE" == "new_project" ]]; then
+        if ask_yes_no "Do you want to initialize a new React Native Expo project?"; then
+            print_step "${ROCKET}" "Initializing Expo project..."
+            
+            # Create Expo project structure
+            if npx create-expo-app@latest . --template blank --no-install > /dev/null 2>&1; then
+                print_success "Expo project structure created."
+                
+                # Install dependencies
+                print_step "${GEAR}" "Installing dependencies..."
+                if npm install > /dev/null 2>&1; then
+                    print_success "Dependencies installed successfully."
+                else
+                    print_error "npm install failed. Please run 'npm install' manually."
+                fi
+            else
+                print_error "Expo initialization failed. Please check your environment."
             fi
         else
-            print_error "Expo initialization failed. Please check your environment."
+            print_info "Skipping React Native initialization."
+            print_info "You can initialize it later with: npx create-expo-app@latest . --template blank"
         fi
-        echo ""
     else
-        print_info "Skipping Expo installation."
-        echo ""
+        print_info "Existing React Native project detected - skipping initialization."
     fi
+}
 
-    # --- 6. Initialize Git ---
-    if ask_yes_no "Do you want to initialize a Git repository?"; then
+# Initialize git repository
+init_git() {
+    if ask_yes_no "Do you want to initialize a new Git repository?"; then
         print_step "${GIT_ICON}" "Initializing Git repository..."
         git init -b main > /dev/null
         print_success "Git repository initialized."
         
-        print_step "${GIT_ICON}" "Adding all files to the first commit..."
+        print_step "${GIT_ICON}" "Adding files to initial commit..."
         git add . > /dev/null
         print_success "Files staged for commit."
 
         print_step "${GIT_ICON}" "Creating initial commit..."
-        git commit -m "feat: initial project setup" > /dev/null
-        print_success "Initial commit created with message 'feat: initial project setup'."
-        echo ""
+        git commit -m "feat: initial project setup with Claude Code system" > /dev/null
+        print_success "Initial commit created."
     else
         print_info "Skipping Git initialization."
-        echo ""
     fi
+}
+
+# Main setup function
+main() {
+    print_header
     
-    # --- 7. Final Instructions ---
+    # Step 1: Detect project type
+    detect_and_setup_project
     echo ""
+    
+    # Step 2: Get project name
+    get_project_name
+    echo ""
+    
+    # Step 3: Clean up cloned repository
+    cleanup_cloned_repo
+    echo ""
+    
+    # Step 4: Customize project files
+    customize_project_files
+    echo ""
+    
+    # Step 5: Initialize React Native (if needed)
+    init_react_native
+    echo ""
+    
+    # Step 6: Initialize Git
+    init_git
+    echo ""
+    
+    # Final success message
     echo -e "${GREEN}╔══════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}║${NC}  ${MAGIC} ${PURPLE}Project '$project_name' is ready!${NC}                     ${GREEN}║${NC}"
+    echo -e "${GREEN}║${NC}  ${MAGIC} ${PURPLE}$PROJECT_NAME is ready for development!${NC}                    ${GREEN}║${NC}"
     echo -e "${GREEN}╚══════════════════════════════════════════════════════════════╝${NC}"
     echo ""
     
-    echo -e "${CYAN}✅ Your development environment is set up at:${NC}"
-    echo -e "   ${YELLOW}$project_dir${NC}"
+    echo -e "${CYAN}✅ Setup completed successfully!${NC}"
     echo ""
-
-    echo -e "${CYAN}📋 Important Next Steps:${NC}"
+    echo -e "${CYAN}📋 Next Steps:${NC}"
     echo ""
-    echo -e "   ${BLUE}1. Navigate to your new project directory:${NC}"
-    echo -e "      cd ../$project_name"
+    echo -e "   ${BLUE}1. Complete your project documentation:${NC}"
+    echo -e "      • Edit ${YELLOW}project-docs/PRD.md${NC} with your app requirements"
+    echo -e "      • Update ${YELLOW}project-docs/functional-requirements.md${NC} with details"
     echo ""
-    echo -e "   ${BLUE}2. Complete your project documentation in 'project-docs':${NC}"
-    echo -e "      • project-docs/PRD.md"
-    echo -e "      • project-docs/functional-requirements.md"
-    echo -e "      • project-docs/ui-ux-specifications.md"
+    echo -e "   ${BLUE}2. Start the Claude Code workflow:${NC}"
+    echo -e "      • Use ${PURPLE}/parse-prd${NC} to generate your task backlog"
+    echo -e "      • Use ${PURPLE}/task-status${NC} to see your project status"
+    echo -e "      • Use ${PURPLE}/start-task${NC} to begin development"
     echo ""
-    echo -e "   ${BLUE}3. Open the project in your editor and start Claude:${NC}"
-    echo -e "      code ."
+    echo -e "   ${BLUE}3. Learn the system:${NC}"
+    echo -e "      • Read ${YELLOW}CLAUDE.md${NC} for development rules"
+    echo -e "      • Check ${YELLOW}help-docs/quick-start.md${NC} for workflow"
+    echo -e "      • Review ${YELLOW}help-docs/commands-reference.md${NC} for all commands"
     echo ""
-    echo -e "   ${BLUE}4. Once inside Claude, begin the development workflow:${NC}"
-    echo -e "      - Use ${PURPLE}/parse-prd${NC} to create your initial task list."
-    echo -e "      - Use ${PURPLE}/start-task${NC} to begin working on the first task."
-    echo ""
-    echo -e "${PURPLE}📚 Review CLAUDE.md for development rules and best practices.${NC}"
-    echo ""
-    echo -e "${GREEN}🚀 Happy coding with your new AI-powered development workflow!${NC}"
+    echo -e "${GREEN}🚀 Happy coding with your AI-powered development workflow!${NC}"
     echo ""
 }
 
-# --- Script Entry Point ---
-# Move to the script's directory to ensure paths are correct
-cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null
-
-# Error handling
-trap 'print_error "An error occurred. Setup failed on line $LINENO. Exit code: $?"; exit 1' ERR
-
 # Run main function
-main
-
-# Return to original directory
-cd - >/dev/null
-
-exit 0
+main "$@"
