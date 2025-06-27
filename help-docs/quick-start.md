@@ -14,55 +14,72 @@ El sistema impone un flujo de trabajo en dos fases para garantizar la calidad y 
     - **Prerrequisito**: La Fase 1 debe estar completamente terminada.
     - **Objetivo**: Reemplazar los datos de prueba con llamadas reales a la API, componente por componente.
 
-## 📊 Tu Flujo de Desarrollo Diario
+## 🏁 Setup Inicial (Solo Primera Vez)
 
-Este es el ciclo que seguirás en cada sesión de desarrollo.
+Después de completar tu `project-docs/PRD.md`, sigue este orden exacto:
+
+### 1. Generar Backlog Inicial
+```bash
+/parse-prd
+```
+**Qué hace**: Analiza tu PRD y genera todas las tareas del proyecto automáticamente.
+
+### 2. Analizar Complejidad
+```bash
+/analyze-complexity
+```
+**Qué hace**: Evalúa qué tareas son muy complejas y necesitan subdivisión.
+
+### 3. Expandir Tareas Complejas (si es necesario)
+```bash
+/expand-task [task-id]
+```
+**Qué hace**: Convierte tareas complejas en subtareas manejables. Repite para cada tarea compleja identificada.
+
+### 4. Ver Estado del Proyecto
+```bash
+/task-status
+```
+**Qué hace**: Te muestra el resumen completo y cuál es tu próxima tarea a trabajar.
+
+## 📊 Tu Flujo de Desarrollo Diario
 
 ### 1. Empezar tu sesión (cada día)
 
-Antes de escribir una sola línea de código, sincroniza a Claude con el estado actual del proyecto.
+Antes de escribir código, obtén el estado actual del proyecto:
 
+```bash
+/task-status
 ```
-/emergency-context
-```
-Claude te responderá con un resumen completo: qué tareas están completas, en cuál estabas trabajando y qué sigue.
+Claude te responderá con: estado del proyecto, qué tareas están completas, en cuál deberías trabajar y plan de acción.
 
-### 2. Iniciar una Tarea
+### 2. Ciclo Principal de Desarrollo
 
-Una vez que tengas el contexto, pide a Claude que te prepare para la siguiente tarea.
+Una vez que tengas el contexto, usa el comando principal:
 
-```
+```bash
 /start-task
 ```
-Claude seleccionará la siguiente subtarea priorizada del backlog, te dará los detalles y creará un plan de acción.
 
-### 3. Actualizar tu Progreso (frecuentemente)
+**Este comando integra todo el flujo**:
+1. 🎯 Selecciona la próxima tarea prioritaria
+2. 📋 Te da detalles y plan de implementación  
+3. ⏸️ Hace pausas para que valides el progreso
+4. ✅ Te pregunta si deseas completar la tarea
+5. 📝 Actualiza automáticamente el progreso
+6. 🔄 Te sugiere la siguiente tarea
 
-Mientras codificas, mantén a Claude informado de tus avances. Esto es crucial para que la memoria del proyecto se mantenga actualizada.
-
-```
-/task-progress
-```
-Informa sobre qué archivos has creado o modificado, qué has logrado y en qué estás trabajando ahora.
-
-### 4. Completar una Tarea
-
-Cuando termines una subtarea (generalmente de 1 a 4 horas de trabajo), notifícalo.
-
-```
-/complete-task
-```
-Claude documentará tus logros, registrará cualquier aprendizaje en `claude_self_improve.md` y te sugerirá la siguiente tarea, listo para que vuelvas a empezar el ciclo con `/start-task`.
+**No necesitas comandos separados** - todo está integrado en `/start-task`.
 
 ## 🔥 Comandos Esenciales del Día a Día
 
 | Comando | Para qué sirve | Cuándo Usarlo |
 | :--- | :--- | :--- |
-| `/emergency-context` | Cargar el contexto completo del proyecto. | **Al inicio de cada sesión.** |
-| `/start-task` | Empezar a trabajar en la siguiente tarea. | Cuando estés listo para codificar. |
-| `/task-progress` | Actualizar a Claude sobre tu avance. | **Frecuentemente** mientras desarrollas. |
-| `/complete-task` | Finalizar la tarea actual y documentar. | Cuando la subtarea esté 100% terminada. |
+| `/task-status` | Obtener estado actual y próxima tarea. | **Al inicio de cada sesión.** |
+| `/start-task` | Ciclo completo de desarrollo integrado. | **Comando principal para desarrollar.** |
 | `/add-discovered-task` | Añadir una tarea no prevista. | Cuando descubres una nueva necesidad. |
+| `/emergency-context` | Cargar contexto completo (emergencias). | Cuando hay pérdida de contexto. |
+| `/project-audit` | Auditoría tecnológica del proyecto. | **Semanalmente** para evaluación. |
 
 ## 🚀 Tus Metas para la Primera Semana
 

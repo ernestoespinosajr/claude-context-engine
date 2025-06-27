@@ -1,396 +1,118 @@
-# 📋 Commands Reference - Claude Code React Native System
+# 📋 Referencia de Comandos - Claude Code System
 
-## 📊 Overview
+## 🚀 Comandos Esenciales (Orden de Uso)
 
-Complete reference for all slash commands available in the Claude Code React Native System. Each command is designed for specific phases of development workflow.
+### 1. `/parse-prd` - Análisis Inicial del Proyecto
+**Uso**: Primera vez únicamente, después de completar tu PRD.md
+**Propósito**: Genera el backlog completo de tareas desde el PRD
+**Resultado**: Crea estructura inicial en claude_tasks.md con todas las tareas identificadas
 
-## 🚀 Project Setup Commands
-
-### `/parse-prd`
-**Purpose**: Generate initial task backlog from PRD.md  
-**Usage**: `Run once at project start`  
-**Prerequisites**: PRD.md must exist with project requirements
-
-**What it does**:
-- Reads and analyzes PRD.md completely
-- Extracts core features and requirements
-- Separates tasks into Phase 1 (Frontend) and Phase 2 (Backend)
-- Creates organized task list in claude_tasks.md
-- Assigns priorities and estimates
-- Stores project context in memory
-
-**Example Output**:
-```markdown
-# 📋 CLAUDE TASKS - MyApp
-*Generated from PRD.md on 2025-01-15*
-
-## 🏗️ SETUP TASKS - Phase 1
-### 📦 Project Base Setup - CRITICAL - Phase 1
-**Description**: Initialize and configure React Native/Expo project
-**Estimated Effort**: Medium (4-6 hours)
+```
+/parse-prd
 ```
 
-**When to use**:
-- ✅ First time setting up project
-- ✅ When PRD.md is significantly updated
-- ❌ During regular development (use other commands)
+### 2. `/analyze-complexity` - Análisis de Complejidad
+**Uso**: Después de parse-prd, una sola vez
+**Propósito**: Evalúa la complejidad de cada tarea y recomienda subdivisiones
+**Resultado**: Identifica tareas que necesitan ser expandidas
 
-**Troubleshooting**:
-- If no tasks generated: Check PRD.md has sufficient detail
-- If error occurs: Ensure PRD.md exists and is readable
-- If categories missing: Add more specific features to PRD
-
----
-
-### `/analyze-complexity`
-**Purpose**: Analyze task complexity with web research  
-**Usage**: `After /parse-prd or when adding new complex tasks`  
-**Parameters**: Optional task name to analyze specific task
-
-**What it does**:
-- Conducts web research for each task using web_search
-- Researches React Native/Expo best practices
-- Identifies common challenges and solutions
-- Assigns complexity scores (1-10 scale)
-- Documents research findings
-- Recommends tasks for expansion
-
-**Complexity Scoring**:
-- **1-3**: Simple, straightforward implementation
-- **4-6**: Moderate, requires some research/setup
-- **7-8**: Complex, multiple moving parts
-- **9-10**: Very complex, high risk of blockers
-
-**Example Usage**:
 ```
-/analyze-complexity                    # Analyze all tasks
-/analyze-complexity Authentication     # Analyze specific task
+/analyze-complexity
 ```
 
-**Research Areas**:
-- Technical complexity and implementation approaches
-- Required dependencies and setup requirements
-- Common gotchas and potential blockers
-- Time estimates from development communities
-- Best practices and patterns
+### 3. `/expand-task` - Expandir Tareas Complejas
+**Uso**: Para tareas específicas que necesitan subdivisión
+**Propósito**: Convierte una tarea compleja en subtareas manejables
+**Resultado**: Subtareas detalladas listas para implementación
 
----
-
-### `/expand-task [task-name]`
-**Purpose**: Break down complex task into manageable subtasks  
-**Usage**: `For tasks with complexity score ≥6`  
-**Parameters**: Task name to expand
-
-**What it does**:
-- Researches optimal implementation approach
-- Breaks task into 1-4 hour subtasks
-- Defines clear acceptance criteria for each subtask
-- Sets up dependency chains between subtasks
-- Maintains logical development sequence
-
-**Subtask Criteria**:
-- Maximum 4 hours estimated time
-- Clear, specific deliverable
-- Testable outcome
-- Minimal dependencies between subtasks
-
-**Example**:
 ```
-/expand-task Authentication System
-
-# Results in:
-#### Subtask 1: Setup Auth Dependencies (1h)
-#### Subtask 2: Create Login Form UI (2h)
-#### Subtask 3: Add Form Validation (1.5h)
-#### Subtask 4: Implement Auth Context (2h)
+/expand-task [task-id]
 ```
 
----
+### 4. `/task-status` - Estado Actual del Proyecto
+**Uso**: Al comenzar cualquier sesión de trabajo
+**Propósito**: Obtiene resumen completo del estado actual y próxima tarea
+**Resultado**: Contexto completo + plan para la siguiente tarea
 
-### `/expand-all`
-**Purpose**: Expand all high-complexity tasks automatically  
-**Usage**: `After complexity analysis, before starting development`
-
-**What it does**:
-- Identifies all tasks with complexity ≥6
-- Runs expansion process for each complex task
-- Creates comprehensive subtask breakdown
-- Updates dependency chains across all tasks
-- Generates development timeline recommendations
-
-**Benefits**:
-- Converts large, intimidating tasks into manageable work
-- Provides realistic time estimates
-- Enables better project planning
-- Reduces risk of getting stuck on complex implementations
-
----
-
-## 🔄 Daily Development Commands
-
-### `/emergency-context`
-**Purpose**: Quickly recover full project context  
-**Usage**: `Start of every development session`
-
-**What it loads**:
-- Project overview from PRD.md
-- Current task status from claude_tasks.md
-- Recent progress and decisions from memory
-- Current development phase (1 or 2)
-- Next priority tasks and blockers
-
-**Output Format**:
 ```
-## 🚨 EMERGENCY CONTEXT RECOVERY
-**Project**: MyApp - Social Media Platform
-**Current Phase**: Phase 1 (Frontend Only)
-**Active Task**: Create LoginScreen Component (2h)
-**Last Progress**: UI layout completed, working on validation
-**Next Priority**: Complete validation → Add error handling → Start RegisterScreen
-**Blockers**: None
-**Ready to Proceed**: YES
+/task-status
 ```
 
----
+### 5. `/start-task` - Ciclo Principal de Desarrollo
+**Uso**: Comando principal para todo el desarrollo diario
+**Propósito**: Flujo completo de desarrollo con validaciones automáticas
+**Flujo Integrado**:
+1. Selecciona/inicia próxima tarea
+2. Implementa con pausas para validación
+3. Solicita confirmación de usuario en checkpoints
+4. Completa tarea automáticamente
+5. Actualiza progreso y sugiere siguiente tarea
 
-### `/start-task`
-**Purpose**: Begin working on next logical task  
-**Usage**: `When ready to start new task`  
-**Prerequisites**: Task backlog must exist (run /parse-prd first)
-
-**Selection Criteria**:
-- All dependencies completed
-- Current phase compliance (Phase 1 vs Phase 2)
-- Priority level and criticality
-- Logical development sequence
-
-**What it does**:
-- Analyzes available tasks
-- Selects optimal next task
-- Loads task context and requirements
-- Sets up workspace mentally for Claude
-- Documents task start in claude_tasks.md
-
----
-
-### `/task-progress`
-**Purpose**: Update progress on current task  
-**Usage**: `During development after significant progress`
-
-**What it tracks**:
-- Completed subtasks and achievements
-- Current work in progress
-- Files modified/created
-- Blockers encountered
-- Time invested vs estimated
-- Next steps in sequence
-
-**Auto-Documentation**:
-```markdown
-## 🔄 Create LoginScreen - IN PROGRESS
-**Last Updated**: 2025-01-15 14:30
-**Progress**: 60% - UI completed, validation in progress
-**Completed Subtasks**:
-- [✅] Form layout and styling
-- [✅] Input field components
-**In Progress**:
-- [🔄] Form validation logic
-**Files Modified**: src/screens/LoginScreen.tsx, src/utils/validation.ts
+```
+/start-task
 ```
 
----
+### 6. `/add-discovered-task` - Añadir Tareas No Previstas
+**Uso**: Cuando descubres nuevas necesidades durante el desarrollo
+**Propósito**: Incorpora tareas emergentes al backlog
+**Resultado**: Nueva tarea integrada con prioridad y dependencias
 
-### `/complete-task`
-**Purpose**: Mark task as completed with full documentation  
-**Usage**: `When all acceptance criteria are met`
-
-**Comprehensive Documentation**:
-- Detailed list of deliverables achieved
-- Files created/modified with descriptions
-- Key technical achievements and solutions
-- Lessons learned and patterns discovered
-- Impact on other tasks (dependencies unblocked)
-- Testing completed and quality metrics
-- Time analysis (actual vs estimated)
-
-**Auto-Updates**:
-- claude_tasks.md with completion record
-- claude_self_improve.md with patterns and learnings
-- Memory storage with project progress
-- Dependency chain updates for blocked tasks
-
-**Next Steps**:
-- Analyzes task backlog for logical next task
-- Provides specific recommendation
-- **Always asks for user confirmation** before proceeding
-
----
-
-### `/add-discovered-task`
-**Purpose**: Add new task discovered during development  
-**Usage**: `When you realize something needs to be done that wasn't planned`
-
-**Smart Categorization**:
-- Analyzes task context and requirements
-- Determines appropriate category (Setup, UI, Backend, etc.)
-- Assigns priority based on impact and dependencies
-- Sets correct development phase (1 or 2)
-- Links to related tasks automatically
-
-**Categories**:
-- **SETUP**: Environment, dependencies, configuration
-- **CORE_FEATURES**: Main app functionality
-- **UI_COMPONENTS**: Reusable components and design system
-- **NAVIGATION**: Routing and navigation
-- **STATE_MANAGEMENT**: Data flow and state
-- **TESTING**: Unit tests, integration tests
-- **OPTIMIZATION**: Performance, bundle size
-- **DOCUMENTATION**: README, guides, comments
-
----
-
-## 🔧 Maintenance Commands
-
-### `/sync-tasks`
-**Purpose**: Reorganize and clean up task backlog  
-**Usage**: `Weekly or when task list becomes disorganized`
-
-**Cleanup Operations**:
-- Marks completed work that wasn't properly closed
-- Identifies blocked tasks that might now be unblocked
-- Updates priorities based on recent discoveries
-- Removes orphaned or outdated tasks
-- Reorganizes by current project phase
-
-**Reorganization**:
-```markdown
-## 🏁 CURRENT SPRINT
-[Active work]
-
-## 📋 READY TO START - PHASE 1
-[Frontend tasks ready to begin]
-
-## ❌ BLOCKED
-[Tasks waiting on dependencies]
-
-## ✅ COMPLETED
-[Finished work with deliverables]
+```
+/add-discovered-task [descripción]
 ```
 
----
+### 7. `/emergency-context` - Recuperación de Contexto Completo
+**Uso**: Cuando necesitas cargar todo el contexto del proyecto
+**Propósito**: Lee todos los archivos importantes y restaura memoria completa
+**Resultado**: Claude completamente sincronizado con el estado del proyecto
 
-## 🎯 Advanced Usage Patterns
-
-### Command Sequences
-
-#### **Project Initialization**:
-```bash
-/parse-prd              # Generate task backlog
-/analyze-complexity     # Research all tasks
-/expand-all            # Break down complex tasks
-/emergency-context     # Load full context
-/start-task           # Begin first task
+```
+/emergency-context
 ```
 
-#### **Daily Development Flow**:
-```bash
-/emergency-context     # Start of session
-/task-progress        # Update current work
-/complete-task        # When finished
-/start-task          # Begin next task
+### 8. `/project-audit` - Auditoría Tecnológica
+**Uso**: Periódicamente para evaluación del proyecto
+**Propósito**: Análisis completo de fortalezas, debilidades y mejoras
+**Resultado**: Reporte detallado con recomendaciones técnicas
+
+```
+/project-audit
 ```
 
-#### **Weekly Maintenance**:
-```bash
-/sync-tasks           # Clean up task list
-/emergency-context    # Refresh full context
+## 🔄 Flujo de Trabajo Recomendado
+
+### Primera Vez (Setup Inicial)
+```
+1. /parse-prd          → Genera backlog inicial
+2. /analyze-complexity → Evalúa complejidad de tareas  
+3. /expand-task [id]   → Expande tareas complejas (repetir según necesidad)
+4. /task-status        → Ve el resumen y próxima tarea
+5. /start-task         → Comienza desarrollo
 ```
 
-### Command Combinations
-
-#### **For Complex Features**:
-```bash
-/add-discovered-task   # Add the complex feature
-/analyze-complexity [feature-name]  # Research complexity
-/expand-task [feature-name]         # Break into subtasks
+### Sesiones Diarias
+```
+1. /task-status        → Estado actual y próxima tarea
+2. /start-task         → Desarrollo (repetir hasta completar sprint)
+3. /project-audit      → Evaluación periódica (semanal/quincenal)
 ```
 
-#### **When Stuck or Blocked**:
-```bash
-/emergency-context     # Reload full context
-/sync-tasks           # Clean up any confusion
-/start-task          # Find alternative task
+### Manejo de Emergencias
+```
+1. /emergency-context  → Recupera contexto completo
+2. /add-discovered-task → Añade tareas no previstas
 ```
 
-## 🚨 Error Handling
+## 📝 Notas Importantes
 
-### Common Command Errors
+- **start-task es el comando principal**: Integra todo el flujo de desarrollo
+- **task-status siempre al inicio**: Para mantener contexto entre sesiones
+- **emergency-context para recuperación**: Cuando algo sale mal o hay pérdida de contexto
+- **project-audit periódicamente**: Para mantener calidad técnica del proyecto
 
-#### **Command Not Found**
-```
-Error: /parse-prd is not recognized
-```
-**Solutions**:
-1. Restart Claude Code completely
-2. Verify `.claude/commands/parse-prd.md` exists
-3. Check file has content (not empty)
+## 🚨 Comandos Deprecados (No Usar)
 
-#### **Missing Prerequisites**
-```
-Error: claude_tasks.md must exist with task backlog
-```
-**Solutions**:
-1. Run `/parse-prd` first to generate tasks
-2. Check PRD.md exists and has content
-3. Verify project setup is complete
-
-#### **Context Loading Issues**
-```
-Warning: No project context found in memory
-```
-**Solutions**:
-1. Run `/emergency-context` to reload
-2. Check PRD.md and claude_tasks.md exist
-3. Re-run `/parse-prd` if necessary
-
-### Command-Specific Troubleshooting
-
-#### `/parse-prd` Issues
-- **No tasks generated**: PRD.md needs more detail
-- **Wrong categories**: Update PRD features section
-- **Missing phases**: Ensure Phase 1/2 distinction clear
-
-#### `/analyze-complexity` Issues
-- **No research results**: Check internet connection
-- **Incomplete analysis**: Re-run for specific tasks
-- **Wrong complexity scores**: Review research findings
-
-#### `/start-task` Issues
-- **No available tasks**: Check dependencies and blockers
-- **Wrong task selected**: Review priority and phase settings
-- **Task already in progress**: Use `/task-progress` instead
-
-## 📚 Best Practices
-
-### Command Usage Guidelines
-1. **Always start sessions** with `/emergency-context`
-2. **Use `/task-progress` frequently** during development
-3. **Complete tasks properly** with `/complete-task`
-4. **Add discovered tasks immediately** with `/add-discovered-task`
-5. **Maintain organization** with weekly `/sync-tasks`
-
-### Quality Assurance
-- Every task should have clear acceptance criteria
-- All completed tasks should be tested
-- Documentation should be updated continuously
-- Patterns should be recorded in claude_self_improve.md
-
-### Performance Tips
-- Use tab completion for file references in Claude Code
-- Keep task descriptions specific and actionable
-- Break large tasks before starting work
-- Document decisions immediately to preserve context
-
----
-
-**Command Support**: For command-specific issues, check the troubleshooting guide or the individual command files in `.claude/commands/`
+Los siguientes comandos han sido integrados en `/start-task`:
+- ~~`/task-progress`~~ → Integrado en start-task
+- ~~`/complete-task`~~ → Integrado en start-task  
+- ~~`/next-task`~~ → Reemplazado por task-status

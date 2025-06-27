@@ -2,6 +2,23 @@
 
 > **CRITICAL**: Claude Code reads this file automatically. ALL rules below are MANDATORY and must be followed without exception.
 
+## 📁 Fixed Project Structure
+
+**MANDATORY PATHS** - Claude MUST always use these exact paths:
+- **Project Documentation**: `./project-docs/` (NEVER rename this folder)
+- **PRD Document**: `./project-docs/PRD.md`
+- **Functional Requirements**: `./project-docs/functional-requirements.md`
+- **UI/UX Specifications**: `./project-docs/ui-ux-specifications.md`
+- **Task Management**: `./claude_tasks.md`
+- **Self Improvement Log**: `./claude_self_improve.md`
+- **Commands Documentation**: `./help-docs/commands-reference.md`
+
+**CONTEXT LOADING PRIORITY**: Always read these files in order when loading project context:
+1. `./project-docs/PRD.md` (Project requirements)
+2. `./claude_tasks.md` (Current task status)
+3. `./claude_self_improve.md` (Previous learnings)
+4. `./project-docs/functional-requirements.md` (Technical details)
+
 ## XML-Structured Development Rules
 
 ```xml

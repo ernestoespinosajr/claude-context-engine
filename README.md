@@ -25,27 +25,57 @@ En resumen, convierte a Claude en un compañero de equipo que nunca olvida el co
 - **Flujo de Desarrollo Guiado**: Un conjunto de comandos (`/start-task`, `/complete-task`, etc.) que estructuran el ciclo de desarrollo diario.
 - **Filosofía de "Frontend Primero"**: Asegura que la UI/UX se construya de forma aislada con datos de prueba antes de la integración con el backend.
 
-## 🏁 Cómo Empezar (En 2 minutos)
+## 🏁 Instalación Rápida (2 minutos)
 
-La única forma de empezar es usando el script de configuración. No copies los archivos manualmente.
+### ⚠️ IMPORTANTE: Este sistema debe instalarse DENTRO de tu proyecto existente
 
-1.  **Clona este repositorio:**
-    ```bash
-    git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git
-    ```
+**NO clones este repo por separado**. El sistema Claude Code debe estar integrado en tu proyecto React Native.
 
-2.  **Ejecuta el script de configuración:**
-    Navega dentro del repositorio clonado y ejecuta:
-    ```bash
-    cd claude-code-react-native-system
-    ./scripts/setup-project.sh
-    ```
+### Opción 1: Proyecto Nuevo (Recomendado)
 
-3.  **Sigue las instrucciones interactivas:**
-    El script te pedirá el nombre de tu proyecto, lo creará, copiará los archivos del sistema, y opcionalmente inicializará un proyecto de Expo y un repositorio de Git por ti.
+1. **Clona este repositorio donde quieres tu proyecto:**
+   ```bash
+   git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git mi-proyecto-app
+   cd mi-proyecto-app
+   ```
 
-4.  **¡Listo para desarrollar!**
-    Una vez que el script termine, te dará las instrucciones finales para que navegues a la carpeta de tu nuevo proyecto y comiences a trabajar con Claude.
+2. **Ejecuta el setup automático:**
+   ```bash
+   ./scripts/setup-project.sh
+   ```
+
+3. **El script hará todo automáticamente:**
+   - ✅ Configurará la estructura del proyecto
+   - ✅ Inicializará Expo/React Native (opcional)
+   - ✅ Configurará Git con commit inicial
+   - ✅ Te dará instrucciones finales
+
+### Opción 2: Proyecto Existente
+
+1. **Ve a tu proyecto React Native existente:**
+   ```bash
+   cd mi-proyecto-existente
+   ```
+
+2. **Clona el sistema dentro de tu proyecto:**
+   ```bash
+   git clone https://github.com/ernestoespinosajr/claude-code-react-native-system.git .claude-system
+   cd .claude-system
+   ./scripts/setup-project.sh
+   ```
+
+### 🎯 Próximos Pasos
+
+1. **Completa tu documentación:**
+   - Edita `project-docs/PRD.md` con los requisitos de tu app
+   - Personaliza `project-docs/functional-requirements.md`
+
+2. **Inicia el flujo de desarrollo:**
+   ```bash
+   /parse-prd        # Genera tu backlog
+   /task-status      # Ve el estado actual  
+   /start-task       # ¡Comienza a desarrollar!
+   ```
 
 ## 📚 Documentación
 

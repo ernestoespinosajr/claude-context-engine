@@ -113,15 +113,15 @@ main() {
     # Change into the new project directory for subsequent operations
     cd "$project_dir"
 
-    # --- 4. Rename project-docs ---
+    # --- 4. Customize project files ---
     print_step "${MAGIC}" "Customizing project..."
-    local docs_dir_name="${project_name}-docs"
-    mv "project-docs" "$docs_dir_name"
-    print_success "Renamed 'project-docs' to '$docs_dir_name'."
+    
+    # Keep project-docs folder name (don't rename)
+    print_success "Keeping 'project-docs' folder structure."
     
     # Remove the setup script from the new project
-    rm "scripts/setup-project.sh"
-    print_success "Removed setup script from the new project."
+    rm "scripts/setup-project.sh" 2>/dev/null || true
+    print_success "Cleaned up setup script."
     echo ""
 
     # --- 5. Install Expo React Native ---
@@ -181,10 +181,10 @@ main() {
     echo -e "   ${BLUE}1. Navigate to your new project directory:${NC}"
     echo -e "      cd ../$project_name"
     echo ""
-    echo -e "   ${BLUE}2. Complete your project documentation in '${docs_dir_name}':${NC}"
-    echo -e "      • ${docs_dir_name}/PRD.md"
-    echo -e "      • ${docs_dir_name}/functional-requirements.md"
-    echo -e "      • ${docs_dir_name}/ui-ux-specifications.md"
+    echo -e "   ${BLUE}2. Complete your project documentation in 'project-docs':${NC}"
+    echo -e "      • project-docs/PRD.md"
+    echo -e "      • project-docs/functional-requirements.md"
+    echo -e "      • project-docs/ui-ux-specifications.md"
     echo ""
     echo -e "   ${BLUE}3. Open the project in your editor and start Claude:${NC}"
     echo -e "      code ."

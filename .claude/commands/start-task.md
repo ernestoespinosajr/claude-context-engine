@@ -1,50 +1,117 @@
-## Iniciar Nueva Tarea (REQUIERE tareas existentes en claude_tasks.md)
+# Start Task Command - Integrated Development Workflow
 
-PREREQUISITE: claude_tasks.md must exist with task backlog. If not, run `/parse-prd` first.
+## Purpose
+Main command for the complete development cycle. Integrates task selection, implementation, progress tracking, and completion into one cohesive flow.
 
-MANDATORY workflow before starting ANY development work:
+## Usage
+Use this as your primary development command. It handles the entire workflow automatically.
 
-### STEP 1: Environment Verification
-1. Check package.json exists with required dependencies
-2. Verify assets/images/ directory exists
-3. Confirm src/ directory structure is complete
-4. **STOP if anything is missing** - provide exact commands to fix
+## Integrated Workflow
 
-### STEP 2: Context Loading
-1. Read PRD.md completely and extract current project objectives
-2. Execute `openmemory:search-memories` with query "[project name] task context"
-3. Read claude_tasks.md to understand task backlog
-4. Identify current development phase (1: Frontend / 2: Backend)
+### Phase 1: Task Selection & Preparation
+1. **Analyze Available Tasks**
+   - Check `./claude_tasks.md` for ready tasks
+   - Verify dependencies are completed
+   - Ensure phase compliance (Phase 1 vs Phase 2)
+   - Select optimal next task based on priority and logic
 
-### STEP 3: Task Selection
-From claude_tasks.md, identify:
-- Next logical task based on dependencies
-- Tasks ready to start (all dependencies completed)
-- Current phase compliance (Phase 1 vs Phase 2)
+2. **Task Setup**
+   - Load complete task context and requirements
+   - Review acceptance criteria and deliverables
+   - Identify files that will need modification
+   - Present implementation plan to user
 
-### STEP 4: Task Preparation
-For selected task:
+### Phase 2: Implementation with Checkpoints
+3. **Begin Implementation**
+   - Start working on the selected task
+   - Break work into logical checkpoints (every 30-60 minutes)
+   - Document progress in real-time
+
+4. **Checkpoint Validations** ⏸️
+   - **Pause regularly** for user validation
+   - Present current progress and next steps
+   - Ask user: "Ready to continue to [next step]? Or do you want to review/modify?"
+   - Allow user to provide feedback or change direction
+
+### Phase 3: Task Completion & Transition
+5. **Completion Check** ✅
+   - When implementation is complete, ask user:
+   - "Task appears complete. Would you like me to mark it as done and move to completion documentation?"
+   - Wait for explicit user confirmation
+
+6. **Automatic Task Completion** 📝
+   - Document all deliverables and files modified
+   - Update `./claude_tasks.md` with completion status
+   - Record learnings in `./claude_self_improve.md`
+   - Store progress in memory
+
+7. **Next Task Suggestion** 🔄
+   - Analyze remaining tasks
+   - Recommend specific next task with reasoning
+   - Ask: "Ready to start the next task, or do you want to take a break?"
+
+## User Interaction Points
+
+### Required User Confirmations
+- **Start confirmation**: "Ready to begin [Task Name]?"
+- **Checkpoint confirmations**: "Continue to [next step]?" (every major milestone)
+- **Completion confirmation**: "Mark task as complete and document?"
+- **Next task confirmation**: "Start next task now?"
+
+### Optional User Inputs
+- **Direction changes**: User can redirect implementation approach
+- **Priority changes**: User can request different task
+- **Break requests**: User can pause workflow at any checkpoint
+
+## Implementation Guidelines
+
+### Phase 1 (Frontend) Enforcement
+- ONLY dummy/mock data allowed
+- NO backend connections
+- UI must be fully functional with test data
+- Progress only continues if phase compliance maintained
+
+### Phase 2 (Backend) Prerequisites
+- Phase 1 must be 100% complete and verified
+- Replace dummy data systematically
+- Maintain UI functionality during integration
+
+### Progress Documentation
+Update `./claude_tasks.md` continuously:
+```markdown
+## 🔄 [Task Name] - IN PROGRESS
+**Started**: [Timestamp]
+**Progress**: [Percentage]% - [Current checkpoint]
+**Files Modified**: [List of files]
+**Next Checkpoint**: [What's coming next]
 ```
-## 🚀 [TASK_NAME] - STARTED
-**Start Date**: [Current Date/Time]
-**Phase**: [1: Frontend Only / 2: Backend Integration]
-**Prerequisites Checked**: ✅
-**Research Required**: [List any investigation needed]
-**Subtasks Breakdown**:
-- [ ] Subtask 1: [Specific, testable outcome]
-- [ ] Subtask 2: [Specific, testable outcome]
-**Success Criteria**: [How to know task is complete]
+
+### Completion Documentation
+```markdown
+## ✅ [Task Name] - COMPLETED
+**Completed**: [Timestamp]
+**Time Invested**: [Actual hours]
+**Deliverables**:
+- [File 1]: [Description of changes]
+- [File 2]: [Description of changes]
+**Key Achievements**: [Major accomplishments]
+**Learnings**: [Patterns discovered]
 ```
 
-### STEP 5: Investigation Phase
-BEFORE coding, research:
-- Best practices for this specific task
-- Existing code patterns to follow
-- Required dependencies or setup
-- Document findings in task notes
+## Error Handling
+- If no tasks available: Recommend dependency resolution or task creation
+- If Phase 2 attempted before Phase 1 complete: Block and explain
+- If critical files missing: Provide setup instructions
+- If user disagrees with approach: Adapt and continue
 
-### STEP 6: Memory Storage
-Execute `openmemory:add-memory` with:
-"Started task [TASK_NAME] in Phase [1/2]. Objectives: [brief summary]"
+## Memory Integration
+- Store task start time and approach
+- Track implementation decisions
+- Record user preferences and feedback patterns
+- Update project context continuously
 
-NEVER start coding without completing this preparation workflow.
+## Success Criteria
+- Task completed with all acceptance criteria met
+- Documentation updated accurately
+- Next steps clearly identified
+- User satisfied with progress and ready to continue
