@@ -30,7 +30,7 @@ Use this as your primary development command. It handles the entire workflow aut
 4. **Checkpoint Validations** ⏸️
    - **Pause regularly** for user validation
    - Present current progress and next steps
-   - Ask user: "Ready to continue to [next step]? Or do you want to review/modify?"
+   - Ask user: "Ready to finish with the task or you wanna review/modify?"
    - Allow user to provide feedback or change direction
 
 ### Phase 3: Task Completion & Transition
@@ -56,7 +56,6 @@ Use this as your primary development command. It handles the entire workflow aut
 - **Start confirmation**: "Ready to begin [Task Name]?"
 - **Checkpoint confirmations**: "Continue to [next step]?" (every major milestone)
 - **Completion confirmation**: "Mark task as complete and document?"
-- **Next task confirmation**: "Start next task now?"
 
 ### Optional User Inputs
 - **Direction changes**: User can redirect implementation approach

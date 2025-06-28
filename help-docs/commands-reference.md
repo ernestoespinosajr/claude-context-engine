@@ -39,18 +39,38 @@
 ```
 
 ### 5. `/start-task` - Ciclo Principal de Desarrollo
-**Uso**: Comando principal para todo el desarrollo diario
-**Propósito**: Flujo completo de desarrollo con validaciones automáticas
-**Flujo Integrado**:
-1. Selecciona/inicia próxima tarea
-2. Implementa con pausas para validación
-3. Solicita confirmación de usuario en checkpoints
-4. Completa tarea automáticamente
-5. Actualiza progreso y sugiere siguiente tarea
+**Uso**: Comando principal para completar UNA tarea específica
+**Propósito**: Desarrollo completo de una tarea con documentación automática
+**Flujo de Tarea Única**:
+1. **Análisis**: Identifica próxima tarea/subtarea disponible
+2. **Investigación**: Documenta hallazgos y plan de implementación 
+3. **Desarrollo**: Implementa la solución completa de la tarea
+4. **Documentación**: Actualiza progreso automáticamente en claude_tasks.md
+5. **Finalización**: Completa tarea, documenta logros y **PARA**
+
+**COMPORTAMIENTO CRÍTICO**: 
+- ✅ **Completa SOLO UNA tarea por comando**
+- ✅ **Documenta progreso automáticamente**
+- ✅ **Mantiene contexto continuo durante la tarea**
+- ✅ **NO continúa con otras tareas automáticamente**
+- ✅ **PARA al terminar para dar control al usuario**
 
 ```
 /start-task
 ```
+
+**Al Finalizar Cada Tarea**:
+- ✅ Documenta detalles de implementación completos
+- ✅ Actualiza claude_tasks.md con status completado
+- ✅ Presenta resumen de lo logrado
+- ✅ Sugiere siguiente tarea lógica (sin iniciarla)
+- ✅ **TERMINA** - deja que el usuario decida qué hacer
+
+**El usuario entonces puede**:
+- Ejecutar `/start-task` otra vez para la siguiente tarea
+- Usar `/add-discovered-task` si encontró algo nuevo
+- Usar `/task-status` para ver el estado general
+- Tomar una pausa o cambiar de enfoque
 
 ### 6. `/add-discovered-task` - Añadir Tareas No Previstas
 **Uso**: Cuando descubres nuevas necesidades durante el desarrollo
@@ -93,8 +113,10 @@
 ### Sesiones Diarias
 ```
 1. /task-status        → Estado actual y próxima tarea
-2. /start-task         → Desarrollo (repetir hasta completar sprint)
-3. /project-audit      → Evaluación periódica (semanal/quincenal)
+2. /start-task         → Completa UNA tarea y para
+3. (Usuario decide)    → Continuar, pausar, o cambiar enfoque
+4. /start-task         → Siguiente tarea (repetir según usuario decida)
+5. /project-audit      → Evaluación periódica (semanal/quincenal)
 ```
 
 ### Manejo de Emergencias
@@ -105,10 +127,18 @@
 
 ## 📝 Notas Importantes
 
-- **start-task es el comando principal**: Integra todo el flujo de desarrollo
+- **start-task completa UNA tarea**: Ejecuta una tarea completa y para para dar control al usuario
+- **Usuario controla el ritmo**: Decide cuándo continuar, pausar o cambiar enfoque después de cada tarea
 - **task-status siempre al inicio**: Para mantener contexto entre sesiones
 - **emergency-context para recuperación**: Cuando algo sale mal o hay pérdida de contexto
 - **project-audit periódicamente**: Para mantener calidad técnica del proyecto
+
+## ⚠️ Comportamiento Crítico de /start-task
+
+🎯 **UNA tarea por comando**: Nunca continúa automáticamente a la siguiente
+📋 **Documenta todo**: Actualiza claude_tasks.md durante el desarrollo  
+🛑 **Para al terminar**: Devuelve control al usuario para decidir siguiente acción
+💡 **Sugiere sin ejecutar**: Recomienda próxima tarea pero NO la inicia
 
 ## 🚨 Comandos Deprecados (No Usar)
 
