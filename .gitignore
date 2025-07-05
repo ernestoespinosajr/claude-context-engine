@@ -122,3 +122,6 @@ jspm_packages/
 tmp/
 temp/
 EOF
+
+# analysis
+analysis/

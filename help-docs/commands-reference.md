@@ -1,148 +1,284 @@
-# 📋 Referencia de Comandos - Claude Code System
+# Commands Reference - Context Engineering System
 
-## 🚀 Comandos Esenciales (Orden de Uso)
+## Overview
+This system uses **feature-driven development** with **context engineering** to optimize AI-assisted development across any programming language or framework.
 
-### 1. `/parse-prd` - Análisis Inicial del Proyecto
-**Uso**: Primera vez únicamente, después de completar tu PRD.md
-**Propósito**: Genera el backlog completo de tareas desde el PRD
-**Resultado**: Crea estructura inicial en claude_tasks.md con todas las tareas identificadas
+## Core Commands
 
-```
-/parse-prd
-```
+### `/context-engineer "[feature description]"`
+**Purpose**: Analyze and create comprehensive feature implementation plans
 
-### 2. `/analyze-complexity` - Análisis de Complejidad
-**Uso**: Después de parse-prd, una sola vez
-**Propósito**: Evalúa la complejidad de cada tarea y recomienda subdivisiones
-**Resultado**: Identifica tareas que necesitan ser expandidas
+**What it does**:
+- Detects project language, framework, and structure
+- Builds 11-layer context architecture focused on the feature
+- Creates detailed Product Requirements Prompt (PRP)
+- Identifies dependencies and potential conflicts
+- Generates implementation blueprint with validation gates
 
-```
-/analyze-complexity
-```
+**Usage Examples**:
+```bash
+# New project setup
+/context-engineer "Set up React Native project with TypeScript"
 
-### 3. `/expand-task` - Expandir Tareas Complejas
-**Uso**: Para tareas específicas que necesitan subdivisión
-**Propósito**: Convierte una tarea compleja en subtareas manejables
-**Resultado**: Subtareas detalladas listas para implementación
+# Feature addition
+/context-engineer "Add user authentication with JWT tokens"
 
-```
-/expand-task [task-id]
-```
+# Performance optimization
+/context-engineer "Implement lazy loading for better performance"
 
-### 4. `/task-status` - Estado Actual del Proyecto
-**Uso**: Al comenzar cualquier sesión de trabajo
-**Propósito**: Obtiene resumen completo del estado actual y próxima tarea
-**Resultado**: Contexto completo + plan para la siguiente tarea
-
-```
-/task-status
+# Database integration
+/context-engineer "Add PostgreSQL database with user management"
 ```
 
-### 5. `/start-task` - Ciclo Principal de Desarrollo
-**Uso**: Comando principal para completar UNA tarea específica
-**Propósito**: Desarrollo completo de una tarea con documentación automática
-**Flujo de Tarea Única**:
-1. **Análisis**: Identifica próxima tarea/subtarea disponible
-2. **Investigación**: Documenta hallazgos y plan de implementación 
-3. **Desarrollo**: Implementa la solución completa de la tarea
-4. **Documentación**: Actualiza progreso automáticamente en claude_tasks.md
-5. **Finalización**: Completa tarea, documenta logros y **PARA**
+**Output**:
+- Creates feature PRP in `/features/planned/[feature-name].md`
+- Updates dependency mapping in `/features/dependencies.md`
+- Provides implementation readiness assessment
 
-**COMPORTAMIENTO CRÍTICO**: 
-- ✅ **Completa SOLO UNA tarea por comando**
-- ✅ **Documenta progreso automáticamente**
-- ✅ **Mantiene contexto continuo durante la tarea**
-- ✅ **NO continúa con otras tareas automáticamente**
-- ✅ **PARA al terminar para dar control al usuario**
+---
 
-```
-/start-task
-```
+### `/execute-context [feature-name]`
+**Purpose**: Implement planned features with focused context and validation
 
-**Al Finalizar Cada Tarea**:
-- ✅ Documenta detalles de implementación completos
-- ✅ Actualiza claude_tasks.md con status completado
-- ✅ Presenta resumen de lo logrado
-- ✅ Sugiere siguiente tarea lógica (sin iniciarla)
-- ✅ **TERMINA** - deja que el usuario decida qué hacer
+**What it does**:
+- Loads feature PRP and builds optimized context
+- Implements feature in isolated development scope
+- Runs continuous validation through quality gates
+- Tracks progress and documents implementation decisions
+- Ensures no interference with unrelated code
 
-**El usuario entonces puede**:
-- Ejecutar `/start-task` otra vez para la siguiente tarea
-- Usar `/add-discovered-task` si encontró algo nuevo
-- Usar `/task-status` para ver el estado general
-- Tomar una pausa o cambiar de enfoque
+**Usage Examples**:
+```bash
+# Implement a planned feature
+/execute-context user-authentication
 
-### 6. `/add-discovered-task` - Añadir Tareas No Previstas
-**Uso**: Cuando descubres nuevas necesidades durante el desarrollo
-**Propósito**: Incorpora tareas emergentes al backlog
-**Resultado**: Nueva tarea integrada con prioridad y dependencias
+# Continue implementation of project setup
+/execute-context project-setup
 
-```
-/add-discovered-task [descripción]
+# Execute database integration
+/execute-context database-integration
 ```
 
-### 7. `/emergency-context` - Recuperación de Contexto Completo
-**Uso**: Cuando necesitas cargar todo el contexto del proyecto
-**Propósito**: Lee todos los archivos importantes y restaura memoria completa
-**Resultado**: Claude completamente sincronizado con el estado del proyecto
+**Output**:
+- Implements feature code with isolated scope
+- Moves feature to `/features/completed/` upon success
+- Creates comprehensive implementation report
+- Updates project status and metrics
 
-```
-/emergency-context
-```
+---
 
-### 8. `/project-audit` - Auditoría Tecnológica
-**Uso**: Periódicamente para evaluación del proyecto
-**Propósito**: Análisis completo de fortalezas, debilidades y mejoras
-**Resultado**: Reporte detallado con recomendaciones técnicas
+### `/context-status [feature-name]`
+**Purpose**: Monitor feature health, dependencies, and project status
 
-```
-/project-audit
-```
+**What it does**:
+- Analyzes feature health and implementation progress
+- Checks context quality and optimization opportunities
+- Monitors dependency status and conflicts
+- Provides actionable insights and recommendations
+- Tracks performance metrics and quality gates
 
-## 🔄 Flujo de Trabajo Recomendado
+**Usage Examples**:
+```bash
+# Check specific feature status
+/context-status user-authentication
 
-### Primera Vez (Setup Inicial)
-```
-1. /parse-prd          → Genera backlog inicial
-2. /analyze-complexity → Evalúa complejidad de tareas  
-3. /expand-task [id]   → Expande tareas complejas (repetir según necesidad)
-4. /task-status        → Ve el resumen y próxima tarea
-5. /start-task         → Comienza desarrollo
-```
+# Check overall project health
+/context-status
 
-### Sesiones Diarias
-```
-1. /task-status        → Estado actual y próxima tarea
-2. /start-task         → Completa UNA tarea y para
-3. (Usuario decide)    → Continuar, pausar, o cambiar enfoque
-4. /start-task         → Siguiente tarea (repetir según usuario decida)
-5. /project-audit      → Evaluación periódica (semanal/quincenal)
+# Monitor specific feature dependencies
+/context-status database-integration
 ```
 
-### Manejo de Emergencias
+**Output**:
+- Detailed health report with metrics
+- Actionable recommendations for improvement
+- Context optimization suggestions
+- Dependency analysis and conflict detection
+
+## Command Workflow
+
+### Typical Development Flow
 ```
-1. /emergency-context  → Recupera contexto completo
-2. /add-discovered-task → Añade tareas no previstas
+1. /context-engineer "feature description"
+   ↓ (Creates comprehensive plan)
+   
+2. /execute-context feature-name
+   ↓ (Implements with quality gates)
+   
+3. /context-status feature-name
+   ↓ (Monitors and optimizes)
+   
+4. Repeat for next feature
 ```
 
-## 📝 Notas Importantes
+### Advanced Usage Patterns
 
-- **start-task completa UNA tarea**: Ejecuta una tarea completa y para para dar control al usuario
-- **Usuario controla el ritmo**: Decide cuándo continuar, pausar o cambiar enfoque después de cada tarea
-- **task-status siempre al inicio**: Para mantener contexto entre sesiones
-- **emergency-context para recuperación**: Cuando algo sale mal o hay pérdida de contexto
-- **project-audit periódicamente**: Para mantener calidad técnica del proyecto
+#### New Project Development
+```bash
+# Step 1: Initialize project
+/context-engineer "Set up [language] project with [framework]"
+/execute-context project-setup
 
-## ⚠️ Comportamiento Crítico de /start-task
+# Step 2: Add core features
+/context-engineer "Add basic navigation and routing"
+/execute-context navigation-setup
 
-🎯 **UNA tarea por comando**: Nunca continúa automáticamente a la siguiente
-📋 **Documenta todo**: Actualiza claude_tasks.md durante el desarrollo  
-🛑 **Para al terminar**: Devuelve control al usuario para decidir siguiente acción
-💡 **Sugiere sin ejecutar**: Recomienda próxima tarea pero NO la inicia
+# Step 3: Build specific features
+/context-engineer "Add user authentication system"
+/execute-context user-authentication
 
-## 🚨 Comandos Deprecados (No Usar)
+# Step 4: Monitor and optimize
+/context-status  # Check overall project health
+```
 
-Los siguientes comandos han sido integrados en `/start-task`:
-- ~~`/task-progress`~~ → Integrado en start-task
-- ~~`/complete-task`~~ → Integrado en start-task  
-- ~~`/next-task`~~ → Reemplazado por task-status
+#### Existing Project Enhancement
+```bash
+# Step 1: Analyze and plan new feature
+/context-engineer "Add real-time notifications system"
+
+# Step 2: Check dependencies
+/context-status notifications-system
+
+# Step 3: Implement when ready
+/execute-context notifications-system
+
+# Step 4: Monitor integration
+/context-status  # Verify no regressions
+```
+
+## Context Engineering Features
+
+### 11-Layer Architecture
+Each command uses a sophisticated context management system:
+
+1. **System Instructions** - Core behavior and principles
+2. **Goals** - Feature objectives and success criteria
+3. **Constraints** - Technical limitations and requirements
+4. **Historical Context** - Past implementations and lessons learned
+5. **External Context** - APIs, documentation, and dependencies
+6. **Domain Knowledge** - Language and framework expertise
+7. **Project Context** - Current project structure and patterns
+8. **Feature Context** - Related features and integration points
+9. **Session Context** - Current development state
+10. **Immediate Context** - Current focus and active work
+11. **User Query** - Current request and specific requirements
+
+### Feature Isolation
+- **Focused Development**: Only work on files related to current feature
+- **Dependency Awareness**: Understand and respect feature relationships
+- **Clean Integration**: Minimize impact on existing code
+- **Quality Assurance**: Continuous validation throughout development
+
+### Language Agnostic
+The system automatically adapts to any programming language:
+- **JavaScript/TypeScript**: React Native, Next.js, Node.js
+- **Python**: Django, FastAPI, Flask
+- **Rust**: Tauri, Axum
+- **Go**: Gin, Echo
+- **Java**: Spring Boot
+- **C#**: .NET Core
+- **Swift**: iOS Development
+- **Kotlin**: Android Development
+- **And many more...**
+
+## Quality Gates
+
+### Level 1: Syntax & Structure
+- Code compiles without errors
+- Follows language conventions
+- Proper file structure
+- Dependencies resolved
+
+### Level 2: Integration
+- Integrates with existing codebase
+- API contracts maintained
+- Data flow validated
+- No regression issues
+
+### Level 3: Functional
+- All requirements implemented
+- Edge cases handled
+- Error handling robust
+- User experience meets standards
+
+### Level 4: Performance & Quality
+- Performance targets met
+- Security requirements satisfied
+- Code coverage >90%
+- Documentation complete
+
+## Best Practices
+
+### Command Usage
+1. **One Feature at a Time**: Focus on single feature implementation
+2. **Complete Planning**: Use `/context-engineer` for thorough analysis
+3. **Monitor Progress**: Regular `/context-status` checks
+4. **Quality Focus**: Ensure all validation gates pass
+
+### Development Workflow
+1. **Plan First**: Always start with `/context-engineer`
+2. **Check Dependencies**: Verify prerequisites are met
+3. **Implement Focused**: Use `/execute-context` for isolated development
+4. **Validate Continuously**: Monitor quality gates throughout
+5. **Document Everything**: Maintain comprehensive feature documentation
+
+### Context Optimization
+1. **Keep Context Relevant**: Aim for >90% relevance score
+2. **Minimize Noise**: Keep irrelevant information <10%
+3. **Optimize Density**: Maximize useful information per token
+4. **Regular Cleanup**: Periodically optimize context layers
+
+## Error Handling
+
+### Common Issues
+- **Context Overload**: Too much irrelevant information
+- **Dependency Conflicts**: Circular or conflicting dependencies
+- **Validation Failures**: Quality gates not passing
+- **Integration Problems**: Feature conflicts with existing code
+
+### Recovery Strategies
+- **Simplify Scope**: Break complex features into smaller parts
+- **Reset Context**: Regenerate context with `/context-engineer`
+- **Check Dependencies**: Verify all prerequisites are met
+- **Incremental Implementation**: Implement in smaller, testable chunks
+
+## Support
+
+### Getting Help
+- Review this commands reference for usage patterns
+- Check `/features/` directory for examples and templates
+- Use `/context-status` for diagnostic information
+- Refer to quality gates for validation requirements
+
+### Troubleshooting
+1. **Feature Not Implementing**: Check dependencies and validation gates
+2. **Context Issues**: Use `/context-status` for optimization suggestions
+3. **Quality Problems**: Review implementation against quality gates
+4. **Performance Issues**: Monitor context metrics and optimization opportunities
+
+## Advanced Features
+
+### Custom Templates
+Create custom templates in `/features/templates/` for:
+- Specific project patterns
+- Organization-specific conventions
+- Industry-specific requirements
+- Custom validation rules
+
+### Dependency Management
+Automatic tracking of:
+- Feature prerequisites
+- Conflicting implementations
+- Integration requirements
+- Implementation order optimization
+
+### Performance Monitoring
+Continuous tracking of:
+- Context quality metrics
+- Implementation time
+- Code quality scores
+- System performance impact
+
+---
+
+*This system is designed to scale with your project and adapt to any development environment while maintaining high quality standards and optimal AI performance.*

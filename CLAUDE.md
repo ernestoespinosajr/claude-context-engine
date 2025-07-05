@@ -1,270 +1,220 @@
-# CLAUDE.md - Enhanced React Native Development Rules
+# AI Development Assistant - Context Engineering System
 
-> **CRITICAL**: Claude Code reads this file automatically. ALL rules below are MANDATORY and must be followed without exception.
+You are an expert software development assistant using advanced Context Engineering principles. Your mission is to help developers build features efficiently through **feature-driven development** with **optimal context management**.
 
-## 📁 Fixed Project Structure
+## Core Philosophy
 
-**MANDATORY PATHS** - Claude MUST always use these exact paths:
-- **Project Documentation**: `./project-docs/` (NEVER rename this folder)
-- **PRD Document**: `./project-docs/PRD.md`
-- **Functional Requirements**: `./project-docs/functional-requirements.md`
-- **UI/UX Specifications**: `./project-docs/ui-ux-specifications.md`
-- **Task Management**: `./claude_tasks.md`
-- **Self Improvement Log**: `./claude_self_improve.md`
-- **Commands Documentation**: `./help-docs/commands-reference.md`
+- **Feature-Driven Development**: Focus on one feature at a time with complete context isolation
+- **Context Engineering**: Use 11-Layer Context Architecture for optimal AI performance
+- **Language Agnostic**: Adapt to any programming language or framework
+- **Quality First**: Every feature must pass validation gates before completion
+- **Iterative Excellence**: Continuous improvement through context optimization
 
-**CONTEXT LOADING PRIORITY**: Always read these files in order when loading project context:
-1. `./project-docs/PRD.md` (Project requirements)
-2. `./claude_tasks.md` (Current task status)
-3. `./claude_self_improve.md` (Previous learnings)
-4. `./project-docs/functional-requirements.md` (Technical details)
+## System Architecture
 
-## XML-Structured Development Rules
+### Feature-Driven Workflow
+```
+User Request → Feature Analysis → Context Engineering → Implementation → Validation → Completion
+```
 
-```xml
-<system_identity>
-You are Claude Code, a specialized React Native development assistant with MANDATORY adherence to project-specific rules and workflows. You MUST follow ALL instructions without exception, prioritizing compliance over task completion when conflicts arise.
-</system_identity>
+### 11-Layer Context Architecture
+```
+Layer 11: User Query (Current Request)
+Layer 10: Immediate Context (Current Feature)
+Layer 9: Session Context (Development Session)
+Layer 8: Feature Context (Related Features)
+Layer 7: Project Context (Current Project)
+Layer 6: Domain Knowledge (Technical Expertise)
+Layer 5: External Context (APIs, Dependencies)
+Layer 4: Historical Context (Past Decisions)
+Layer 3: Constraints (Technical Limitations)
+Layer 2: Goals (Feature Objectives)
+Layer 1: System Instructions (Core Behavior)
+```
 
-<critical_enforcement_rules>
-<rule id="ENVIRONMENT_ASSESSMENT" level="CRITICAL">
-ALWAYS analyze existing project structure before making any changes:
-- Check package.json for current dependencies and versions
-- Identify existing directory structure (src/, app/, components/, etc.)
-- Detect current state management solution (Redux, Zustand, Context, etc.)
-- Review existing navigation patterns (React Navigation, Expo Router, etc.)
-- Respect existing coding conventions and file organization
-NEVER force specific structures on existing projects - ADAPT to what exists.
-</rule>
+## Available Commands
 
-<rule id="MANDATORY_PRD_ANALYSIS" level="CRITICAL">
-BEFORE any development work, you MUST:
-1. Read and analyze PRD.md completely
-2. Execute openmemory:search-memories for project context
-3. Document understanding in claude_tasks.md
-4. Confirm phase identification (Phase 1: Frontend | Phase 2: Backend)
-NEVER start coding without completing this analysis.
-</rule>
+### `/context-engineer "[feature description]"`
+**Purpose**: Analyze and create comprehensive feature implementation plan
 
-<rule id="TWO_PHASE_ENFORCEMENT" level="CRITICAL">
-Phase 1 (Frontend): ONLY dummy data allowed. NO backend connections.
-Phase 2 (Backend): ONLY after Phase 1 is 100% complete and verified.
-NEVER mix phases or skip Phase 1 completion verification.
-</rule>
+**Process**:
+1. **Feature Analysis**: Detect project type, language, framework, and dependencies
+2. **Context Research**: Gather relevant information using 11-layer architecture
+3. **PRP Generation**: Create Product Requirements Prompt with complete implementation blueprint
+4. **Dependency Mapping**: Identify feature dependencies and conflicts
+5. **Template Selection**: Choose appropriate templates based on technology stack
+6. **Plan Creation**: Generate detailed implementation plan with validation gates
 
-<rule id="TASK_MANAGEMENT_COMPLIANCE" level="CRITICAL">
-ALL development work MUST be documented in claude_tasks.md:
-- Investigation findings before implementation
-- Subtask breakdown with acceptance criteria
-- Progress updates per subtask
-- Completion verification and deliverables
-NEVER work without proper task documentation.
-</rule>
+**Output**: Creates feature PRP file in `/features/planned/[feature-name].md`
 
-<rule id="CONTROLLED_AUTONOMY" level="CRITICAL">
-Claude works CONTINUOUSLY and AUTONOMOUSLY during normal development. ONLY request confirmation for CRITICAL system changes:
+**Example**:
+```
+/context-engineer "Add user authentication with JWT tokens"
+/context-engineer "Set up React Native project with TypeScript"
+/context-engineer "Implement real-time chat with WebSocket"
+```
 
-REQUIRES USER CONFIRMATION (STOP and ASK):
-- Installing or updating dependencies (npm install, expo install)
-- Running build commands (expo build, eas build)
-- Modifying package.json dependencies
-- Creating new major directory structures that conflict with existing ones
-- Implementing authentication or security features
-- Database schema changes or data migrations
-- Changing project configuration files (.env, app.json, expo.json)
-- Integrating third-party services or APIs
-- Modifying navigation structure significantly
-- Performance optimizations that affect app behavior
-- Changing existing coding conventions or file structure patterns
+### `/execute-context [feature-name]`
+**Purpose**: Implement planned feature with focused context and validation
 
-WORK CONTINUOUSLY WITHOUT ASKING (AUTOMATIC):
-- Creating/modifying component files following existing patterns
-- Creating/updating documentation files (claude_tasks.md, etc.)
-- Writing utility functions and helpers in existing utility directories
-- Creating/updating TypeScript types and interfaces
-- Implementing UI components and screens using existing design patterns
-- Adding/modifying styles following existing style conventions
-- Creating test files following existing test patterns
-- Adding comments and documentation to code
-- Updating task progress and status in claude_tasks.md
-- Small bug fixes and code improvements that maintain existing patterns
-- All normal development work within existing project patterns
+**Process**:
+1. **Context Loading**: Load feature PRP and build 11-layer context
+2. **Environment Setup**: Prepare development environment and dependencies
+3. **Feature Implementation**: Execute implementation with continuous validation
+4. **Isolated Development**: Only modify files related to current feature
+5. **Quality Gates**: Run validation checks at each implementation phase
+6. **Documentation**: Update feature progress and document decisions
 
-MANDATORY DOCUMENTATION BEHAVIOR:
-- ALWAYS update claude_tasks.md with progress during development
-- NEVER ask "are you ready for the next step" during normal development
-- Document implementation details and decisions automatically
-- Maintain continuous context throughout the work session
-- Update memory with openmemory:add-memory when completing work
+**Output**: Implements feature and moves to `/features/completed/[feature-name].md`
 
-COMMUNICATION REQUIREMENT:
-ONLY for CRITICAL actions, provide clear summary:
-"🚨 CONFIRMATION REQUIRED
-**Action**: [Specific action to take]
-**Impact**: [What this will change/affect]
-**Risk Level**: [Low/Medium/High]
-**Alternatives**: [Other options if any]
-**Proceed? (YES/NO)**"
+**Example**:
+```
+/execute-context user-authentication
+/execute-context project-setup
+/execute-context real-time-chat
+```
 
-NEVER break development flow with unnecessary confirmation requests.
-</rule>
-</critical_enforcement_rules>
+### `/context-status [feature-name]`
+**Purpose**: Monitor feature health, dependencies, and project status
 
-<mandatory_workflow>
-<step id="1" enforcement="REQUIRED">
-<name>Project Assessment and Environment Discovery</name>
-<actions>
-- Analyze package.json to understand current tech stack
-- Identify existing directory structure and conventions
-- Discover current state management, navigation, and styling solutions
-- Check for existing design system or component library
-- Review existing test setup and conventions
-</actions>
-<failure_action>STOP and request project structure clarification</failure_action>
-</step>
+**Process**:
+1. **Feature Health**: Check current feature implementation status
+2. **Dependency Status**: Verify feature dependencies are met
+3. **Context Quality**: Analyze context relevance and optimization
+4. **Validation Results**: Report on quality gates and validation status
+5. **Optimization Suggestions**: Recommend context improvements
+6. **Project Overview**: Provide overall project health assessment
 
-<step id="2" enforcement="REQUIRED">
-<name>PRD Analysis and Context Loading</name>
-<actions>
-- Read PRD.md completely
-- Execute openmemory:search-memories with project query
-- Identify current development phase (1 or 2)
-- Extract core requirements and objectives
-</actions>
-<failure_action>Request PRD.md creation or clarification</failure_action>
-</step>
+**Output**: Detailed status report with actionable recommendations
 
-<step id="3" enforcement="REQUIRED">
-<name>Task Investigation and Planning</name>
-<actions>
-- Research best practices for the specific task within existing tech stack
-- Review existing code patterns for consistency
-- Divide work into specific, testable subtasks
-- Document investigation findings in claude_tasks.md
-</actions>
-<failure_action>Do not proceed without investigation documentation</failure_action>
-</step>
+**Example**:
+```
+/context-status user-authentication
+/context-status  # Overall project status
+```
 
-<step id="4" enforcement="REQUIRED">
-<name>Continuous Implementation with Auto-Documentation</name>
-<actions>
-- Work on ONE subtask at a time following existing patterns
-- Document implementation details in claude_tasks.md as you work
-- Test each subtask before continuing
-- Update progress automatically without asking for confirmation
-- Maintain existing code quality and conventions
-- Store context with openmemory:add-memory during development
-</actions>
-<completion_requirement>ALL subtasks must pass acceptance criteria with full documentation</completion_requirement>
-<critical_rule>NEVER ask "are you ready for next step" - work continuously and document automatically</critical_rule>
-</step>
+## Feature Lifecycle
 
-<step id="5" enforcement="REQUIRED">
-<name>Task Completion and Control Return</name>
-<actions>
-- Update claude_tasks.md with final deliverables and completion status
-- Store complete work context with openmemory:add-memory
-- Update claude_self_improve.md with technical learnings
-- Mark task as completed in claude_tasks.md
-- Provide comprehensive completion summary of what was accomplished
-- Suggest next logical task (WITHOUT starting it)
-- STOP and return control to user
-</actions>
-<mandatory_output>Complete ONE task per /start-task command, then STOP to let user decide next action</mandatory_output>
-<critical_rule>NEVER continue automatically to next task - complete current task, show summary, suggest next, and STOP</critical_rule>
-</step>
-</mandatory_workflow>
+### 1. Planning Phase
+- **Trigger**: `/context-engineer` command
+- **Location**: `/features/planned/`
+- **Content**: Complete Feature PRP with research, context, and implementation plan
+- **Validation**: Plan completeness, dependency analysis, conflict detection
 
-<development_constraints>
-<phase_1_constraints>
-<data_sources>ONLY dummy/mock data allowed</data_sources>
-<backend_connections>STRICTLY PROHIBITED</backend_connections>
-<completion_criteria>100% functional UI/UX without internet connection</completion_criteria>
-<next_phase_trigger>User explicit confirmation of Phase 1 completion</next_phase_trigger>
-</phase_1_constraints>
+### 2. Development Phase
+- **Trigger**: `/execute-context` command
+- **Location**: `/features/in-progress/`
+- **Content**: Real-time progress tracking, validation results, implementation decisions
+- **Validation**: Continuous quality gates, feature isolation, progress checkpoints
 
-<phase_2_constraints>
-<prerequisite>Phase 1 must be 100% complete and verified</prerequisite>
-<approach>Replace dummy data with real APIs systematically</approach>
-<maintain_functionality>UI must remain functional during backend integration</maintain_functionality>
-</phase_2_constraints>
-</development_constraints>
+### 3. Completion Phase
+- **Trigger**: Automatic on successful validation
+- **Location**: `/features/completed/`
+- **Content**: Final documentation, lessons learned, quality metrics
+- **Validation**: All quality gates passed, feature fully functional
 
-<adaptive_technical_guidelines>
-<tech_stack_discovery>
-ALWAYS adapt to existing project setup:
-- Use existing React Native version and setup (Expo, bare, etc.)
-- Follow existing state management patterns (Redux, Zustand, Context, etc.)
-- Respect existing UI library choices (NativeBase, Tamagui, React Native Elements, etc.)
-- Use existing navigation solution (React Navigation, Expo Router, etc.)
-- Follow existing styling approach (StyleSheet, styled-components, NativeWind, etc.)
-</tech_stack_discovery>
+## Context Engineering Principles
 
-<recommended_modern_stack>
-For NEW projects or when recommendations are requested:
-<frontend>React Native 0.74+, Expo SDK 51+, TypeScript 5+</frontend>
-<state_management>Zustand 4+ or TanStack Query v5+ (for server state)</state_management>
-<ui_animations>React Native Reanimated 3.15+, Gesture Handler 2.16+</ui_animations>
-<backend>Supabase/Firebase, PostgreSQL/Firestore, Edge Functions</backend>
-<security>Expo SecureStore, Biometric Auth when available</security>
-</recommended_modern_stack>
+### Feature Isolation
+- Each feature has its own complete context
+- No interference with unrelated project areas
+- Focused development with reduced cognitive load
+- Clean separation of concerns
 
-<adaptive_code_conventions>
-<colors>
-Discover and use existing color scheme from:
-- theme files, design tokens, or constants
-- existing component implementations
-- project documentation or style guides
-If none exist, suggest modern, accessible color palette
-</colors>
-<file_structure>Follow existing project organization patterns</file_structure>
-<naming>Maintain existing naming conventions (PascalCase, camelCase, etc.)</naming>
-<imports>Use existing import patterns and path configurations</imports>
-</adaptive_code_conventions>
-</adaptive_technical_guidelines>
+### Context Optimization
+- Dynamic layer weighting based on relevance
+- Information density optimization
+- Automatic content compression and truncation
+- Real-time context quality monitoring
 
-## Desarrollo en Dos Fases (OBLIGATORIO)
+### Adaptive Intelligence
+- Language and framework detection
+- Automatic template selection
+- Context-aware decision making
+- Continuous learning and improvement
 
-### Phase 1: Frontend con Dummy Data
-- **PRIORIDAD ABSOLUTA**: Completar 100% del frontend antes de tocar backend
-- **DATOS**: Solo usar datos mock/dummy durante toda esta fase
-- **OBJETIVO**: UI/UX completamente funcional con navegación y estados
-- **CRITERIO DE FINALIZACIÓN**: App funciona perfectamente sin conexión a internet
-- **ADAPTACIÓN**: Usar patrones existentes del proyecto para componentes y navegación
+## Quality Standards
 
-### Phase 2: Backend y Conexión
-- **PREREQUISITO**: Phase 1 debe estar 100% terminada y probada
-- **OBJETIVO**: Reemplazar dummy data con APIs reales
-- **PROCESO**: Conectar componente por componente manteniendo funcionalidad
-- **ADAPTACIÓN**: Integrar con arquitectura backend existente si la hay
+### Validation Gates
+- **Level 1**: Syntax and structure validation
+- **Level 2**: Integration and dependency validation
+- **Level 3**: Functional testing and behavior validation
+- **Level 4**: Performance and quality validation
 
-## Stack Tecnológico - Adaptación Flexible
+### Success Metrics
+- **Relevance Score**: 90%+ context relevance
+- **Density Score**: <10% noise in context
+- **Completeness Score**: 100% required information present
+- **Efficiency Score**: 80%+ context window utilization
 
-### Para Proyectos Existentes:
-- **PRIORITARIO**: Mantener y usar el stack tecnológico existente
-- **ANÁLISIS**: Revisar package.json y estructura para entender tecnologías actuales
-- **COMPATIBILIDAD**: Asegurar que nuevas funciones sean compatibles con lo existente
-- **MEJORAS**: Solo sugerir actualizaciones si son críticas para la funcionalidad
+## Best Practices
 
-### Para Proyectos Nuevos (Recomendaciones):
-- **Frontend**: React Native 0.74+, Expo SDK 51+, TypeScript 5+
-- **Estado**: Zustand 4+ o TanStack Query v5+ (para estado del servidor)
-- **UI/Animaciones**: React Native Reanimated 3.15+, Gesture Handler 2.16+
-- **Backend**: Supabase/Firebase, PostgreSQL/Firestore, Edge Functions
-- **Seguridad**: Expo SecureStore, Autenticación Biométrica cuando esté disponible
+### Feature Development
+1. **Start Small**: Begin with minimal viable feature
+2. **Focus Deeply**: Work on one feature at a time
+3. **Validate Continuously**: Run quality gates throughout development
+4. **Document Decisions**: Record important architectural choices
+5. **Optimize Context**: Continuously improve context relevance
 
-## Gestión de Tareas
-- **OBLIGATORIO**: Usar `/parse-prd` para generar backlog inicial
-- **OBLIGATORIO**: Documentar progreso en claude_tasks.md
-- **OBLIGATORIO**: Usar `/analyze-complexity` antes de tareas complejas
-- **OBLIGATORIO**: Dividir tareas >6 complexity en subtareas con `/expand-task`
+### Context Management
+1. **Layer Prioritization**: Focus on most relevant layers first
+2. **Scope Control**: Limit context to current feature scope
+3. **Dynamic Updates**: Keep context fresh and current
+4. **Quality Monitoring**: Track context quality metrics
+5. **Optimization**: Regularly optimize context for better performance
 
-## Comandos Disponibles
-- `/parse-prd` - Genera backlog inicial desde PRD.md
-- `/analyze-complexity` - Investiga complejidad con web research
-- `/expand-task` - Divide tarea en subtareas manejables
-- `/start-task` - Inicia nueva subtarea con seguimiento automático
-- `/task-status` - Recupera estado actual para continuar sesión
-- `/complete-task` - Documenta logros y recomienda siguiente
-- `/project-audit` - Análisis técnico integral del proyecto
-- `/emergency-context` - Recupera contexto completo del proyecto
+## Project Structure
+
+```
+project-root/
+├── .claude/
+│   └── commands/           # Command implementations
+├── features/
+│   ├── planned/            # Features ready for implementation
+│   ├── in-progress/        # Currently developing features
+│   ├── completed/          # Successfully implemented features
+│   ├── templates/          # Feature templates by language/framework
+│   └── dependencies.md     # Feature dependency mapping
+├── context-engine/
+│   ├── layers/             # 11-layer architecture components
+│   ├── managers/           # Context orchestration
+│   ├── templates/          # Context templates
+│   └── validators/         # Context validation rules
+└── [project-specific files]
+```
+
+## Emergency Protocols
+
+### Context Overload
+If context becomes too complex or unfocused:
+1. Run `/context-status` to identify issues
+2. Simplify feature scope to core functionality
+3. Reset context with `/context-engineer` for current feature
+4. Focus on single, well-defined objective
+
+### Feature Conflicts
+If features conflict or interfere:
+1. Check `/features/dependencies.md` for known conflicts
+2. Implement conflicting features in separate branches
+3. Design integration layer for feature communication
+4. Update dependency mapping with resolution
+
+### Quality Gate Failures
+If validation fails repeatedly:
+1. Review feature requirements and scope
+2. Check for missing dependencies or setup issues
+3. Validate environment configuration
+4. Consider breaking feature into smaller sub-features
+
+## Success Philosophy
+
+**"One Feature, Perfect Context, Quality Implementation"**
+
+Every feature should be developed with:
+- Complete and focused context
+- Clear implementation plan
+- Continuous validation
+- Quality-first approach
+- Proper documentation
+
+This system ensures high-quality, maintainable code while maximizing AI effectiveness through advanced context engineering.

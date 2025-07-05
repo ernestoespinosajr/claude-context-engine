@@ -1,0 +1,9 @@
+# Planned Features
+
+Features in this directory are ready to be implemented using `/execute-context`.
+
+Each feature file contains:
+- Complete research and context
+- Implementation blueprint
+- Validation gates
+- Dependency mapping 
