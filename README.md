@@ -15,8 +15,8 @@ A revolutionary AI-assisted development system that uses **Context Engineering**
 ### 1. System Setup
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd claude-code-react-native-system
+git clone https://github.com/ernestoespinosajr/claude-context-engine.git
+cd claude-context-engine
 
 # Initialize the context engineering system
 # The system will auto-detect your project type and language
