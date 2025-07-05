@@ -226,6 +226,154 @@ The system continuously monitors and optimizes context quality:
 
 ## 📖 Example Workflows
 
+### 🚀 Complete Step-by-Step Example
+Here's a complete walkthrough showing the full lifecycle of a feature:
+
+#### **Step 1: Create Feature Plan**
+```bash
+# Claude creates comprehensive implementation plan
+/context-engineer "Add user authentication with JWT tokens and biometric login"
+```
+
+**What Claude does:**
+- Creates `features/planned/user-authentication/` directory
+- Generates `implementation-plan.md` with detailed requirements
+- Creates `context-layers.md` with 11-layer architecture
+- Identifies dependencies and creates `dependencies.md`
+
+#### **Step 2: Move Feature to In-Progress**
+```bash
+# User manually moves feature to active development
+mv features/planned/user-authentication/ features/in-progress/
+```
+
+**What the user does:**
+- Physically moves the folder when ready to start implementation
+- This gives you full control over when development begins
+
+#### **Step 3: Execute Implementation**
+```bash
+# Claude implements the feature using the generated plan
+/execute-context user-authentication
+```
+
+**What Claude does:**
+- Loads the implementation plan and builds focused context
+- Implements code following the plan step by step
+- Updates progress in `features/in-progress/user-authentication/progress.md`
+- Runs quality gates at each step
+- Documents decisions and issues encountered
+
+#### **Step 4: Monitor Progress**
+```bash
+# Check implementation status and health
+/context-status user-authentication
+```
+
+**What Claude shows:**
+- Current implementation progress (e.g., "Step 3 of 7 completed")
+- Quality gate status (✅ Syntax, ✅ Integration, ⏳ Testing, ⏳ Performance)
+- Any issues or blockers found
+- Context quality metrics
+
+#### **Step 5: Complete Feature**
+```bash
+# User moves completed feature to completed folder
+mv features/in-progress/user-authentication/ features/completed/
+```
+
+**What the user does:**
+- Moves folder only after all quality gates pass
+- Claude will tell you when the feature is ready for completion
+
+#### **Final Result:**
+- `features/completed/user-authentication/` contains:
+  - Complete implementation documentation
+  - Lessons learned
+  - Quality gate results
+  - Reusable patterns for similar features
+
+### 📱 Adding to Existing Project Example
+Using the system with an existing project (e.g., adding multiprofile feature):
+
+#### **Step 1: Integrate Context Engine**
+```bash
+# In your existing project directory
+cd /path/to/your/existing-project
+
+# Clone and integrate Context Engine
+git clone https://github.com/ernestoespinosajr/claude-context-engine.git temp-context-engine
+cp -r temp-context-engine/.claude/ ./
+cp -r temp-context-engine/context-engine/ ./
+cp -r temp-context-engine/features/ ./
+rm -rf temp-context-engine
+```
+
+#### **Step 2: Generate Implementation Plan**
+```bash
+# Claude analyzes your existing project and creates optimized plan
+/context-engineer "Implement multiprofile system for user management"
+
+# OR if you have existing requirements document:
+/context-engineer "Implement multiprofile system according to multiprofile-requirements.md"
+```
+
+**What Claude does:**
+- Auto-detects your project language, framework, and structure
+- Analyzes existing codebase for integration points
+- Creates `features/planned/multiprofile/` directory with complete implementation plan
+- If you reference a requirements document, Claude reads it and incorporates it into the plan
+- Identifies potential conflicts with existing features
+
+**💡 Pro Tip:** If you have existing requirements documents, just reference them in the command:
+- `/context-engineer "Add payment system according to payment-spec.md"`
+- `/context-engineer "Implement chat feature based on chat-requirements.pdf"`
+- `/context-engineer "Add dashboard using dashboard-mockups.md and api-docs.md"`
+
+Claude will automatically read and analyze these documents to create a comprehensive implementation plan.
+
+#### **Step 3: Execute with Existing Project Context**
+```bash
+# Move to active development
+mv features/planned/multiprofile/ features/in-progress/
+
+# Implement with full project context
+/execute-context multiprofile
+```
+
+**What Claude does:**
+- Loads your existing project context
+- Implements feature without breaking existing functionality
+- Maintains consistency with your current code patterns
+- Integrates seamlessly with your existing architecture
+
+### 🔄 Workflow Responsibilities
+Understanding what's automatic vs. manual:
+
+#### **🤖 Claude's Automatic Actions:**
+- ✅ Create feature planning documents
+- ✅ Generate implementation plans with 11-layer context
+- ✅ Write and implement code
+- ✅ Update progress tracking files
+- ✅ Run quality gates and validation
+- ✅ Document decisions and issues
+- ✅ Detect dependencies and conflicts
+- ✅ Maintain context optimization
+
+#### **👤 User's Manual Actions:**
+- 📁 Move folders between `planned/` → `in-progress/` → `completed/`
+- 🎯 Decide when to start/complete features
+- 🔍 Review and approve implementation plans
+- 🧪 Test implemented features
+- 💬 Provide feedback and resolve blockers
+- 🎛️ Maintain control over development timeline
+
+#### **🤝 Collaborative Actions:**
+- 📋 Feature requirements definition
+- 🔧 Issue resolution and troubleshooting
+- 📊 Quality gate evaluation
+- 🔄 Context optimization decisions
+
 ### React Native Mobile App
 ```bash
 # Initialize React Native project
