@@ -157,14 +157,38 @@ cp -r ~/.claude ~/.claude-backup
 - ✅ **Better User Experience**: No more confusion about which commands to use
 - ✅ **Future-Proof**: Following proven SuperClaude architecture
 
+## 🔌 MCP Integration After Migration
+
+After migration, MCP servers are automatically configured:
+
+### ✅ What's Included
+- **Sequential Thinking**: `--mcp-sequential` for complex problem solving
+- **Puppeteer**: `--mcp-puppeteer` for browser automation  
+- **Fetch**: `--mcp-fetch` for web content retrieval
+
+### 🔧 MCP Configuration
+```bash
+# Check MCP setup
+cat ~/.claude/mcp.json
+
+# Test MCP functionality
+/context-engineer "test feature" --mcp-sequential
+```
+
+### 📋 Requirements
+- **Node.js v16+**: `node --version`
+- **Claude Desktop**: Latest version
+- **Internet connection**: For auto-downloading MCP servers
+
 ## 🆘 Need Help?
 
 If you encounter issues during migration:
 
 1. **Check System Status**: Run `./install-context-engine.sh --verify`
 2. **Review Installation Report**: Check `~/.claude/installation-report.md`
-3. **Force Clean Install**: Use `--force` flag to override existing files
-4. **Backup First**: Always backup before major changes
+3. **Verify MCP Setup**: Check `docs/mcp-installation-guide.md`
+4. **Force Clean Install**: Use `--force` flag to override existing files
+5. **Backup First**: Always backup before major changes
 
 ---
 

@@ -69,6 +69,14 @@ cd claude-context-engine
 - Use `--update` to upgrade existing global installation
 - Project installations now only add configurations
 
+**🔌 MCP Integration (Automatic)**
+The installer automatically configures MCP servers in `~/.claude/mcp.json`:
+- **Sequential Thinking**: Advanced problem-solving assistance
+- **Puppeteer**: Browser automation and web testing
+- **Fetch**: Web content retrieval and processing
+
+No manual MCP installation required - Claude Desktop will auto-download when first used.
+
 ### 3. Start with Token Efficiency
 ```bash
 # Plan with automatic compression (70% token reduction)
@@ -341,9 +349,43 @@ Every feature automatically passes through 4 levels of validation:
 ```
 
 ### 🔌 MCP-Enhanced Development
+
+### 🔧 Automatic MCP Setup
+The Context Engineering System automatically configures these MCP servers:
+
+| MCP Server | Purpose | Auto-Installation | Usage |
+|------------|---------|------------------|-------|
+| **Sequential Thinking** | Complex problem solving | ✅ Auto-configured | `--mcp-sequential` |
+| **Puppeteer** | Browser automation | ✅ Auto-configured | `--mcp-puppeteer` |
+| **Fetch** | Web content retrieval | ✅ Auto-configured | `--mcp-fetch` |
+
+### 📋 How MCP Installation Works
+
+1. **During Installation**: 
+   ```bash
+   ./install-context-engine.sh --global
+   # Creates ~/.claude/mcp.json automatically
+   ```
+
+2. **First Usage**:
+   ```bash
+   /context-engineer "Add web scraping" --mcp-fetch
+   # Claude Desktop downloads MCP server automatically via npx
+   ```
+
+3. **Verification**:
+   ```bash
+   # Check MCP configuration
+   cat ~/.claude/mcp.json
+   
+   # Test MCP functionality
+   /context-status --mcp-test
+   ```
+
+### 🚀 MCP Usage Examples
 ```bash
 # Advanced context management
-/context-engineer "Complex microservices architecture" --mcp-context7 --persona-architect
+/context-engineer "Complex microservices architecture" --mcp-sequential --persona-architect
 
 # Structured problem solving
 /execute-context complex-feature --mcp-sequential --think-hard
@@ -351,8 +393,28 @@ Every feature automatically passes through 4 levels of validation:
 # UI testing automation
 /execute-context frontend-components --mcp-puppeteer --persona-frontend
 
-# Intelligent automation
-/context-status --mcp-magic --deep --recommendations
+# Web content integration
+/context-engineer "Add news feed feature" --mcp-fetch --think
+```
+
+### 🔧 MCP Troubleshooting
+
+**Problem: MCP server not working**
+```bash
+# Solution 1: Verify configuration
+cat ~/.claude/mcp.json
+
+# Solution 2: Restart Claude Desktop
+# Close and reopen Claude Desktop application
+
+# Solution 3: Clear MCP cache
+rm -rf ~/.claude/mcp-cache/  # If exists
+```
+
+**Problem: Slow MCP response**
+```bash
+# Check network connection and Node.js installation
+node --version  # Should be v16+ for npx compatibility
 ```
 
 ## 🛠️ Installation & Configuration
