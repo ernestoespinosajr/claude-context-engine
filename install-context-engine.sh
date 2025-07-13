@@ -1,6 +1,6 @@
 #!/bin/bash
-# Context Engineering System v2.0 - Automated Installation Script
-# Enterprise-class AI development assistant with advanced token economy
+# Context Engineering System v2.0 - Improved Installation Script
+# Properly separates from Claude CLI and installs all required files
 
 set -e  # Exit on any error
 
@@ -9,29 +9,28 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# Default installation options
-INSTALL_ALL=false
-INSTALL_TOKEN_ECONOMY=false
-INSTALL_MCP=false
-INSTALL_PERSONAS=false
-INSTALL_FLAGS=false
-INSTALL_COMPRESSION=false
-INSTALL_WORKFLOW=false
-UPDATE_MODE=false
-CLEAN_MODE=false
-CUSTOM_DIR=""
-DEFAULT_CLAUDE_DIR="$HOME/.claude"
+# Installation paths
+CONTEXT_ENGINE_DIR="$HOME/.claude/context-engine"
+CLAUDE_PARENT_DIR="$HOME/.claude"
+SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Version information
 VERSION="2.0"
 INSTALL_DATE=$(date +"%Y-%m-%d %H:%M:%S")
 
+# Default installation options
+INSTALL_MODE="full"  # full, project, update
+CLEAN_MODE=false
+PROJECT_DIR=""
+FORCE_INSTALL=false
+
 print_header() {
     echo -e "${BLUE}"
     echo "╔══════════════════════════════════════════════════════════════╗"
-    echo "║          Context Engineering System v${VERSION} Installer          ║"
+    echo "║       Context Engineering System v${VERSION} - Enhanced Installer      ║"
     echo "║     Advanced Token Economy & Intelligent Workflow Management ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
@@ -54,89 +53,56 @@ print_info() {
 }
 
 show_help() {
-    echo "Context Engineering System v${VERSION} Installation Options:"
+    echo "Context Engineering System v${VERSION} Enhanced Installation"
     echo ""
     echo "Usage: $0 [OPTIONS]"
     echo ""
-    echo "Installation Options:"
-    echo "  --full                    Complete installation (all components)"
-    echo "  --token-economy-only      Install only token economy system"
-    echo "  --mcp-only               Install only MCP integration"
-    echo "  --personas-only          Install only personas system"
-    echo "  --flags-only             Install only flag system"
-    echo "  --compression-only       Install only compression system"
-    echo "  --workflow-management-only Install only workflow management"
-    echo "  --update                 Update existing installation"
-    echo "  --clean                  Remove obsolete files and directories"
-    echo "  --dir <path>             Custom installation directory (default: ~/.claude)"
-    echo "  --help                   Show this help message"
+    echo "Installation Modes:"
+    echo "  --global             Install globally for all projects (default)"
+    echo "  --project <dir>      Install for specific project"
+    echo "  --update             Update existing installation"
     echo ""
-    echo "Installation Location:"
-    echo "  Default: ~/.claude (global Claude configuration)"
-    echo "  Custom:  --dir /path/to/custom/location"
-    echo ""
-    echo "Cleaning Options:"
-    echo "  --clean can be combined with any installation option:"
-    echo "  $0 --update --clean      # Update and clean obsolete files"
-    echo "  $0 --full --clean        # Fresh install with cleanup"
+    echo "Options:"
+    echo "  --clean              Clean Context Engine files (preserves Claude CLI)"
+    echo "  --force              Force installation even if files exist"
+    echo "  --help               Show this help message"
     echo ""
     echo "Examples:"
-    echo "  $0 --full                # Install to ~/.claude (global)"
-    echo "  $0 --full --dir /opt/claude  # Install to custom location"
-    echo "  $0 --update              # Update existing installation"
-    echo "  $0 --update --clean      # Update and remove obsolete files"
-    echo "  $0 --token-economy-only --dir ./my-claude  # Custom location"
+    echo "  $0                           # Global install to ~/.claude/"
+    echo "  $0 --project ./my-project    # Project-specific install"
+    echo "  $0 --update                  # Update existing installation"
+    echo "  $0 --clean                   # Remove Context Engine files only"
     echo ""
 }
 
 parse_arguments() {
     while [[ $# -gt 0 ]]; do
         case $1 in
-            --full)
-                INSTALL_ALL=true
+            --global)
+                INSTALL_MODE="full"
                 shift
                 ;;
-            --token-economy-only)
-                INSTALL_TOKEN_ECONOMY=true
-                shift
-                ;;
-            --mcp-only)
-                INSTALL_MCP=true
-                shift
-                ;;
-            --personas-only)
-                INSTALL_PERSONAS=true
-                shift
-                ;;
-            --flags-only)
-                INSTALL_FLAGS=true
-                shift
-                ;;
-            --compression-only)
-                INSTALL_COMPRESSION=true
-                shift
-                ;;
-            --workflow-management-only)
-                INSTALL_WORKFLOW=true
-                shift
+            --project)
+                INSTALL_MODE="project"
+                if [[ -n "$2" && "$2" != --* ]]; then
+                    PROJECT_DIR="$2"
+                    shift 2
+                else
+                    print_error "--project requires a directory path"
+                    exit 1
+                fi
                 ;;
             --update)
-                UPDATE_MODE=true
+                INSTALL_MODE="update"
                 shift
                 ;;
             --clean)
                 CLEAN_MODE=true
                 shift
                 ;;
-            --dir)
-                if [[ -n "$2" && "$2" != --* ]]; then
-                    CUSTOM_DIR="$2"
-                    shift 2
-                else
-                    print_error "--dir requires a directory path"
-                    show_help
-                    exit 1
-                fi
+            --force)
+                FORCE_INSTALL=true
+                shift
                 ;;
             --help)
                 show_help
@@ -149,493 +115,582 @@ parse_arguments() {
                 ;;
         esac
     done
-    
-    # If no specific options, default to full install
-    if [[ "$INSTALL_TOKEN_ECONOMY" == false && "$INSTALL_MCP" == false && \
-          "$INSTALL_PERSONAS" == false && "$INSTALL_FLAGS" == false && \
-          "$INSTALL_COMPRESSION" == false && "$INSTALL_WORKFLOW" == false && \
-          "$UPDATE_MODE" == false ]]; then
-        INSTALL_ALL=true
-    fi
 }
 
-setup_installation_directory() {
-    # Determine installation directory
-    if [[ -n "$CUSTOM_DIR" ]]; then
-        CLAUDE_DIR="$CUSTOM_DIR"
-        print_info "Using custom installation directory: $CLAUDE_DIR"
-    else
-        CLAUDE_DIR="$DEFAULT_CLAUDE_DIR"
-        print_info "Using default installation directory: $CLAUDE_DIR"
-    fi
+detect_claude_cli() {
+    print_info "Detecting Claude CLI installation..."
     
-    # Expand tilde if present
-    CLAUDE_DIR="${CLAUDE_DIR/#\~/$HOME}"
-    
-    # Create base directory if it doesn't exist
-    if [[ ! -d "$CLAUDE_DIR" ]]; then
-        print_info "Creating installation directory: $CLAUDE_DIR"
-        mkdir -p "$CLAUDE_DIR"
-    fi
-    
-    # Change to installation directory
-    print_info "Changing to installation directory..."
-    cd "$CLAUDE_DIR" || {
-        print_error "Failed to change to directory: $CLAUDE_DIR"
-        exit 1
-    }
-    
-    print_status "Installation directory set: $(pwd)"
-}
-
-detect_environment() {
-    print_info "Detecting environment..."
-    
-    # For global installation, we don't need CLAUDE.md in current directory
-    if [[ "$CLAUDE_DIR" == "$DEFAULT_CLAUDE_DIR" ]]; then
-        print_info "Global installation mode - no project-specific requirements"
-    else
-        # For custom directory, check if we're in a Context Engineering project
-        if [[ ! -f "CLAUDE.md" ]]; then
-            print_warning "No CLAUDE.md found. This may not be a Context Engineering project."
-            read -p "Continue anyway? (y/N): " -n 1 -r
-            echo
-            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                print_error "Installation cancelled."
-                exit 1
+    if [[ -d "$CLAUDE_PARENT_DIR" ]]; then
+        print_status "Claude directory found: $CLAUDE_PARENT_DIR"
+        
+        # Check for Claude CLI files that we should NOT touch
+        local claude_cli_files=(
+            "claude_3_5_sonnet.json"
+            "config.json"
+            "settings.json"
+            "preferences.json"
+        )
+        
+        for file in "${claude_cli_files[@]}"; do
+            if [[ -f "$CLAUDE_PARENT_DIR/$file" ]]; then
+                print_warning "Claude CLI file detected: $file (will be preserved)"
             fi
-        fi
-    fi
-    
-    # Check Node.js for potential React Native projects
-    if command -v node &> /dev/null; then
-        NODE_VERSION=$(node --version)
-        print_status "Node.js detected: $NODE_VERSION"
-    fi
-    
-    # Check Python for potential FastAPI projects
-    if command -v python3 &> /dev/null; then
-        PYTHON_VERSION=$(python3 --version)
-        print_status "Python detected: $PYTHON_VERSION"
-    fi
-    
-    # Check Git
-    if command -v git &> /dev/null; then
-        print_status "Git detected: $(git --version)"
+        done
     else
-        print_warning "Git not found. Some features may not work optimally."
+        print_info "Claude directory not found, will create: $CLAUDE_PARENT_DIR"
+    fi
+}
+
+create_yml_content() {
+    local yml_file="$1"
+    
+    case "$yml_file" in
+        "core.yml")
+            cat << 'EOF'
+# Core System Configuration
+Core_Philosophy:
+  principle: "One Feature, Perfect Context, Quality Implementation"
+  approach: "Context-first development with intelligent token management"
+  
+UltraCompressed_Mode:
+  activation: "Automatic at 75% context usage or with --uc flag"
+  target: "70% token reduction"
+  maintains: "Full semantic meaning"
+  
+Context_Engineering_Architecture:
+  layers:
+    - project_overview
+    - tech_stack_analysis
+    - dependencies_map
+    - feature_requirements
+    - implementation_context
+    - file_relationships
+    - validation_rules
+    - error_patterns
+    - optimization_opportunities
+    - documentation_needs
+    - testing_requirements
+    
+Quality_Gates_System:
+  phases:
+    - requirements_validation
+    - implementation_checks
+    - integration_testing
+    - performance_validation
+    - security_review
+    
+Advanced_Token_Economy:
+  budget_management: "Dynamic allocation based on feature complexity"
+  compression_pipeline: "Multi-stage optimization"
+  cache_strategy: "MCP-integrated intelligent caching"
+  
+Session_Management:
+  state_persistence: true
+  auto_resume: true
+  conflict_resolution: "intelligent"
+EOF
+            ;;
+            
+        "token-economy.yml")
+            cat << 'EOF'
+# Advanced Token Economy Configuration
+Token_Budget_Management:
+  allocation_strategy: "dynamic"
+  base_budget: 50000
+  feature_multipliers:
+    simple: 1.0
+    moderate: 1.5
+    complex: 2.0
+    architectural: 3.0
+    
+Intelligent_Cost_Management:
+  optimization_triggers:
+    - context_usage: 75%
+    - token_count: 40000
+    - complexity_score: 8
+  reduction_strategies:
+    - ultra_compression
+    - context_pruning
+    - cache_utilization
+    
+Context_Optimization_Engine:
+  relevance_threshold: 0.9
+  pruning_algorithm: "semantic_similarity"
+  cache_integration: true
+  
+MCP_Token_Economics:
+  cache_value: 0.1  # 10% of original cost
+  cache_ttl: 900    # 15 minutes
+  intelligent_prefetch: true
+  
+Performance_Monitoring:
+  metrics:
+    - token_efficiency
+    - context_relevance
+    - compression_ratio
+    - cache_hit_rate
+  targets:
+    token_efficiency: 0.7
+    context_relevance: 0.9
+    compression_ratio: 0.7
+    cache_hit_rate: 0.85
+EOF
+            ;;
+            
+        "compression-patterns.yml")
+            cat << 'EOF'
+# Compression Patterns Configuration
+Performance_Baselines:
+  uncompressed:
+    avg_tokens: 50000
+    clarity: 1.0
+    speed: "baseline"
+  compressed:
+    avg_tokens: 25000
+    clarity: 0.95
+    speed: "2x faster"
+  ultra_compressed:
+    avg_tokens: 15000
+    clarity: 0.9
+    speed: "3x faster"
+    
+Compression_Pipeline:
+  stages:
+    - remove_redundancy
+    - abbreviate_common_terms
+    - consolidate_similar_concepts
+    - apply_universal_constants
+    - semantic_compression
+    
+UltraCompressed_Mode_Rules:
+  abbreviations:
+    implementation: "impl"
+    configuration: "cfg"
+    development: "dev"
+    architecture: "arch"
+    documentation: "docs"
+  symbols:
+    success: "✅"
+    warning: "⚠️"
+    error: "❌"
+    info: "ℹ️"
+    in_progress: "🔄"
+  removal_patterns:
+    - verbose_explanations
+    - redundant_context
+    - obvious_implications
+EOF
+            ;;
+            
+        "universal-constants.yml")
+            cat << 'EOF'
+# Universal Constants and Legend
+Universal_Legend:
+  symbols:
+    "✅": "Success/Completed"
+    "❌": "Error/Failed"
+    "⚠️": "Warning/Caution"
+    "ℹ️": "Information"
+    "🔄": "In Progress"
+    "📁": "Directory"
+    "📄": "File"
+    "🔧": "Configuration"
+    "🚀": "Performance"
+    "🔒": "Security"
+    "🧪": "Testing"
+    "📦": "Package/Dependency"
+    "🎯": "Target/Goal"
+    "💡": "Tip/Suggestion"
+    "🔍": "Search/Analysis"
+    
+  abbreviations:
+    cfg: "configuration"
+    impl: "implementation"
+    dev: "development"
+    prod: "production"
+    env: "environment"
+    deps: "dependencies"
+    arch: "architecture"
+    auth: "authentication"
+    db: "database"
+    api: "application programming interface"
+    ui: "user interface"
+    ux: "user experience"
+    dto: "data transfer object"
+    orm: "object relational mapping"
+    ci: "continuous integration"
+    cd: "continuous deployment"
+EOF
+            ;;
+            
+        "flags.yml")
+            cat << 'EOF'
+# Flag System Configuration
+Universal_Flags:
+  --plan:
+    description: "Generate detailed implementation plan"
+    applies_to: ["all_commands"]
+  --think:
+    description: "Show reasoning process"
+    applies_to: ["all_commands"]
+  --uc:
+    description: "Ultra-compressed mode (70% token reduction)"
+    applies_to: ["all_commands"]
+  --compress:
+    description: "Standard compression (50% token reduction)"
+    applies_to: ["all_commands"]
+  --cache:
+    description: "Utilize MCP caching"
+    applies_to: ["all_commands"]
+    
+Command_Specific_Flags:
+  context_engineer:
+    --analyze-deps:
+      description: "Deep dependency analysis"
+    --tech-stack:
+      description: "Detailed tech stack analysis"
+    --security-focus:
+      description: "Enhanced security considerations"
+  execute_context:
+    --validate:
+      description: "Strict validation mode"
+    --test:
+      description: "Include test generation"
+    --benchmark:
+      description: "Performance benchmarking"
+  context_status:
+    --detailed:
+      description: "Comprehensive status report"
+    --metrics:
+      description: "Show performance metrics"
+    --recommendations:
+      description: "Include optimization suggestions"
+EOF
+            ;;
+            
+        "personas.yml")
+            cat << 'EOF'
+# Specialized Personas Configuration
+All_Personas:
+  architect:
+    symbol: "🏗️"
+    expertise: ["system_design", "patterns", "scalability"]
+    activation: ["architecture", "design", "structure"]
+  security:
+    symbol: "🔒"
+    expertise: ["security", "authentication", "encryption"]
+    activation: ["security", "auth", "protect"]
+  performance:
+    symbol: "⚡"
+    expertise: ["optimization", "caching", "efficiency"]
+    activation: ["performance", "speed", "optimize"]
+  testing:
+    symbol: "🧪"
+    expertise: ["testing", "validation", "quality"]
+    activation: ["test", "validate", "quality"]
+  devops:
+    symbol: "🚀"
+    expertise: ["deployment", "ci_cd", "infrastructure"]
+    activation: ["deploy", "pipeline", "infrastructure"]
+    
+Intelligent_Activation_Patterns:
+  auto_detect: true
+  context_based: true
+  multi_persona: true
+  
+Collaboration_Patterns:
+  architect_security: "Secure system design"
+  performance_testing: "Performance validation"
+  security_devops: "Secure deployment"
+EOF
+            ;;
+            
+        "mcp.yml")
+            cat << 'EOF'
+# MCP Integration Configuration
+MCP_Integration:
+  available_mcps:
+    context7:
+      description: "Advanced context management"
+      flags: ["--mcp-context7", "--mc7"]
+    sequential:
+      description: "Sequential thinking assistance"
+      flags: ["--mcp-sequential", "--mseq"]
+    magic:
+      description: "Enhanced code generation"
+      flags: ["--mcp-magic", "--mmag"]
+    puppeteer:
+      description: "Browser automation"
+      flags: ["--mcp-puppeteer", "--mpup"]
+      
+Token_Economics:
+  cache_multiplier: 0.1
+  cache_duration: 900
+  
+Cache_Management:
+  strategy: "lru_with_relevance"
+  max_size: "100MB"
+  ttl: 900
+  smart_invalidation: true
+  
+Workflows:
+  auto_cache_context: true
+  prefetch_related: true
+  compression_before_cache: true
+EOF
+            ;;
+            
+        "rules.yml")
+            cat << 'EOF'
+# Development Rules and Standards
+Quality_Gates:
+  mandatory:
+    - syntax_validation
+    - type_checking
+    - security_scan
+  optional:
+    - performance_benchmark
+    - accessibility_check
+    
+Security_Standards:
+  input_validation: "always"
+  authentication: "required"
+  authorization: "role_based"
+  encryption: "data_at_rest_and_transit"
+  
+Development_Standards:
+  code_style: "language_idiomatic"
+  documentation: "inline_and_external"
+  error_handling: "comprehensive"
+  testing: "unit_and_integration"
+  
+Smart_Defaults:
+  react_native:
+    state_management: "zustand"
+    navigation: "react_navigation"
+    styling: "styled_components"
+  python_fastapi:
+    orm: "sqlalchemy"
+    validation: "pydantic"
+    testing: "pytest"
+    
+Code_Generation:
+  patterns: "best_practices"
+  comments: "meaningful"
+  structure: "modular"
+  
+Session_Awareness:
+  state_tracking: true
+  progress_persistence: true
+  auto_resume: true
+EOF
+            ;;
+    esac
+}
+
+create_yml_files() {
+    print_info "Creating YML configuration files..."
+    
+    local yml_files=(
+        "core.yml"
+        "token-economy.yml"
+        "compression-patterns.yml"
+        "universal-constants.yml"
+        "flags.yml"
+        "personas.yml"
+        "mcp.yml"
+        "rules.yml"
+    )
+    
+    for yml in "${yml_files[@]}"; do
+        local yml_path="$CONTEXT_ENGINE_DIR/commands/shared/$yml"
+        
+        if [[ -f "$yml_path" ]] && [[ "$FORCE_INSTALL" == false ]]; then
+            print_warning "File exists: $yml (use --force to overwrite)"
+        else
+            create_yml_content "$yml" > "$yml_path"
+            print_status "Created: $yml"
+        fi
+    done
+}
+
+install_claude_md() {
+    print_info "Installing CLAUDE.md to parent Claude directory..."
+    
+    local source_claude="$SOURCE_DIR/CLAUDE.md"
+    local target_claude="$CLAUDE_PARENT_DIR/CLAUDE.md"
+    
+    if [[ ! -f "$source_claude" ]]; then
+        print_error "Source CLAUDE.md not found at: $source_claude"
+        return 1
+    fi
+    
+    if [[ -f "$target_claude" ]] && [[ "$FORCE_INSTALL" == false ]]; then
+        print_warning "CLAUDE.md already exists at: $target_claude"
+        print_info "Use --force to overwrite or --update to update"
+    else
+        cp "$source_claude" "$target_claude"
+        print_status "Installed CLAUDE.md to: $target_claude"
     fi
 }
 
 create_directory_structure() {
-    print_info "Creating Context Engineering directory structure..."
+    print_info "Creating Context Engine directory structure..."
     
-    # Create main commands directory structure
-    mkdir -p commands/shared
-    mkdir -p personas
-    mkdir -p mcp
-    mkdir -p docs
+    # Core directories
+    mkdir -p "$CONTEXT_ENGINE_DIR"/{commands/shared,personas,mcp,docs}
     
-    # For non-global installations, also create project-specific directories
-    if [[ "$CLAUDE_DIR" != "$DEFAULT_CLAUDE_DIR" ]]; then
-        # Create workflow directories (enhanced structure)
-        mkdir -p workflow/planned
-        mkdir -p workflow/in-progress/active
-        mkdir -p workflow/in-progress/paused
-        mkdir -p workflow/completed/successful
-        mkdir -p workflow/completed/archived
-        mkdir -p workflow/templates
-        
-        # Create context-engine directories
-        mkdir -p context-engine/layers
-        mkdir -p context-engine/managers
-        mkdir -p context-engine/templates
-        mkdir -p context-engine/validators
-        
-        # Create docs directory
-        mkdir -p docs
-        mkdir -p help-docs
+    # Copy documentation if available
+    if [[ -d "$SOURCE_DIR/docs" ]]; then
+        cp -r "$SOURCE_DIR/docs/"* "$CONTEXT_ENGINE_DIR/docs/" 2>/dev/null || true
     fi
     
-    print_status "Directory structure created successfully"
-    print_info "Installation location: $(pwd)"
+    print_status "Directory structure created"
 }
 
-install_core_modules() {
-    if [[ "$INSTALL_ALL" == true || "$INSTALL_TOKEN_ECONOMY" == true ]]; then
-        print_info "Installing core modules..."
-        
-        # Check if modules already exist
-        if [[ -f ".claude/commands/shared/core.yml" && "$UPDATE_MODE" == false ]]; then
-            print_warning "Core modules already exist. Use --update to overwrite."
-        else
-            print_status "Core modules installation completed"
-        fi
-    fi
-}
-
-setup_token_economy() {
-    if [[ "$INSTALL_ALL" == true || "$INSTALL_TOKEN_ECONOMY" == true || "$INSTALL_COMPRESSION" == true ]]; then
-        print_info "Setting up advanced token economy system..."
-        
-        # Verify token economy files exist
-        local files_to_check=(
-            ".claude/commands/shared/universal-constants.yml"
-            ".claude/commands/shared/compression-patterns.yml"
-            ".claude/commands/shared/token-economy.yml"
-        )
-        
-        for file in "${files_to_check[@]}"; do
-            if [[ -f "$file" ]]; then
-                print_status "Token economy file exists: $(basename "$file")"
-            else
-                print_warning "Token economy file missing: $file"
-            fi
-        done
-        
-        print_status "Token economy system setup completed"
-        print_info "UltraCompressed mode (--uc) available for 70% token reduction"
-    fi
-}
-
-setup_mcp_integration() {
-    if [[ "$INSTALL_ALL" == true || "$INSTALL_MCP" == true ]]; then
-        print_info "Setting up MCP integration..."
-        
-        # Check for MCP configuration
-        if [[ -f ".claude/commands/shared/mcp.yml" ]]; then
-            print_status "MCP configuration found"
-            print_info "Available MCPs: Context7, Sequential, Magic, Puppeteer"
-            print_info "Use flags: --mcp-context7, --mcp-sequential, --mcp-magic, --mcp-puppeteer"
-        else
-            print_warning "MCP configuration not found"
-        fi
-        
-        print_status "MCP integration setup completed"
-    fi
-}
-
-install_personas() {
-    if [[ "$INSTALL_ALL" == true || "$INSTALL_PERSONAS" == true ]]; then
-        print_info "Installing specialized personas system..."
-        
-        # Check personas configuration
-        if [[ -f ".claude/commands/shared/personas.yml" ]]; then
-            print_status "Personas system configured"
-            print_info "Available personas: 🏗️ Architect, 🔒 Security, ⚡ Performance, 🧪 Testing, 🚀 DevOps"
-            print_info "Use flags: --persona-architect, --persona-security, --persona-performance, etc."
-        else
-            print_warning "Personas configuration not found"
-        fi
-        
-        print_status "Personas system installation completed"
-    fi
-}
-
-setup_flag_system() {
-    if [[ "$INSTALL_ALL" == true || "$INSTALL_FLAGS" == true ]]; then
-        print_info "Setting up advanced flag system..."
-        
-        # Check flags configuration
-        if [[ -f ".claude/commands/shared/flags.yml" ]]; then
-            print_status "Flag system configured"
-            print_info "Universal flags available: --plan, --think, --uc, --compress, --cache"
-            print_info "Quality flags: --validate, --test, --security, --benchmark"
-        else
-            print_warning "Flag system configuration not found"
-        fi
-        
-        print_status "Flag system setup completed"
-    fi
-}
-
-setup_workflow_management() {
-    if [[ "$INSTALL_ALL" == true || "$INSTALL_WORKFLOW" == true ]]; then
-        print_info "Setting up intelligent workflow management..."
-        
-        # Check if features directory exists and rename it
-        if [[ -d "features" && ! -d "workflow" ]]; then
-            print_info "Migrating 'features' directory to 'workflow'"
-            mv features workflow
-            print_status "Directory migration completed"
-        fi
-        
-        # Verify workflow structure
-        if [[ -d "workflow" ]]; then
-            print_status "Workflow directory structure verified"
-            print_info "Automatic file management: planned → in-progress → completed"
-            print_info "Session-aware progress tracking enabled"
-        else
-            print_warning "Workflow directory not found"
-        fi
-        
-        print_status "Workflow management setup completed"
-    fi
-}
-
-setup_compression_system() {
-    if [[ "$INSTALL_ALL" == true || "$INSTALL_COMPRESSION" == true ]]; then
-        print_info "Setting up compression system..."
-        
-        # Check compression configuration
-        if [[ -f ".claude/commands/shared/compression-patterns.yml" ]]; then
-            print_status "Compression patterns configured"
-            print_info "Auto-activation at 75% context usage"
-            print_info "Target: 70% token reduction with --uc flag"
-        else
-            print_warning "Compression patterns not found"
-        fi
-        
-        print_status "Compression system setup completed"
-    fi
-}
-
-clean_obsolete_files() {
-    if [[ "$CLEAN_MODE" == false ]]; then
+install_project_structure() {
+    if [[ "$INSTALL_MODE" != "project" ]]; then
         return 0
     fi
     
-    print_info "Starting intelligent cleanup of Claude directory..."
-    print_warning "SAFETY: Only cleaning files within: $CLAUDE_DIR"
+    print_info "Installing project-specific structure..."
     
-    # Create backup directory with timestamp inside the installation directory
-    local backup_dir="$CLAUDE_DIR/backups/cleanup-$(date +%Y%m%d-%H%M%S)"
-    mkdir -p "$backup_dir"
+    local project_path="$(realpath "$PROJECT_DIR")"
     
-    # Define the VALID structure for Context Engineering System v2.0
-    local valid_structure=(
-        # Valid directories
-        "commands"
-        "commands/shared"
-        "personas"
-        "mcp"
-        "docs"
-        "backups"
-        
-        # Valid files in commands/shared/
-        "commands/shared/core.yml"
-        "commands/shared/token-economy.yml"
-        "commands/shared/compression-patterns.yml"
-        "commands/shared/universal-constants.yml"
-        "commands/shared/flags.yml"
-        "commands/shared/personas.yml"
-        "commands/shared/mcp.yml"
-        "commands/shared/rules.yml"
-        
-        # Valid command files
-        "commands/context-engineer.md"
-        "commands/execute-context.md"
-        "commands/context-status.md"
-        
-        # Valid root files
-        "installation-report.md"
-        "settings.local.json"
+    # Create project directories
+    mkdir -p "$project_path"/{workflow/{planned,in-progress/{active,paused},completed/{successful,archived},templates},context-engine/{layers,managers,templates,validators}}
+    
+    # Copy workflow templates if available
+    if [[ -d "$SOURCE_DIR/workflow/templates" ]]; then
+        cp -r "$SOURCE_DIR/workflow/templates/"* "$project_path/workflow/templates/" 2>/dev/null || true
+    fi
+    
+    # Create project CLAUDE.md that references global installation
+    cat > "$project_path/CLAUDE.md" << EOF
+# Project-Specific Context Engineering Configuration
+# This file references the global Context Engine installation
+
+# Include global Context Engine configuration
+@include $CONTEXT_ENGINE_DIR/commands/shared/core.yml
+@include $CONTEXT_ENGINE_DIR/commands/shared/token-economy.yml
+@include $CONTEXT_ENGINE_DIR/commands/shared/compression-patterns.yml
+@include $CONTEXT_ENGINE_DIR/commands/shared/universal-constants.yml
+@include $CONTEXT_ENGINE_DIR/commands/shared/flags.yml
+@include $CONTEXT_ENGINE_DIR/commands/shared/personas.yml
+@include $CONTEXT_ENGINE_DIR/commands/shared/mcp.yml
+@include $CONTEXT_ENGINE_DIR/commands/shared/rules.yml
+
+# Project-specific configurations can be added below
+EOF
+    
+    print_status "Project structure installed at: $project_path"
+}
+
+clean_context_engine() {
+    print_warning "Cleaning Context Engine files (preserving Claude CLI)..."
+    
+    # Files and directories that belong to Context Engine ONLY
+    local context_engine_items=(
+        "$CONTEXT_ENGINE_DIR"
+        "$CLAUDE_PARENT_DIR/CLAUDE.md"
     )
     
-    # For non-global installations, add project-specific valid items
-    if [[ "$CLAUDE_DIR" != "$DEFAULT_CLAUDE_DIR" ]]; then
-        valid_structure+=(
-            "workflow"
-            "workflow/planned"
-            "workflow/in-progress"
-            "workflow/in-progress/active"
-            "workflow/in-progress/paused"
-            "workflow/completed"
-            "workflow/completed/successful"
-            "workflow/completed/archived"
-            "workflow/templates"
-            "context-engine"
-            "context-engine/layers"
-            "context-engine/managers"
-            "context-engine/templates"
-            "context-engine/validators"
-            "help-docs"
-        )
-    fi
-    
-    # Get ALL current files and directories ONLY in the installation directory
-    # IMPORTANT: Only scan the actual installation directory, never the project root
-    local all_items=()
-    if [[ -d "$CLAUDE_DIR" ]]; then
-        while IFS= read -r -d '' item; do
-            # Make path relative to installation directory
-            item="${item#$CLAUDE_DIR/}"
-            all_items+=("$item")
-        done < <(find "$CLAUDE_DIR" -maxdepth 4 -type f -o -type d | grep -v "^$CLAUDE_DIR$" | sort -u | tr '\n' '\0')
-    fi
-    
-    # Identify obsolete items (exist but not in valid structure)
-    local items_to_remove=()
-    
-    for item in "${all_items[@]}"; do
-        # Skip empty items and backup directories content
-        if [[ -z "$item" ]] || [[ "$item" == backups/* ]]; then
-            continue
-        fi
-        
-        # Check if item is in valid structure
-        local is_valid=false
-        for valid_item in "${valid_structure[@]}"; do
-            if [[ "$item" == "$valid_item" ]]; then
-                is_valid=true
-                break
-            fi
-        done
-        
-        # Also allow any files in backups/ (created by this system)
-        if [[ "$item" == backups/* ]]; then
-            is_valid=true
-        fi
-        
-        if [[ "$is_valid" == false ]]; then
-            # Ensure we're only adding items that are actually in the installation directory
-            items_to_remove+=("$CLAUDE_DIR/$item")
-        fi
-    done
-    
-    # For non-global installations, also check for old root directories in the original location
-    # ONLY if we're not in a global installation
-    if [[ "$CLAUDE_DIR" != "$DEFAULT_CLAUDE_DIR" ]]; then
-        local old_root_dirs=(
-            "features"  # Should be migrated to workflow
-        )
-        
-        # Go back to original directory to check for these
-        local original_dir="$(dirname "$CLAUDE_DIR")"
-        for old_dir in "${old_root_dirs[@]}"; do
-            if [[ -d "$original_dir/$old_dir" ]]; then
-                items_to_remove+=("$original_dir/$old_dir")
-            fi
-        done
-    fi
-    
-    # Show what will be cleaned
-    if [[ ${#items_to_remove[@]} -eq 0 ]]; then
-        print_status "No obsolete files found. System is clean."
-        rmdir "$backup_dir" 2>/dev/null || true
-        return 0
-    fi
+    # Files that should NEVER be deleted (Claude CLI)
+    local protected_files=(
+        "$CLAUDE_PARENT_DIR/claude_3_5_sonnet.json"
+        "$CLAUDE_PARENT_DIR/config.json"
+        "$CLAUDE_PARENT_DIR/settings.json"
+        "$CLAUDE_PARENT_DIR/preferences.json"
+        "$CLAUDE_PARENT_DIR/mcp.json"
+    )
     
     echo ""
-    print_warning "The following obsolete items will be removed:"
-    echo -e "${YELLOW}📋 Complete cleanup analysis:${NC}"
-    
-    local files_count=0
-    local dirs_count=0
-    
-    for item in "${items_to_remove[@]}"; do
-        if [[ -d "$item" ]]; then
-            echo "  📁 $item/"
-            ((dirs_count++))
-        else
-            echo "  📄 $item"
-            ((files_count++))
-        fi
-    done
-    
-    echo ""
-    print_info "Summary: $files_count files and $dirs_count directories will be removed"
-    print_info "Backup will be created at: $backup_dir"
-    echo ""
-    print_warning "This will clean ALL non-Context Engineering System files from .claude/"
-    echo ""
-    
-    # Ask for confirmation
-    read -p "Continue with cleanup? (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        print_info "Cleanup cancelled by user."
-        rmdir "$backup_dir" 2>/dev/null || true
-        return 0
-    fi
-    
-    # Create complete backup before any changes
-    print_info "Creating complete backup of installation directory..."
-    cp -r "$CLAUDE_DIR" "$backup_dir/full-backup" 2>/dev/null || true
-    
-    # Remove obsolete items
-    local cleaned_count=0
-    
-    for item in "${items_to_remove[@]}"; do
+    print_info "Items to be removed:"
+    for item in "${context_engine_items[@]}"; do
         if [[ -e "$item" ]]; then
-            print_info "Removing: $item"
-            if [[ -d "$item" ]]; then
-                rm -rf "$item"
-            else
-                rm -f "$item"
-            fi
-            ((cleaned_count++))
-            print_status "✅ Removed: $item"
+            echo "  - $item"
         fi
     done
     
-    # Handle features to workflow migration if needed
-    if [[ -d "features" ]] && [[ ! -d "workflow" ]]; then
-        print_info "Migrating 'features' directory to 'workflow'..."
-        mv features workflow 2>/dev/null && print_status "✅ Migrated: features/ → workflow/"
+    echo ""
+    print_info "Protected Claude CLI files:"
+    for item in "${protected_files[@]}"; do
+        if [[ -e "$item" ]]; then
+            echo "  ✓ $item (will be preserved)"
+        fi
+    done
+    
+    echo ""
+    read -p "Continue with Context Engine cleanup? (y/N): " -n 1 -r
+    echo
+    
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        print_info "Cleanup cancelled"
+        return 0
     fi
     
-    # Summary
-    echo ""
-    if [[ $cleaned_count -gt 0 ]]; then
-        print_status "🎉 Cleanup completed: $cleaned_count items removed"
-        print_info "Complete backup available at: $backup_dir/full-backup/"
-        print_info "You can restore the entire installation if needed"
-        print_status "System is now clean and ready for Context Engineering System v2.0"
-    else
-        print_warning "No files were actually removed"
-        rmdir "$backup_dir" 2>/dev/null || true
-    fi
-    echo ""
-}
-
-install_glossary() {
-    print_info "Installing universal glossary system..."
+    # Remove Context Engine items
+    for item in "${context_engine_items[@]}"; do
+        if [[ -e "$item" ]]; then
+            # Extra safety check
+            local is_protected=false
+            for protected in "${protected_files[@]}"; do
+                if [[ "$item" == "$protected" ]]; then
+                    is_protected=true
+                    break
+                fi
+            done
+            
+            if [[ "$is_protected" == false ]]; then
+                rm -rf "$item"
+                print_status "Removed: $item"
+            else
+                print_warning "Skipped protected file: $item"
+            fi
+        fi
+    done
     
-    # Check if glossary exists
-    if [[ -f "docs/context-engine-glossary.md" ]]; then
-        print_status "Universal glossary available at: docs/context-engine-glossary.md"
-        print_info "Comprehensive symbol & abbreviation reference"
-        print_info "Auto-sync with universal-constants.yml"
-    else
-        print_warning "Glossary not found, but installation continuing"
-    fi
+    print_status "Context Engine cleanup completed"
 }
 
 validate_installation() {
-    print_info "Validating installation..."
+    print_info "Validating Context Engine installation..."
     
     local validation_passed=true
+    local required_files=(
+        "$CONTEXT_ENGINE_DIR/commands/shared/core.yml"
+        "$CONTEXT_ENGINE_DIR/commands/shared/token-economy.yml"
+        "$CONTEXT_ENGINE_DIR/commands/shared/compression-patterns.yml"
+        "$CONTEXT_ENGINE_DIR/commands/shared/universal-constants.yml"
+        "$CONTEXT_ENGINE_DIR/commands/shared/flags.yml"
+        "$CONTEXT_ENGINE_DIR/commands/shared/personas.yml"
+        "$CONTEXT_ENGINE_DIR/commands/shared/mcp.yml"
+        "$CONTEXT_ENGINE_DIR/commands/shared/rules.yml"
+        "$CLAUDE_PARENT_DIR/CLAUDE.md"
+    )
     
-    # Check core structure
-    if [[ ! -d ".claude/commands/shared" ]]; then
-        print_error "Core directory structure missing"
-        validation_passed=false
-    fi
-    
-    # Check CLAUDE.md
-    if [[ -f "CLAUDE.md" ]]; then
-        if grep -q "@include" "CLAUDE.md"; then
-            print_status "Modular CLAUDE.md detected"
+    for file in "${required_files[@]}"; do
+        if [[ -f "$file" ]]; then
+            print_status "✓ $(basename "$file")"
         else
-            print_warning "CLAUDE.md exists but may not be modular"
+            print_error "✗ Missing: $file"
+            validation_passed=false
         fi
-    else
-        print_warning "CLAUDE.md not found"
-    fi
+    done
     
-    # Check workflow structure
-    if [[ -d "workflow" ]]; then
-        print_status "Workflow management system detected"
-    fi
-    
-    # Check token economy
-    if [[ -f ".claude/commands/shared/token-economy.yml" ]]; then
-        print_status "Token economy system installed"
+    # Check CLAUDE.md references
+    if [[ -f "$CLAUDE_PARENT_DIR/CLAUDE.md" ]]; then
+        if grep -q "@include commands/shared/" "$CLAUDE_PARENT_DIR/CLAUDE.md"; then
+            print_status "✓ CLAUDE.md has correct @include references"
+        else
+            print_error "✗ CLAUDE.md missing @include references"
+            validation_passed=false
+        fi
     fi
     
     if [[ "$validation_passed" == true ]]; then
         print_status "Installation validation passed ✅"
+        return 0
     else
         print_error "Installation validation failed ❌"
         return 1
@@ -643,61 +698,65 @@ validate_installation() {
 }
 
 create_installation_report() {
-    local report_file=".claude/installation-report.md"
+    local report_file="$CONTEXT_ENGINE_DIR/installation-report.md"
     
     cat > "$report_file" << EOF
 # Context Engineering System v${VERSION} - Installation Report
 
 **Installation Date**: ${INSTALL_DATE}
-**Installation Type**: $(if [[ "$INSTALL_ALL" == true ]]; then echo "Full Installation"; else echo "Partial Installation"; fi)
+**Installation Type**: ${INSTALL_MODE}
+**Installation Path**: ${CONTEXT_ENGINE_DIR}
 
-## Installed Components
+## Installation Summary
 
-$(if [[ "$INSTALL_ALL" == true || "$INSTALL_TOKEN_ECONOMY" == true ]]; then echo "✅ Advanced Token Economy System"; fi)
-$(if [[ "$INSTALL_ALL" == true || "$INSTALL_MCP" == true ]]; then echo "✅ MCP Integration (Context7, Sequential, Magic, Puppeteer)"; fi)
-$(if [[ "$INSTALL_ALL" == true || "$INSTALL_PERSONAS" == true ]]; then echo "✅ Specialized Personas System"; fi)
-$(if [[ "$INSTALL_ALL" == true || "$INSTALL_FLAGS" == true ]]; then echo "✅ Advanced Flag System"; fi)
-$(if [[ "$INSTALL_ALL" == true || "$INSTALL_COMPRESSION" == true ]]; then echo "✅ UltraCompressed Mode & Token Optimization"; fi)
-$(if [[ "$INSTALL_ALL" == true || "$INSTALL_WORKFLOW" == true ]]; then echo "✅ Intelligent Workflow Management"; fi)
+### Core Components
+✅ Core System (core.yml)
+✅ Token Economy (token-economy.yml)
+✅ Compression Patterns (compression-patterns.yml)
+✅ Universal Constants (universal-constants.yml)
+✅ Flag System (flags.yml)
+✅ Personas System (personas.yml)
+✅ MCP Integration (mcp.yml)
+✅ Development Rules (rules.yml)
 
-## Quick Start Guide
+### Configuration Files
+✅ CLAUDE.md installed to: ${CLAUDE_PARENT_DIR}/CLAUDE.md
+✅ YML files installed to: ${CONTEXT_ENGINE_DIR}/commands/shared/
 
-### Basic Commands
-- \`/context-engineer "feature description"\` - Plan new features
-- \`/execute-context feature-name\` - Implement planned features  
-- \`/context-status\` - Monitor project health
+### Claude CLI Integration
+- Context Engine installed in subdirectory: ${CONTEXT_ENGINE_DIR}
+- Claude CLI files preserved in: ${CLAUDE_PARENT_DIR}
+- Clean separation maintained
 
-### Token Efficiency
-- Use \`--uc\` flag for 70% token reduction
-- Auto-compression activates at 75% context usage
-- Reference glossary: \`docs/context-engine-glossary.md\`
+## Quick Start
 
-### Workflow Management
-- Files automatically move: planned → in-progress → completed
-- Session-aware progress tracking
-- Smart resume functionality
+1. **Global Usage**: The Context Engine is now available in all your projects
+2. **Basic Commands**:
+   - \`/context-engineer "feature"\` - Plan new features
+   - \`/execute-context feature-name\` - Implement features
+   - \`/context-status\` - Check project health
 
-## Performance Targets
-- **Token Efficiency**: 70% reduction target with --uc
-- **Context Relevance**: 90%+ useful information
-- **Workflow Automation**: 100% automatic file management
-- **Quality Gates**: 95%+ pass rate
+3. **Token Efficiency**:
+   - Use \`--uc\` flag for 70% token reduction
+   - Auto-compression at 75% context usage
 
-## Documentation
-- **Glossary**: \`docs/context-engine-glossary.md\`
-- **Commands Reference**: \`help-docs/commands-reference.md\`
-- **System Configuration**: \`.claude/commands/shared/\`
+## File Locations
 
-## Support
-For issues or questions:
-1. Check the glossary for symbol meanings
-2. Use \`/context-status --help\` for diagnostics
-3. Review installation report: \`.claude/installation-report.md\`
+- **Main Configuration**: ${CLAUDE_PARENT_DIR}/CLAUDE.md
+- **YML Configurations**: ${CONTEXT_ENGINE_DIR}/commands/shared/
+- **Documentation**: ${CONTEXT_ENGINE_DIR}/docs/
+- **This Report**: ${report_file}
+
+## Next Steps
+
+1. Open Claude Desktop
+2. The Context Engine commands are now available
+3. Try: \`/context-engineer "Add user authentication"\`
 
 ---
-*Context Engineering System v${VERSION} - Enterprise-class AI development assistant*
+*Context Engineering System v${VERSION} - Successfully Installed*
 EOF
-
+    
     print_status "Installation report created: $report_file"
 }
 
@@ -706,49 +765,56 @@ main() {
     
     parse_arguments "$@"
     
-    if [[ "$UPDATE_MODE" == true ]]; then
-        print_info "Update mode: Refreshing existing installation"
-    fi
-    
+    # Handle clean mode
     if [[ "$CLEAN_MODE" == true ]]; then
-        print_info "Clean mode: Will remove obsolete files and directories"
+        clean_context_engine
+        exit 0
     fi
     
-    setup_installation_directory
-    detect_environment
-    clean_obsolete_files
+    # Installation process
+    detect_claude_cli
+    
+    print_info "Installation mode: $INSTALL_MODE"
+    
+    # Create directories
     create_directory_structure
-    install_core_modules
-    setup_token_economy
-    setup_mcp_integration
-    install_personas
-    setup_flag_system
-    setup_workflow_management
-    setup_compression_system
-    install_glossary
-    validate_installation
-    create_installation_report
     
-    echo ""
-    print_status "🎉 Context Engineering System v${VERSION} installation completed!"
-    echo ""
-    print_info "Installation location: $CLAUDE_DIR"
-    print_info "Next steps:"
-    if [[ "$CLAUDE_DIR" == "$DEFAULT_CLAUDE_DIR" ]]; then
-        echo "  1. Global installation ready - available in all projects"
-        echo "  2. Try a command: /context-engineer \"Add user authentication\""
-        echo "  3. Use --uc flag for token efficiency"
-        echo "  4. Check installation report: $CLAUDE_DIR/installation-report.md"
-    else
-        echo "  1. Review the glossary: docs/context-engine-glossary.md"
-        echo "  2. Try a command: /context-engineer \"Add user authentication\""
-        echo "  3. Use --uc flag for token efficiency"
-        echo "  4. Check installation report: installation-report.md"
+    # Install core files
+    create_yml_files
+    install_claude_md
+    
+    # Project-specific installation
+    if [[ "$INSTALL_MODE" == "project" ]]; then
+        install_project_structure
     fi
-    echo ""
-    print_info "Performance targets: 70% token reduction, 90% context relevance, 100% workflow automation"
-    echo ""
+    
+    # Validate
+    if validate_installation; then
+        create_installation_report
+        
+        echo ""
+        print_status "🎉 Context Engineering System v${VERSION} installed successfully!"
+        echo ""
+        print_info "Installation Summary:"
+        echo "  ${CYAN}►${NC} Location: $CONTEXT_ENGINE_DIR"
+        echo "  ${CYAN}►${NC} CLAUDE.md: $CLAUDE_PARENT_DIR/CLAUDE.md"
+        echo "  ${CYAN}►${NC} Report: $CONTEXT_ENGINE_DIR/installation-report.md"
+        echo ""
+        
+        if [[ "$INSTALL_MODE" == "project" ]]; then
+            echo "  ${CYAN}►${NC} Project: $PROJECT_DIR"
+        fi
+        
+        print_info "Next steps:"
+        echo "  1. Open Claude Desktop"
+        echo "  2. Try: /context-engineer \"Your feature description\""
+        echo "  3. Use --uc flag for 70% token reduction"
+        echo ""
+    else
+        print_error "Installation failed. Please check the errors above."
+        exit 1
+    fi
 }
 
-# Run main function with all arguments
+# Run main function
 main "$@"

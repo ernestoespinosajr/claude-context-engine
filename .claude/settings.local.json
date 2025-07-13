@@ -16,7 +16,8 @@
       "Bash(npm uninstall:*)",
       "Bash(curl:*)",
       "Bash(touch:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "mcp__sequential-thinking__sequentialthinking"
     ],
     "deny": []
   }
