@@ -1248,10 +1248,11 @@ install_project_structure() {
         cp -r "$SOURCE_DIR/workflow/templates/"* "$project_path/workflow/templates/" 2>/dev/null || true
     fi
     
-    # Create project CLAUDE.md following SuperClaude's approach
-    # NO command definitions - only project-specific configurations
+    # Create project CLAUDE.md in .claude/ subdirectory to avoid global conflicts
+    # This follows Claude CLI's local project configuration pattern
     if [[ "$DRY_RUN" != true ]]; then
-        cat > "$project_path/CLAUDE.md" << EOF
+        mkdir -p "$project_path/.claude"
+        cat > "$project_path/.claude/CLAUDE.md" << EOF
 # Project Configuration - Context Engineering System
 
 This project uses the global Context Engineering System installed at: $CLAUDE_PARENT_DIR
