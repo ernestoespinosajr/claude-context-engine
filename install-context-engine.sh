@@ -1216,19 +1216,42 @@ install_project_structure() {
     
     print_info "Installing project-specific structure..."
     
-    local project_path="$(realpath "$PROJECT_DIR")"
+    # Resolve project path (handle non-existent directories)
+    local project_path="$PROJECT_DIR"
+    if [[ ! "$project_path" = /* ]]; then
+        # Convert relative to absolute path
+        project_path="$(pwd)/$project_path"
+    fi
+    
+    # Validate parent directory exists
+    local parent_dir="$(dirname "$project_path")"
+    if [[ ! -d "$parent_dir" ]]; then
+        log_error "Parent directory does not exist: $parent_dir"
+        return 1
+    fi
     
     # Create project directories
-    mkdir -p "$project_path"/{workflow/{planned,in-progress/{active,paused},completed/{successful,archived},templates},context-engine/{layers,managers,templates,validators}}
+    log_verbose "Creating project directories at: $project_path"
+    if [[ "$DRY_RUN" != true ]]; then
+        mkdir -p "$project_path/workflow/planned"
+        mkdir -p "$project_path/workflow/in-progress/active"
+        mkdir -p "$project_path/workflow/in-progress/paused"
+        mkdir -p "$project_path/workflow/completed/successful"
+        mkdir -p "$project_path/workflow/completed/archived"
+        mkdir -p "$project_path/workflow/templates"
+    fi
     
     # Copy workflow templates if available
-    if [[ -d "$SOURCE_DIR/workflow/templates" ]]; then
+    if [[ -d "$SOURCE_DIR/workflow/templates" ]] && [[ "$DRY_RUN" != true ]]; then
+        log_verbose "Copying workflow templates to project"
+        mkdir -p "$project_path/workflow/templates"
         cp -r "$SOURCE_DIR/workflow/templates/"* "$project_path/workflow/templates/" 2>/dev/null || true
     fi
     
     # Create project CLAUDE.md following SuperClaude's approach
     # NO command definitions - only project-specific configurations
-    cat > "$project_path/CLAUDE.md" << EOF
+    if [[ "$DRY_RUN" != true ]]; then
+        cat > "$project_path/CLAUDE.md" << EOF
 # Project Configuration - Context Engineering System
 
 This project uses the global Context Engineering System installed at: $CLAUDE_PARENT_DIR
@@ -1289,6 +1312,7 @@ quality_requirements:
 *Project powered by Context Engineering System v2.0*
 *Commands: /context-engineer, /execute-context, /context-status*
 EOF
+    fi
     
     print_status "Project structure installed at: $project_path"
 }
@@ -1624,41 +1648,46 @@ main() {
     
     log "Installation mode: $INSTALL_MODE"
     
-    # Clean incorrect structure from previous installations
-    log_verbose "Step 1: Cleaning incorrect structure"
-    clean_incorrect_structure
-    
-    # Create directories
-    log_verbose "Step 2: Creating directory structure"
-    create_directory_structure
-    
-    # Move repository files to correct locations
-    log_verbose "Step 3: Moving repository files"
-    if ! move_repository_files; then
-        log_error "Failed during move_repository_files step" "installation"
-        return 1
-    fi
-    log_verbose "Step 3 completed successfully"
-    
-    # Install core files
-    log_verbose "Step 4: Installing core files"
-    if ! create_yml_files; then
-        log_error "Failed during create_yml_files step" "installation"
-        return 1
-    fi
-    log_verbose "Step 4 completed successfully"
-    
-    # Create MCP configuration
-    log_verbose "Step 5: Creating MCP configuration"
-    if ! create_mcp_configuration; then
-        log_error "Failed during create_mcp_configuration step" "installation"
-        return 1
-    fi
-    log_verbose "Step 5 completed successfully"
-    
-    # Project-specific installation
+    # Execute installation steps based on mode
     if [[ "$INSTALL_MODE" == "project" ]]; then
+        # Project-only installation - NO global files touched
+        log_verbose "Project-only installation: Creating project configuration only"
         install_project_structure
+    else
+        # Global installation (full or update mode)
+        log_verbose "Global installation: Installing commands and global configuration"
+        
+        # Clean incorrect structure from previous installations
+        log_verbose "Step 1: Cleaning incorrect structure"
+        clean_incorrect_structure
+        
+        # Create directories
+        log_verbose "Step 2: Creating directory structure"
+        create_directory_structure
+        
+        # Move repository files to correct locations
+        log_verbose "Step 3: Moving repository files"
+        if ! move_repository_files; then
+            log_error "Failed during move_repository_files step" "installation"
+            return 1
+        fi
+        log_verbose "Step 3 completed successfully"
+        
+        # Install core files
+        log_verbose "Step 4: Installing core files"
+        if ! create_yml_files; then
+            log_error "Failed during create_yml_files step" "installation"
+            return 1
+        fi
+        log_verbose "Step 4 completed successfully"
+        
+        # Create MCP configuration
+        log_verbose "Step 5: Creating MCP configuration"
+        if ! create_mcp_configuration; then
+            log_error "Failed during create_mcp_configuration step" "installation"
+            return 1
+        fi
+        log_verbose "Step 5 completed successfully"
     fi
     
     # Mark installation phase as complete
