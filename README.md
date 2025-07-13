@@ -36,31 +36,38 @@ cd claude-context-engine
 - **Intelligent Caching**: 85%+ hit rate with optimized TTL
 - **Parallel Processing**: Concurrent operations for speed
 
-### 2. Installation Options
+### 2. Installation Options (Anti-Duplication System)
 
 ```bash
-# Global installation (recommended - available in all projects)
-./install-context-engine.sh --full
+# Step 1: Global installation (REQUIRED - installs commands)
+./install-context-engine.sh --global
 
-# Update existing installation with cleanup
-./install-context-engine.sh --update --clean
+# Step 2: Per-project setup (OPTIONAL - adds project config only)
+./install-context-engine.sh --project ./my-project
 
-# Custom location installation
-./install-context-engine.sh --full --dir /opt/claude
+# Update existing installation
+./install-context-engine.sh --update
 
-# Project-specific installation
-./install-context-engine.sh --full --dir ./my-project/.claude
+# Custom global location
+./install-context-engine.sh --global --dir /opt/claude
 ```
 
-**Installation Types:**
-- **Global (`~/.claude/`)**: Available system-wide for all projects
-- **Custom directory**: Install to any location with `--dir <path>`
-- **Project-specific**: Install directly in your project directory
+**🚀 New Anti-Duplication Architecture:**
+- **Global Installation**: Commands installed ONCE in `~/.claude/` (available everywhere)
+- **Project Setup**: Only project-specific configurations (NO command duplication)
+- **Smart Detection**: Automatically prevents command conflicts
+- **Zero Duplication**: Following SuperClaude's proven approach
 
-**For existing Claude configurations:**
-- Use `--update` to safely upgrade your current setup
-- Use `--update --clean` to remove obsolete files during upgrade
-- `--clean` creates automatic backups before removing any files
+**Installation Flow:**
+1. **Global First**: Install commands globally (required)
+2. **Project Config**: Add project-specific settings (optional)
+3. **Automatic Detection**: System warns if global installation missing
+4. **Clean Separation**: Commands vs. configurations kept separate
+
+**For existing installations:**
+- System automatically detects and prevents duplication
+- Use `--update` to upgrade existing global installation
+- Project installations now only add configurations
 
 ### 3. Start with Token Efficiency
 ```bash

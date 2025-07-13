@@ -397,6 +397,58 @@ detect_claude_cli() {
     fi
 }
 
+detect_global_context_engine() {
+    print_info "Checking for existing Context Engineering System installation..."
+    
+    # Check for global installation markers
+    local global_markers=(
+        "$CLAUDE_PARENT_DIR/CLAUDE.md"
+        "$CLAUDE_PARENT_DIR/commands/context-engineer.md"
+        "$CLAUDE_PARENT_DIR/commands/shared/core.yml"
+    )
+    
+    local global_found=false
+    for marker in "${global_markers[@]}"; do
+        if [[ -f "$marker" ]]; then
+            global_found=true
+            break
+        fi
+    done
+    
+    if [[ "$global_found" = true ]]; then
+        print_status "Global Context Engineering System detected at: $CLAUDE_PARENT_DIR"
+        
+        # Check version if available
+        if [[ -f "$CLAUDE_PARENT_DIR/commands/shared/core.yml" ]]; then
+            print_info "Existing global installation found"
+            if [[ "$INSTALL_MODE" = "project" ]]; then
+                print_status "Project installation will use existing global commands"
+                print_info "No command duplication will occur"
+            elif [[ "$INSTALL_MODE" = "full" ]]; then
+                print_warning "Global installation exists - this will update it"
+            fi
+        fi
+    else
+        print_info "No global Context Engineering System found"
+        if [[ "$INSTALL_MODE" = "project" ]]; then
+            print_warning "Project installation recommended only after global installation"
+            echo ""
+            echo -e "${YELLOW}Recommendation:${NC}"
+            echo "1. First install globally: $0 --global"
+            echo "2. Then install per project: $0 --project <directory>"
+            echo ""
+            if [[ "$FORCE_INSTALL" != true ]]; then
+                echo -n "Continue with project-only installation? (y/N): "
+                read -r continue_choice
+                if [[ ! "$continue_choice" =~ ^[Yy]$ ]]; then
+                    print_info "Installation cancelled"
+                    exit 0
+                fi
+            fi
+        fi
+    fi
+}
+
 create_backup_if_exists() {
     local file_path="$1"
     local backup_name="$2"
@@ -1174,22 +1226,68 @@ install_project_structure() {
         cp -r "$SOURCE_DIR/workflow/templates/"* "$project_path/workflow/templates/" 2>/dev/null || true
     fi
     
-    # Create project CLAUDE.md that references global installation
+    # Create project CLAUDE.md following SuperClaude's approach
+    # NO command definitions - only project-specific configurations
     cat > "$project_path/CLAUDE.md" << EOF
-# Project-Specific Context Engineering Configuration
-# This file references the global Context Engine installation
+# Project Configuration - Context Engineering System
 
-# Include global Context Engine configuration
-@include $CLAUDE_PARENT_DIR/commands/shared/core.yml
-@include $CLAUDE_PARENT_DIR/commands/shared/token-economy.yml
-@include $CLAUDE_PARENT_DIR/commands/shared/compression-patterns.yml
-@include $CLAUDE_PARENT_DIR/commands/shared/universal-constants.yml
-@include $CLAUDE_PARENT_DIR/commands/shared/flags.yml
-@include $CLAUDE_PARENT_DIR/commands/shared/personas.yml
-@include $CLAUDE_PARENT_DIR/commands/shared/mcp.yml
-@include $CLAUDE_PARENT_DIR/commands/shared/rules.yml
+This project uses the global Context Engineering System installed at: $CLAUDE_PARENT_DIR
+Commands are provided globally and available in all projects automatically.
 
-# Project-specific configurations can be added below
+## Project Metadata
+- **Project Name**: $(basename "$project_path")
+- **Installation Date**: $(date +"%Y-%m-%d %H:%M:%S")
+- **Context Engine Version**: 2.0
+- **Global Installation**: $CLAUDE_PARENT_DIR
+
+## Project-Specific Context
+
+### Technology Stack
+# Document your project's technology stack here
+# This helps the Context Engine understand your project better
+# Examples:
+# - Framework: React Native
+# - State Management: Zustand
+# - Navigation: React Navigation
+# - Styling: Styled Components
+# - Testing: Jest + React Native Testing Library
+
+### Development Standards
+# Define project-specific development standards
+# Examples:
+# - All components must have TypeScript definitions
+# - All features must include unit tests
+# - Follow semantic versioning for releases
+# - Use ESLint and Prettier for code formatting
+
+### Project Workflows
+# Custom workflow configurations for this project
+# These settings influence how /context-engineer plans features
+workflow_settings:
+  - feature_planning_depth: detailed
+  - validation_level: strict
+  - documentation_required: true
+  - testing_coverage_target: 80%
+
+### Custom Templates
+# Project-specific feature templates
+# These will be used by /context-engineer when available
+templates:
+  - react_native_screen: "Create new app screen with navigation"
+  - api_integration: "Add new API endpoint integration"
+  - component_library: "Add reusable UI component"
+
+### Quality Gates
+# Project-specific quality requirements
+quality_requirements:
+  - typescript_strict: true
+  - test_coverage_minimum: 80
+  - accessibility_compliance: true
+  - performance_budget_mobile: "< 3s load time"
+
+---
+*Project powered by Context Engineering System v2.0*
+*Commands: /context-engineer, /execute-context, /context-status*
 EOF
     
     print_status "Project structure installed at: $project_path"
@@ -1522,6 +1620,7 @@ main() {
     # Installation process
     log_verbose "Starting installation process"
     detect_claude_cli
+    detect_global_context_engine
     
     log "Installation mode: $INSTALL_MODE"
     
