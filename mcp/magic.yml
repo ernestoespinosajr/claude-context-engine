@@ -1,0 +1,62 @@
+# Magic MCP Configuration
+# Intelligent automation and workflow optimization
+
+name: "Magic"
+description: "Enhanced automation and intelligent workflow optimization"
+command: "npx"
+args: ["-y", "@modelcontextprotocol/server-magic"]
+
+capabilities:
+  - intelligent_automation
+  - workflow_optimization
+  - pattern_detection
+  - code_generation
+  - template_automation
+  - repetitive_task_detection
+  - smart_suggestions
+  - workflow_learning
+
+features:
+  automation_types:
+    code_patterns: "Detect and automate repetitive code patterns"
+    workflow_steps: "Automate common development workflows"
+    template_generation: "Smart template creation and application"
+    
+  pattern_detection:
+    code_repetition: true
+    workflow_patterns: true
+    anti_patterns: true
+    optimization_opportunities: true
+    
+  learning:
+    user_patterns: "Learn from user behavior"
+    project_patterns: "Adapt to project-specific patterns"
+    team_patterns: "Learn team conventions"
+
+flags:
+  - "--mcp-magic"
+  - "--mmag"
+  - "--automate"
+  - "--optimize-workflow"
+
+integration:
+  auto_activation: true
+  triggers:
+    - repetitive_tasks: "3+ similar operations"
+    - workflow_complexity: "high"
+    - optimization_opportunities: "detected"
+    
+cache_strategy:
+  duration: 1800  # 30 minutes
+  patterns: "persistent"  # Keep learned patterns
+  
+usage_patterns:
+  repetitive_tasks: "Automate common development patterns"
+  workflow_optimization: "Streamline development processes"
+  code_generation: "Smart code template generation"
+  
+optimization_targets:
+  - boilerplate_reduction
+  - workflow_efficiency
+  - pattern_consistency
+  - development_speed
