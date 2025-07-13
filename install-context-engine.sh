@@ -1,21 +1,44 @@
 #!/bin/bash
-# Context Engineering System v2.0 - Improved Installation Script
+# Context Engineering System v2.0 - Enhanced Installation Script
 # Properly separates from Claude CLI and installs all required files
+# Enhanced with security, error handling, and user experience improvements
 
 set -e  # Exit on any error
+set -o pipefail  # Exit on pipe failure
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+# Constants
+readonly REQUIRED_SPACE_KB=10240  # 10MB in KB
+readonly MIN_BASH_VERSION=3
+readonly SCRIPT_VERSION="2.0"
+
+# Colors for output - detect terminal support
+if [[ -t 1 ]] && [[ "$(tput colors 2>/dev/null)" -ge 8 ]]; then
+    readonly RED='\033[0;31m'
+    readonly GREEN='\033[0;32m'
+    readonly YELLOW='\033[1;33m'
+    readonly BLUE='\033[0;34m'
+    readonly CYAN='\033[0;36m'
+    readonly NC='\033[0m' # No Color
+else
+    readonly RED=''
+    readonly GREEN=''
+    readonly YELLOW=''
+    readonly BLUE=''
+    readonly CYAN=''
+    readonly NC=''
+fi
+
+# Error/Warning tracking
+ERROR_COUNT=0
+WARNING_COUNT=0
+ERROR_DETAILS=()
+WARNING_DETAILS=()
+VERIFICATION_FAILURES=0
 
 # Installation paths
-CONTEXT_ENGINE_DIR="$HOME/.claude/context-engine"
 CLAUDE_PARENT_DIR="$HOME/.claude"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKUP_DIR="$CLAUDE_PARENT_DIR/backups"
 
 # Version information
 VERSION="2.0"
@@ -26,6 +49,30 @@ INSTALL_MODE="full"  # full, project, update
 CLEAN_MODE=false
 PROJECT_DIR=""
 FORCE_INSTALL=false
+UPDATE_MODE=false
+VERIFY_MODE=false
+VERBOSE=false
+DRY_RUN=false
+LOG_FILE=""
+ROLLBACK_ON_FAILURE=true
+INSTALLATION_PHASE=false
+
+# Original working directory
+ORIGINAL_DIR=$(pwd)
+
+# Files that should NEVER be deleted (Claude CLI)
+PROTECTED_CLI_FILES=(
+    "claude_3_5_sonnet.json"
+    "config.json"
+    "settings.json"
+    "preferences.json"
+    "settings.local.json"
+    "backups"
+    "projects"
+    "shell-snapshots"
+    "statsig"
+    "todos"
+)
 
 print_header() {
     echo -e "${BLUE}"
@@ -52,6 +99,80 @@ print_info() {
     echo -e "${BLUE}ℹ️  $1${NC}"
 }
 
+# Enhanced logging functions
+log() {
+    local message="$1"
+    if [[ -n "$LOG_FILE" ]]; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] $message" >> "$LOG_FILE"
+    fi
+    echo "$message"
+}
+
+log_verbose() {
+    local message="$1"
+    if [[ -n "$LOG_FILE" ]]; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [VERBOSE] $message" >> "$LOG_FILE"
+    fi
+    if [[ "$VERBOSE" = true ]]; then
+        echo -e "${BLUE}[VERBOSE]${NC} $message" >&2
+    fi
+}
+
+log_error() {
+    local message="$1"
+    local context="${2:-unknown}"
+    
+    ((ERROR_COUNT++))
+    ERROR_DETAILS+=("[$context] $message")
+    
+    if [[ -n "$LOG_FILE" ]]; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [ERROR] [$context] $message" >> "$LOG_FILE"
+    fi
+    echo -e "${RED}[ERROR]${NC} $message" >&2
+}
+
+log_warning() {
+    local message="$1"
+    local context="${2:-unknown}"
+    
+    ((WARNING_COUNT++))
+    WARNING_DETAILS+=("[$context] $message")
+    
+    if [[ -n "$LOG_FILE" ]]; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [WARNING] [$context] $message" >> "$LOG_FILE"
+    fi
+    echo -e "${YELLOW}[WARNING]${NC} $message" >&2
+}
+
+generate_error_report() {
+    if [[ $ERROR_COUNT -eq 0 ]] && [[ $WARNING_COUNT -eq 0 ]]; then
+        return 0
+    fi
+    
+    echo ""
+    echo -e "${BLUE}=== Installation Report ===${NC}"
+    echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')"
+    echo "Script Version: $SCRIPT_VERSION"
+    echo "Installation Directory: $CLAUDE_PARENT_DIR"
+    echo ""
+    
+    if [[ $ERROR_COUNT -gt 0 ]]; then
+        echo -e "${RED}Errors ($ERROR_COUNT):${NC}"
+        for error in "${ERROR_DETAILS[@]}"; do
+            echo "  • $error"
+        done
+        echo ""
+    fi
+    
+    if [[ $WARNING_COUNT -gt 0 ]]; then
+        echo -e "${YELLOW}Warnings ($WARNING_COUNT):${NC}"
+        for warning in "${WARNING_DETAILS[@]}"; do
+            echo "  • $warning"
+        done
+        echo ""
+    fi
+}
+
 show_help() {
     echo "Context Engineering System v${VERSION} Enhanced Installation"
     echo ""
@@ -65,6 +186,12 @@ show_help() {
     echo "Options:"
     echo "  --clean              Clean Context Engine files (preserves Claude CLI)"
     echo "  --force              Force installation even if files exist"
+    echo "  --verify             Verify existing installation integrity"
+    echo "  --verbose            Show detailed output during installation"
+    echo "  --dry-run            Preview changes without making them"
+    echo "  --log <file>         Save installation log to file"
+    echo "  --no-rollback        Disable automatic rollback on failure"
+    echo "  --version            Show installer version"
     echo "  --help               Show this help message"
     echo ""
     echo "Examples:"
@@ -72,7 +199,99 @@ show_help() {
     echo "  $0 --project ./my-project    # Project-specific install"
     echo "  $0 --update                  # Update existing installation"
     echo "  $0 --clean                   # Remove Context Engine files only"
+    echo "  $0 --verify                  # Verify existing installation"
+    echo "  $0 --dry-run --verbose       # Preview with detailed output"
     echo ""
+}
+
+# Security validation functions
+validate_directory_path() {
+    local dir_path="$1"
+    
+    if [[ -z "$dir_path" ]]; then
+        log_error "Directory path cannot be empty" "path-validation"
+        return 1
+    fi
+    
+    # Check for dangerous paths
+    local dangerous_paths=("/" "/bin" "/sbin" "/usr" "/usr/bin" "/usr/sbin" "/etc" "/sys" "/proc" "/dev" "/boot" "/lib" "/lib64")
+    for dangerous in "${dangerous_paths[@]}"; do
+        if [[ "$dir_path" == "$dangerous" ]] || [[ "$dir_path" == "$dangerous"/* ]]; then
+            log_error "Installation to system directory not allowed: $dir_path" "path-validation"
+            return 1
+        fi
+    done
+    
+    # Check for path traversal attempts
+    if [[ "$dir_path" =~ \.\./|/\.\. ]]; then
+        log_error "Path traversal not allowed in directory path: $dir_path" "path-validation"
+        return 1
+    fi
+    
+    return 0
+}
+
+check_command() {
+    local cmd="$1"
+    
+    if [[ -z "$cmd" ]]; then
+        log_error "Command name cannot be empty" "command-check"
+        return 1
+    fi
+    
+    # Check for dangerous command patterns
+    if [[ "$cmd" =~ [\;\&\|\`\$\(\)\{\}\"\'\\] ]] || [[ "$cmd" =~ \.\.|^/ ]] || [[ "$cmd" =~ [[:space:]] ]]; then
+        log_error "Invalid command name contains dangerous characters: $cmd" "command-check"
+        return 1
+    fi
+    
+    command -v "$cmd" &> /dev/null
+}
+
+verify_file_integrity() {
+    local src_file="$1"
+    local dest_file="$2"
+    
+    if [[ -z "$src_file" ]] || [[ -z "$dest_file" ]]; then
+        log_error "Both source and destination files required" "integrity-check"
+        return 1
+    fi
+    
+    if [[ ! -f "$src_file" ]] || [[ ! -r "$src_file" ]]; then
+        log_error "Cannot read source file: $src_file" "integrity-check"
+        return 1
+    fi
+    
+    if [[ ! -f "$dest_file" ]] || [[ ! -r "$dest_file" ]]; then
+        log_error "Cannot read destination file: $dest_file" "integrity-check"
+        return 1
+    fi
+    
+    if ! check_command sha256sum; then
+        log_verbose "sha256sum not available, skipping integrity check"
+        return 0
+    fi
+    
+    local src_checksum dest_checksum
+    
+    if ! src_checksum=$(sha256sum "$src_file" 2>/dev/null | awk '{print $1}'); then
+        log_error "Failed to calculate checksum for source: $src_file" "integrity-check"
+        return 1
+    fi
+    
+    if ! dest_checksum=$(sha256sum "$dest_file" 2>/dev/null | awk '{print $1}'); then
+        log_error "Failed to calculate checksum for destination: $dest_file" "integrity-check"
+        return 1
+    fi
+    
+    if [[ "$src_checksum" != "$dest_checksum" ]]; then
+        log_error "Checksum mismatch for $dest_file" "integrity-check"
+        ((VERIFICATION_FAILURES++))
+        return 1
+    fi
+    
+    log_verbose "File integrity verified: $dest_file"
+    return 0
 }
 
 parse_arguments() {
@@ -94,6 +313,7 @@ parse_arguments() {
                 ;;
             --update)
                 INSTALL_MODE="update"
+                UPDATE_MODE=true
                 shift
                 ;;
             --clean)
@@ -103,6 +323,42 @@ parse_arguments() {
             --force)
                 FORCE_INSTALL=true
                 shift
+                ;;
+            --verify)
+                VERIFY_MODE=true
+                shift
+                ;;
+            --verbose)
+                VERBOSE=true
+                shift
+                ;;
+            --dry-run)
+                DRY_RUN=true
+                shift
+                ;;
+            --log)
+                if [[ -z "$2" ]] || [[ "$2" == --* ]]; then
+                    log_error "--log requires a file argument"
+                    exit 1
+                fi
+                LOG_FILE="$2"
+                # Create log directory if needed
+                log_dir=$(dirname "$LOG_FILE")
+                if [[ ! -d "$log_dir" ]]; then
+                    mkdir -p "$log_dir" || {
+                        log_error "Cannot create log directory: $log_dir"
+                        exit 1
+                    }
+                fi
+                shift 2
+                ;;
+            --no-rollback)
+                ROLLBACK_ON_FAILURE=false
+                shift
+                ;;
+            --version)
+                echo "Context Engineering System Installer v$SCRIPT_VERSION"
+                exit 0
                 ;;
             --help)
                 show_help
@@ -138,6 +394,244 @@ detect_claude_cli() {
         done
     else
         print_info "Claude directory not found, will create: $CLAUDE_PARENT_DIR"
+    fi
+}
+
+create_backup_if_exists() {
+    local file_path="$1"
+    local backup_name="$2"
+    
+    if [[ -f "$file_path" ]]; then
+        local timestamp=$(date +"%Y%m%d-%H%M%S")
+        
+        # Generate secure random suffix
+        local backup_random=""
+        if [[ -r /dev/urandom ]]; then
+            backup_random=$(head -c 8 /dev/urandom 2>/dev/null | od -An -tx1 | tr -d ' \n')
+        elif check_command openssl; then
+            backup_random=$(openssl rand -hex 8 2>/dev/null)
+        else
+            backup_random=$(date +%s)$$
+        fi
+        
+        local backup_file="$BACKUP_DIR/${timestamp}-${backup_random}-${backup_name}"
+        
+        mkdir -p "$BACKUP_DIR"
+        chmod 700 "$BACKUP_DIR" 2>/dev/null || log_warning "Failed to set restrictive permissions on backup directory"
+        
+        if cp "$file_path" "$backup_file"; then
+            print_status "Backed up existing file: $backup_name -> $backup_file"
+            log_verbose "Backup created with secure naming: $backup_file"
+            return 0
+        else
+            log_error "Failed to create backup for: $file_path" "backup"
+            return 1
+        fi
+    fi
+    return 1
+}
+
+cleanup_on_exit() {
+    local exit_code=$?
+    
+    # Return to original directory
+    cd "$ORIGINAL_DIR" 2>/dev/null || true
+    
+    # Generate error report if there were issues
+    if [[ $exit_code -ne 0 ]] || [[ $ERROR_COUNT -gt 0 ]] || [[ $WARNING_COUNT -gt 0 ]]; then
+        generate_error_report
+    fi
+    
+    # Rollback on failure if enabled and we're in installation phase
+    if [[ $exit_code -ne 0 ]] && [[ "$ROLLBACK_ON_FAILURE" = true ]] && [[ -n "$BACKUP_DIR" ]] && [[ "$INSTALLATION_PHASE" = true ]]; then
+        echo -e "${YELLOW}Installation failed, attempting rollback...${NC}" >&2
+        if rollback_installation; then
+            echo -e "${GREEN}Rollback completed successfully${NC}" >&2
+        else
+            echo -e "${RED}Rollback failed - manual intervention required${NC}" >&2
+            echo -e "${YELLOW}Backup available at: $BACKUP_DIR${NC}" >&2
+        fi
+    fi
+    
+    exit $exit_code
+}
+
+rollback_installation() {
+    if [[ -z "$BACKUP_DIR" ]] || [[ ! -d "$BACKUP_DIR" ]]; then
+        log_error "No backup available for rollback" "rollback"
+        return 1
+    fi
+    
+    echo -e "${YELLOW}Rolling back installation...${NC}" >&2
+    log_verbose "Backup directory: $BACKUP_DIR"
+    log_verbose "Install directory: $CLAUDE_PARENT_DIR"
+    
+    # Validate backup directory contents
+    if [[ -z "$(ls -A "$BACKUP_DIR" 2>/dev/null)" ]]; then
+        log_error "Backup directory is empty, cannot rollback" "rollback"
+        return 1
+    fi
+    
+    # Create temporary directory for safe operations
+    local temp_dir
+    temp_dir=$(mktemp -d 2>/dev/null) || {
+        log_error "Failed to create temporary directory for rollback" "rollback"
+        return 1
+    }
+    
+    # Remove failed installation safely
+    if [[ -d "$CLAUDE_PARENT_DIR" ]]; then
+        log_verbose "Moving failed installation to temporary location"
+        if ! mv "$CLAUDE_PARENT_DIR" "$temp_dir/failed_install" 2>/dev/null; then
+            log_error "Failed to move failed installation" "rollback"
+            rm -rf "$temp_dir" 2>/dev/null
+            return 1
+        fi
+    fi
+    
+    # Restore backup
+    log_verbose "Restoring backup to installation directory"
+    if ! mv "$BACKUP_DIR" "$CLAUDE_PARENT_DIR" 2>/dev/null; then
+        log_error "Failed to restore backup" "rollback"
+        # Try to restore the failed installation
+        if [[ -d "$temp_dir/failed_install" ]]; then
+            mv "$temp_dir/failed_install" "$CLAUDE_PARENT_DIR" 2>/dev/null || true
+        fi
+        rm -rf "$temp_dir" 2>/dev/null
+        return 1
+    fi
+    
+    # Clean up
+    rm -rf "$temp_dir" 2>/dev/null
+    BACKUP_DIR=""
+    
+    echo -e "${GREEN}Installation rolled back successfully${NC}" >&2
+    return 0
+}
+
+# Set up cleanup trap
+trap cleanup_on_exit EXIT INT TERM HUP QUIT
+
+move_repository_files() {
+    print_info "Moving repository files to Claude directory..."
+    
+    # Files to move from repository root to .claude/
+    local repo_files=(
+        "CLAUDE.md"
+        "workflow"
+        "docs"
+    )
+    
+    # Create necessary directories
+    mkdir -p "$CLAUDE_PARENT_DIR"/{commands/shared,personas,mcp}
+    
+    # Move main files
+    for file in "${repo_files[@]}"; do
+        local source_path="$SOURCE_DIR/$file"
+        local target_path="$CLAUDE_PARENT_DIR/$file"
+        
+        if [[ -e "$source_path" ]]; then
+            if [[ -e "$target_path" ]]; then
+                create_backup_if_exists "$target_path" "$(basename "$file")"
+                rm -rf "$target_path"
+            fi
+            cp -r "$source_path" "$target_path"
+            print_status "Moved: $file"
+        fi
+    done
+    
+    # Move context-engine contents if it exists in repository
+    if [[ -d "$SOURCE_DIR/context-engine" ]]; then
+        local context_files=$(find "$SOURCE_DIR/context-engine" -type f)
+        while IFS= read -r file; do
+            if [[ -n "$file" ]]; then
+                local relative_path="${file#$SOURCE_DIR/context-engine/}"
+                local target_file="$CLAUDE_PARENT_DIR/$relative_path"
+                local target_dir="$(dirname "$target_file")"
+                
+                mkdir -p "$target_dir"
+                if [[ -f "$target_file" ]]; then
+                    create_backup_if_exists "$target_file" "$(basename "$relative_path")"
+                fi
+                cp "$file" "$target_file"
+                print_status "Moved context-engine file: $relative_path"
+            fi
+        done <<< "$context_files"
+    fi
+}
+
+create_mcp_configuration() {
+    print_info "Creating MCP configuration for Claude CLI..."
+    
+    local mcp_config="$CLAUDE_PARENT_DIR/mcp.json"
+    
+    # Backup existing mcp.json if it exists
+    create_backup_if_exists "$mcp_config" "mcp.json"
+    
+    cat > "$mcp_config" << 'EOF'
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "description": "Sequential thinking assistance for complex problem solving"
+    },
+    "puppeteer": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "description": "Browser automation and web interaction capabilities"
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "description": "Web content fetching and processing"
+    }
+  }
+}
+EOF
+    
+    print_status "Created MCP configuration: $mcp_config"
+}
+
+clean_incorrect_structure() {
+    print_info "Cleaning incorrect structure created by previous installation..."
+    
+    # Remove the incorrectly created context-engine subdirectory
+    local incorrect_dir="$CLAUDE_PARENT_DIR/context-engine"
+    if [[ -d "$incorrect_dir" ]]; then
+        print_warning "Removing incorrect context-engine subdirectory..."
+        
+        # First, check if there are any files we need to preserve
+        if [[ -f "$incorrect_dir/installation-report.md" ]]; then
+            create_backup_if_exists "$incorrect_dir/installation-report.md" "installation-report.md"
+        fi
+        
+        # Move any YML files to correct location if they're newer
+        if [[ -d "$incorrect_dir/commands/shared" ]]; then
+            for yml_file in "$incorrect_dir/commands/shared"/*.yml; do
+                if [[ -f "$yml_file" ]]; then
+                    local basename_file="$(basename "$yml_file")"
+                    local target_file="$CLAUDE_PARENT_DIR/commands/shared/$basename_file"
+                    
+                    mkdir -p "$CLAUDE_PARENT_DIR/commands/shared"
+                    
+                    if [[ -f "$target_file" ]]; then
+                        # Compare modification times
+                        if [[ "$yml_file" -nt "$target_file" ]]; then
+                            create_backup_if_exists "$target_file" "$basename_file"
+                            cp "$yml_file" "$target_file"
+                            print_status "Updated: $basename_file"
+                        fi
+                    else
+                        cp "$yml_file" "$target_file"
+                        print_status "Moved: $basename_file"
+                    fi
+                fi
+            done
+        fi
+        
+        rm -rf "$incorrect_dir"
+        print_status "Removed incorrect context-engine subdirectory"
     fi
 }
 
@@ -502,12 +996,17 @@ create_yml_files() {
         "rules.yml"
     )
     
+    mkdir -p "$CLAUDE_PARENT_DIR/commands/shared"
+    
     for yml in "${yml_files[@]}"; do
-        local yml_path="$CONTEXT_ENGINE_DIR/commands/shared/$yml"
+        local yml_path="$CLAUDE_PARENT_DIR/commands/shared/$yml"
         
         if [[ -f "$yml_path" ]] && [[ "$FORCE_INSTALL" == false ]]; then
             print_warning "File exists: $yml (use --force to overwrite)"
         else
+            if [[ -f "$yml_path" ]]; then
+                create_backup_if_exists "$yml_path" "$yml"
+            fi
             create_yml_content "$yml" > "$yml_path"
             print_status "Created: $yml"
         fi
@@ -535,15 +1034,10 @@ install_claude_md() {
 }
 
 create_directory_structure() {
-    print_info "Creating Context Engine directory structure..."
+    print_info "Creating Claude directory structure..."
     
     # Core directories
-    mkdir -p "$CONTEXT_ENGINE_DIR"/{commands/shared,personas,mcp,docs}
-    
-    # Copy documentation if available
-    if [[ -d "$SOURCE_DIR/docs" ]]; then
-        cp -r "$SOURCE_DIR/docs/"* "$CONTEXT_ENGINE_DIR/docs/" 2>/dev/null || true
-    fi
+    mkdir -p "$CLAUDE_PARENT_DIR"/{commands/shared,personas,mcp,docs}
     
     print_status "Directory structure created"
 }
@@ -571,14 +1065,14 @@ install_project_structure() {
 # This file references the global Context Engine installation
 
 # Include global Context Engine configuration
-@include $CONTEXT_ENGINE_DIR/commands/shared/core.yml
-@include $CONTEXT_ENGINE_DIR/commands/shared/token-economy.yml
-@include $CONTEXT_ENGINE_DIR/commands/shared/compression-patterns.yml
-@include $CONTEXT_ENGINE_DIR/commands/shared/universal-constants.yml
-@include $CONTEXT_ENGINE_DIR/commands/shared/flags.yml
-@include $CONTEXT_ENGINE_DIR/commands/shared/personas.yml
-@include $CONTEXT_ENGINE_DIR/commands/shared/mcp.yml
-@include $CONTEXT_ENGINE_DIR/commands/shared/rules.yml
+@include $CLAUDE_PARENT_DIR/commands/shared/core.yml
+@include $CLAUDE_PARENT_DIR/commands/shared/token-economy.yml
+@include $CLAUDE_PARENT_DIR/commands/shared/compression-patterns.yml
+@include $CLAUDE_PARENT_DIR/commands/shared/universal-constants.yml
+@include $CLAUDE_PARENT_DIR/commands/shared/flags.yml
+@include $CLAUDE_PARENT_DIR/commands/shared/personas.yml
+@include $CLAUDE_PARENT_DIR/commands/shared/mcp.yml
+@include $CLAUDE_PARENT_DIR/commands/shared/rules.yml
 
 # Project-specific configurations can be added below
 EOF
@@ -591,7 +1085,12 @@ clean_context_engine() {
     
     # Files and directories that belong to Context Engine ONLY
     local context_engine_items=(
-        "$CONTEXT_ENGINE_DIR"
+        "$CLAUDE_PARENT_DIR/commands"
+        "$CLAUDE_PARENT_DIR/personas"
+        "$CLAUDE_PARENT_DIR/mcp"
+        "$CLAUDE_PARENT_DIR/docs"
+        "$CLAUDE_PARENT_DIR/workflow"
+        "$CLAUDE_PARENT_DIR/context-engine"
         "$CLAUDE_PARENT_DIR/CLAUDE.md"
     )
     
@@ -601,7 +1100,12 @@ clean_context_engine() {
         "$CLAUDE_PARENT_DIR/config.json"
         "$CLAUDE_PARENT_DIR/settings.json"
         "$CLAUDE_PARENT_DIR/preferences.json"
-        "$CLAUDE_PARENT_DIR/mcp.json"
+        "$CLAUDE_PARENT_DIR/settings.local.json"
+        "$CLAUDE_PARENT_DIR/backups"
+        "$CLAUDE_PARENT_DIR/projects"
+        "$CLAUDE_PARENT_DIR/shell-snapshots"
+        "$CLAUDE_PARENT_DIR/statsig"
+        "$CLAUDE_PARENT_DIR/todos"
     )
     
     echo ""
@@ -658,15 +1162,16 @@ validate_installation() {
     
     local validation_passed=true
     local required_files=(
-        "$CONTEXT_ENGINE_DIR/commands/shared/core.yml"
-        "$CONTEXT_ENGINE_DIR/commands/shared/token-economy.yml"
-        "$CONTEXT_ENGINE_DIR/commands/shared/compression-patterns.yml"
-        "$CONTEXT_ENGINE_DIR/commands/shared/universal-constants.yml"
-        "$CONTEXT_ENGINE_DIR/commands/shared/flags.yml"
-        "$CONTEXT_ENGINE_DIR/commands/shared/personas.yml"
-        "$CONTEXT_ENGINE_DIR/commands/shared/mcp.yml"
-        "$CONTEXT_ENGINE_DIR/commands/shared/rules.yml"
+        "$CLAUDE_PARENT_DIR/commands/shared/core.yml"
+        "$CLAUDE_PARENT_DIR/commands/shared/token-economy.yml"
+        "$CLAUDE_PARENT_DIR/commands/shared/compression-patterns.yml"
+        "$CLAUDE_PARENT_DIR/commands/shared/universal-constants.yml"
+        "$CLAUDE_PARENT_DIR/commands/shared/flags.yml"
+        "$CLAUDE_PARENT_DIR/commands/shared/personas.yml"
+        "$CLAUDE_PARENT_DIR/commands/shared/mcp.yml"
+        "$CLAUDE_PARENT_DIR/commands/shared/rules.yml"
         "$CLAUDE_PARENT_DIR/CLAUDE.md"
+        "$CLAUDE_PARENT_DIR/mcp.json"
     )
     
     for file in "${required_files[@]}"; do
@@ -698,14 +1203,14 @@ validate_installation() {
 }
 
 create_installation_report() {
-    local report_file="$CONTEXT_ENGINE_DIR/installation-report.md"
+    local report_file="$CLAUDE_PARENT_DIR/installation-report.md"
     
     cat > "$report_file" << EOF
 # Context Engineering System v${VERSION} - Installation Report
 
 **Installation Date**: ${INSTALL_DATE}
 **Installation Type**: ${INSTALL_MODE}
-**Installation Path**: ${CONTEXT_ENGINE_DIR}
+**Installation Path**: ${CLAUDE_PARENT_DIR}
 
 ## Installation Summary
 
@@ -721,12 +1226,14 @@ create_installation_report() {
 
 ### Configuration Files
 ✅ CLAUDE.md installed to: ${CLAUDE_PARENT_DIR}/CLAUDE.md
-✅ YML files installed to: ${CONTEXT_ENGINE_DIR}/commands/shared/
+✅ YML files installed to: ${CLAUDE_PARENT_DIR}/commands/shared/
+✅ MCP configuration: ${CLAUDE_PARENT_DIR}/mcp.json
+✅ Workflow structure: ${CLAUDE_PARENT_DIR}/workflow/
 
 ### Claude CLI Integration
-- Context Engine installed in subdirectory: ${CONTEXT_ENGINE_DIR}
-- Claude CLI files preserved in: ${CLAUDE_PARENT_DIR}
-- Clean separation maintained
+- Context Engine files integrated directly into: ${CLAUDE_PARENT_DIR}
+- Claude CLI files preserved and protected
+- MCP servers configured for immediate use
 
 ## Quick Start
 
@@ -743,8 +1250,11 @@ create_installation_report() {
 ## File Locations
 
 - **Main Configuration**: ${CLAUDE_PARENT_DIR}/CLAUDE.md
-- **YML Configurations**: ${CONTEXT_ENGINE_DIR}/commands/shared/
-- **Documentation**: ${CONTEXT_ENGINE_DIR}/docs/
+- **YML Configurations**: ${CLAUDE_PARENT_DIR}/commands/shared/
+- **MCP Configuration**: ${CLAUDE_PARENT_DIR}/mcp.json
+- **Workflow Structure**: ${CLAUDE_PARENT_DIR}/workflow/
+- **Documentation**: ${CLAUDE_PARENT_DIR}/docs/
+- **Backups**: ${CLAUDE_PARENT_DIR}/backups/
 - **This Report**: ${report_file}
 
 ## Next Steps
@@ -760,10 +1270,84 @@ EOF
     print_status "Installation report created: $report_file"
 }
 
+run_preflight_checks() {
+    log_verbose "Running pre-flight checks..."
+    
+    # Check required commands
+    local required_commands=("find" "sort" "uniq" "basename" "dirname" "grep" "awk" "sed")
+    local missing_commands=()
+    
+    for cmd in "${required_commands[@]}"; do
+        if ! check_command "$cmd"; then
+            missing_commands+=("$cmd")
+        fi
+    done
+    
+    if [[ ${#missing_commands[@]} -gt 0 ]]; then
+        log_error "Missing required commands: ${missing_commands[*]}" "preflight-check"
+        echo "Please install the missing commands and try again."
+        exit 1
+    fi
+    
+    # Check bash version
+    local bash_major_version="${BASH_VERSION%%.*}"
+    if [[ -z "$bash_major_version" ]] || [[ "$bash_major_version" -lt "$MIN_BASH_VERSION" ]]; then
+        log_error "Bash version $MIN_BASH_VERSION.0 or higher required (current: ${BASH_VERSION:-unknown})" "preflight-check"
+        exit 1
+    fi
+    
+    # Check disk space
+    if [[ "$DRY_RUN" != true ]]; then
+        local install_parent=$(dirname "$CLAUDE_PARENT_DIR")
+        if [[ -d "$install_parent" ]]; then
+            local available_space=""
+            if check_command df; then
+                available_space=$(df -P -k "$install_parent" 2>/dev/null | awk 'NR==2 && NF>=4 {print $4}')
+                if [[ -n "$available_space" ]] && [[ "$available_space" -lt "$REQUIRED_SPACE_KB" ]]; then
+                    log_error "Insufficient disk space. Need at least $((REQUIRED_SPACE_KB / 1024))MB free." "disk-space-check"
+                    exit 1
+                fi
+            fi
+        fi
+    fi
+    
+    log_verbose "Pre-flight checks passed"
+}
+
 main() {
     print_header
     
     parse_arguments "$@"
+    
+    # Validate installation directory path
+    if ! validate_directory_path "$CLAUDE_PARENT_DIR"; then
+        exit 1
+    fi
+    
+    # Run pre-flight checks
+    run_preflight_checks
+    
+    # Handle verification mode
+    if [[ "$VERIFY_MODE" = true ]]; then
+        echo -e "${GREEN}Context Engine Verification${NC}"
+        echo "========================="
+        echo -e "Target directory: ${YELLOW}$CLAUDE_PARENT_DIR${NC}"
+        echo ""
+        
+        if [[ ! -d "$CLAUDE_PARENT_DIR" ]]; then
+            echo -e "${RED}Error: Context Engine not found at $CLAUDE_PARENT_DIR${NC}"
+            exit 1
+        fi
+        
+        # Verify installation
+        if validate_installation; then
+            echo -e "${GREEN}✓ Installation verified successfully!${NC}"
+            exit 0
+        else
+            echo -e "${RED}✗ Verification failed${NC}"
+            exit 1
+        fi
+    fi
     
     # Handle clean mode
     if [[ "$CLEAN_MODE" == true ]]; then
@@ -771,45 +1355,92 @@ main() {
         exit 0
     fi
     
+    # Show installation info
+    echo -e "Installation directory: ${YELLOW}$CLAUDE_PARENT_DIR${NC}"
+    if [[ "$DRY_RUN" = true ]]; then
+        echo -e "${BLUE}Mode: DRY RUN (no changes will be made)${NC}"
+    fi
+    if [[ "$VERBOSE" = true ]]; then
+        echo -e "${BLUE}Mode: VERBOSE${NC}"
+    fi
+    if [[ -n "$LOG_FILE" ]]; then
+        echo -e "Log file: ${YELLOW}$LOG_FILE${NC}"
+    fi
+    echo ""
+    
+    # Mark installation phase as starting
+    INSTALLATION_PHASE=true
+    
     # Installation process
     detect_claude_cli
     
-    print_info "Installation mode: $INSTALL_MODE"
+    log "Installation mode: $INSTALL_MODE"
+    
+    # Clean incorrect structure from previous installations
+    clean_incorrect_structure
     
     # Create directories
     create_directory_structure
     
+    # Move repository files to correct locations
+    move_repository_files
+    
     # Install core files
     create_yml_files
-    install_claude_md
+    
+    # Create MCP configuration
+    create_mcp_configuration
     
     # Project-specific installation
     if [[ "$INSTALL_MODE" == "project" ]]; then
         install_project_structure
     fi
     
+    # Mark installation phase as complete
+    INSTALLATION_PHASE=false
+    
     # Validate
     if validate_installation; then
         create_installation_report
         
         echo ""
-        print_status "🎉 Context Engineering System v${VERSION} installed successfully!"
+        if [[ "$UPDATE_MODE" = true ]]; then
+            print_status "🎉 Context Engineering System v${VERSION} updated successfully!"
+        else
+            print_status "🎉 Context Engineering System v${VERSION} installed successfully!"
+        fi
         echo ""
-        print_info "Installation Summary:"
-        echo "  ${CYAN}►${NC} Location: $CONTEXT_ENGINE_DIR"
+        log "Installation Summary:"
+        echo "  ${CYAN}►${NC} Location: $CLAUDE_PARENT_DIR"
         echo "  ${CYAN}►${NC} CLAUDE.md: $CLAUDE_PARENT_DIR/CLAUDE.md"
-        echo "  ${CYAN}►${NC} Report: $CONTEXT_ENGINE_DIR/installation-report.md"
+        echo "  ${CYAN}►${NC} MCP Config: $CLAUDE_PARENT_DIR/mcp.json"
+        echo "  ${CYAN}►${NC} Report: $CLAUDE_PARENT_DIR/installation-report.md"
         echo ""
+        
+        if [[ -n "$BACKUP_DIR" ]] && [[ -d "$BACKUP_DIR" ]]; then
+            echo -e "${YELLOW}Note: Previous configuration backed up to:${NC}"
+            echo "$BACKUP_DIR"
+            echo ""
+        fi
         
         if [[ "$INSTALL_MODE" == "project" ]]; then
             echo "  ${CYAN}►${NC} Project: $PROJECT_DIR"
         fi
         
-        print_info "Next steps:"
+        log "Next steps:"
         echo "  1. Open Claude Desktop"
         echo "  2. Try: /context-engineer \"Your feature description\""
         echo "  3. Use --uc flag for 70% token reduction"
         echo ""
+        
+        # Show summary of any issues
+        if [[ $WARNING_COUNT -gt 0 ]]; then
+            echo -e "${YELLOW}Installation completed with $WARNING_COUNT warning(s).${NC}"
+        fi
+        if [[ $VERIFICATION_FAILURES -gt 0 ]]; then
+            echo -e "${YELLOW}Note: $VERIFICATION_FAILURES file(s) had integrity verification issues.${NC}"
+        fi
+        
     else
         print_error "Installation failed. Please check the errors above."
         exit 1
