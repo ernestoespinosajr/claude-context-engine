@@ -1,0 +1,243 @@
+# Development Standards & Rules
+# Context Engineering System v2.0
+# Quality standards, best practices & operational guidelines
+
+Development_Standards:
+  Code_Quality_Requirements:
+    Syntax_Compliance: "All code must compile without errors"
+    Language_Conventions: "Follow established language-specific patterns"
+    Framework_Alignment: "Adhere to framework best practices"
+    Naming_Conventions: "Use clear, descriptive names for all entities"
+    
+  Security_Standards:
+    Input_Validation: "Validate all user inputs & external data"
+    Authentication_Authorization: "Implement proper auth mechanisms"
+    Data_Protection: "Encrypt sensitive data at rest & in transit"
+    Secret_Management: "Never expose secrets, keys, or credentials"
+    OWASP_Compliance: "Follow OWASP Top 10 security guidelines"
+    
+  Performance_Standards:
+    Algorithm_Efficiency: "Use optimal algorithms for data processing"
+    Database_Optimization: "Optimize queries & indexing strategies"
+    Memory_Management: "Prevent memory leaks & optimize usage"
+    Caching_Strategy: "Implement appropriate caching mechanisms"
+    Bundle_Optimization: "Minimize bundle size & loading times"
+
+Quality_Gates:
+  Level_1_Syntax_Structure:
+    Compilation: "✅ Code compiles without errors"
+    Linting: "✅ Passes linting rules & style checks"
+    Type_Safety: "✅ Type checking passes (TypeScript/etc)"
+    Dependencies: "✅ All dependencies resolved & available"
+    
+  Level_2_Integration:
+    API_Compatibility: "✅ Maintains existing API contracts"
+    Data_Flow: "✅ Correct data handling & validation"
+    Error_Handling: "✅ Robust error handling implemented"
+    Backward_Compatibility: "✅ No breaking changes introduced"
+    
+  Level_3_Functional:
+    Feature_Completeness: "✅ All requirements implemented"
+    Edge_Cases: "✅ Edge cases identified & handled"
+    User_Experience: "✅ Meets UX standards & expectations"
+    Accessibility: "✅ Accessibility requirements met"
+    
+  Level_4_Performance_Quality:
+    Performance_Benchmarks: "✅ Meets performance targets"
+    Security_Validation: "✅ Security requirements satisfied"
+    Test_Coverage: "✅ >90% test coverage achieved"
+    Documentation: "✅ Complete documentation provided"
+
+Smart_Defaults:
+  Context_Management:
+    High_Usage_Optimization: "Auto-enable compression at 75% context usage"
+    Noise_Filtering: "Automatically exclude <10% relevance content"
+    Layer_Prioritization: "Focus on task-relevant context layers"
+    Dynamic_Adjustment: "Adapt context based on operation complexity"
+    
+  Operation_Efficiency:
+    Skip_Ceremonial_Text: "Eliminate unnecessary 'I will now...' phrases"
+    Direct_Execution: "Execute obvious operations without confirmation"
+    Batch_Similar_Tasks: "Group related operations together"
+    Progressive_Enhancement: "Start simple, add complexity as needed"
+
+Ambiguity_Resolution:
+  Context_Clarification:
+    Insufficient_Information: "Request specific clarification from user"
+    Multiple_Interpretations: "Present options for user selection"
+    Technical_Assumptions: "State assumptions clearly"
+    Scope_Boundaries: "Define clear operation boundaries"
+    
+  Decision_Making:
+    Best_Practices_First: "Default to established best practices"
+    Framework_Conventions: "Follow framework-specific patterns"
+    Security_Bias: "Choose more secure option when ambiguous"
+    Performance_Consideration: "Optimize for performance when unclear"
+
+Code_Generation:
+  Quality_Requirements:
+    Idiomatic_Code: "Generate code following language idioms"
+    Framework_Patterns: "Use appropriate framework patterns"
+    Error_Handling: "Include proper error handling"
+    Type_Safety: "Use strong typing where available"
+    
+  Documentation_Standards:
+    Inline_Comments: "Explain complex logic & business rules"
+    Function_Documentation: "Document parameters, returns, & purpose"
+    API_Documentation: "Complete API documentation for interfaces"
+    Usage_Examples: "Provide usage examples for complex features"
+    
+  Testing_Requirements:
+    Unit_Tests: "Generate unit tests for core functionality"
+    Integration_Tests: "Provide integration test examples"
+    Edge_Case_Testing: "Include tests for edge cases"
+    Error_Scenario_Testing: "Test error handling paths"
+
+Session_Awareness:
+  Context_Continuity:
+    State_Preservation: "Maintain context across interruptions"
+    Progress_Tracking: "Remember task completion states"
+    Preference_Learning: "Adapt to user preferences over time"
+    Error_Recovery: "Resume from failure points gracefully"
+    
+  Adaptive_Behavior:
+    Pattern_Recognition: "Learn from user interaction patterns"
+    Efficiency_Optimization: "Improve performance based on usage"
+    Quality_Improvement: "Enhance accuracy through feedback"
+    Personalization: "Adapt to individual user styles"
+
+Action_Command_Efficiency:
+  Execution_Standards:
+    Immediate_Action: "Execute clear commands without delay"
+    Minimal_Overhead: "Reduce unnecessary processing steps"
+    Batch_Processing: "Group related operations efficiently"
+    Parallel_Execution: "Execute independent operations concurrently"
+    
+  Communication_Efficiency:
+    Essential_Information: "Communicate only essential details"
+    Status_Updates: "Provide clear progress indicators"
+    Error_Communication: "Clear, actionable error messages"
+    Success_Confirmation: "Concise completion confirmations"
+
+Project_Quality:
+  Architecture_Standards:
+    Separation_Concerns: "Clear separation of responsibilities"
+    Modularity: "Loosely coupled, highly cohesive modules"
+    Scalability: "Design for growth & expansion"
+    Maintainability: "Code that's easy to understand & modify"
+    
+  Code_Organization:
+    Directory_Structure: "Logical file & directory organization"
+    Naming_Consistency: "Consistent naming across project"
+    Import_Management: "Clean, organized import statements"
+    Configuration_Management: "Centralized configuration handling"
+
+Security_Standards:
+  OWASP_Top_10:
+    Injection_Prevention: "Prevent SQL, NoSQL, OS, & LDAP injection"
+    Broken_Authentication: "Implement secure authentication mechanisms"
+    Sensitive_Data_Exposure: "Protect sensitive data transmission & storage"
+    XML_External_Entities: "Prevent XXE attacks"
+    Broken_Access_Control: "Implement proper authorization checks"
+    Security_Misconfiguration: "Secure default configurations"
+    Cross_Site_Scripting: "Prevent XSS attacks"
+    Insecure_Deserialization: "Secure data deserialization"
+    Known_Vulnerabilities: "Keep dependencies updated"
+    Insufficient_Logging: "Implement comprehensive logging"
+    
+  Validation_Levels:
+    Input_Sanitization: "Sanitize all user inputs"
+    Output_Encoding: "Properly encode all outputs"
+    Parameter_Validation: "Validate all parameters & data"
+    Business_Logic_Validation: "Validate business rule compliance"
+
+Efficiency_Management:
+  Token_Optimization:
+    Context_Compression: "Use symbols & abbreviations appropriately"
+    Information_Density: "Maximize useful content per token"
+    Relevance_Filtering: "Include only relevant information"
+    Progressive_Detail: "Start with essential, add detail as needed"
+    
+  Performance_Optimization:
+    Cache_Utilization: "Use caching effectively"
+    Resource_Management: "Optimize memory & CPU usage"
+    Network_Efficiency: "Minimize network requests"
+    Database_Optimization: "Optimize database interactions"
+
+Operations_Standards:
+  Error_Handling:
+    Graceful_Degradation: "Maintain functionality during partial failures"
+    User_Friendly_Messages: "Provide clear, actionable error messages"
+    Logging_Standards: "Comprehensive error logging for debugging"
+    Recovery_Procedures: "Automatic recovery where possible"
+    
+  Monitoring_Requirements:
+    Health_Checks: "Implement system health monitoring"
+    Performance_Metrics: "Track key performance indicators"
+    Error_Tracking: "Monitor & alert on error rates"
+    Usage_Analytics: "Track system usage patterns"
+    
+  Deployment_Standards:
+    Environment_Consistency: "Consistent behavior across environments"
+    Configuration_Management: "Environment-specific configuration"
+    Rollback_Capability: "Ability to rollback deployments"
+    Zero_Downtime: "Deploy without service interruption"
+
+Workflow_Management:
+  Feature_Lifecycle:
+    Planning_Requirements: "Complete planning before implementation"
+    Implementation_Isolation: "Isolate feature development"
+    Testing_Validation: "Comprehensive testing before completion"
+    Documentation_Updates: "Update documentation with changes"
+    
+  Quality_Assurance:
+    Continuous_Validation: "Validate quality throughout development"
+    Automated_Testing: "Automated test execution"
+    Code_Review: "Peer review of significant changes"
+    Performance_Testing: "Performance validation for critical features"
+    
+  Progress_Tracking:
+    Status_Visibility: "Clear visibility into feature status"
+    Milestone_Tracking: "Track progress against milestones"
+    Blockers_Identification: "Identify & resolve blockers quickly"
+    Completion_Criteria: "Clear definition of done"
+
+Validation_Sequence:
+  Pre_Implementation:
+    Requirements_Review: "Validate requirements completeness"
+    Architecture_Review: "Review architectural decisions"
+    Security_Assessment: "Assess security implications"
+    Performance_Planning: "Plan for performance requirements"
+    
+  During_Implementation:
+    Code_Quality_Checks: "Continuous code quality validation"
+    Integration_Testing: "Regular integration testing"
+    Security_Scanning: "Automated security scanning"
+    Performance_Monitoring: "Monitor performance during development"
+    
+  Post_Implementation:
+    Functional_Testing: "Complete functional test suite"
+    Security_Validation: "Security penetration testing"
+    Performance_Benchmarking: "Performance benchmark validation"
+    User_Acceptance: "User acceptance testing"
+
+Severity_Levels:
+  Critical:
+    Definition: "System-breaking issues, security vulnerabilities"
+    Response_Time: "Immediate attention required"
+    Resolution_Priority: "Highest priority"
+    
+  High:
+    Definition: "Significant functionality impact"
+    Response_Time: "Within 4 hours"
+    Resolution_Priority: "High priority"
+    
+  Medium:
+    Definition: "Moderate functionality impact"
+    Response_Time: "Within 24 hours"
+    Resolution_Priority: "Normal priority"
+    
+  Low:
+    Definition: "Minor issues, enhancement requests"
+    Response_Time: "Within 1 week"
+    Resolution_Priority: "Low priority"

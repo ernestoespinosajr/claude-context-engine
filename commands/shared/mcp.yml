@@ -1,0 +1,252 @@
+# MCP Integration System
+# Context Engineering System v2.0
+# Model Context Protocol integration with intelligent caching & optimization
+
+MCP_Integration:
+  Core_Philosophy:
+    Native_First: "Use built-in capabilities before MCP escalation"
+    Intelligent_Escalation: "Native → Light MCP → Medium MCP → Full Stack"
+    Token_Efficiency: "Minimize MCP overhead while maximizing value"
+    Cache_Optimization: "Aggressive caching for repeated operations"
+    
+  Server_Capabilities_Extended:
+    Context7:
+      Purpose: "Advanced context management & optimization"
+      Capabilities:
+        - "Dynamic context layer weighting"
+        - "Noise detection & filtering"
+        - "Context compression & optimization"
+        - "Multi-session context continuity"
+      Token_Budget: "Medium impact (context optimization savings)"
+      Cache_TTL: "3600 seconds (1 hour)"
+      
+    Sequential:
+      Purpose: "Structured thinking & complex problem solving"
+      Capabilities:
+        - "Multi-step problem decomposition"
+        - "Logical reasoning chains"
+        - "Hypothesis generation & validation"
+        - "Complex analysis workflows"
+      Token_Budget: "Medium-Heavy impact (thinking overhead)"
+      Cache_TTL: "Session duration"
+      
+    Magic:
+      Purpose: "Intelligent automation & workflow optimization"
+      Capabilities:
+        - "Pattern detection & automation"
+        - "Workflow optimization suggestions"
+        - "Intelligent task batching"
+        - "Predictive operation suggestions"
+      Token_Budget: "Medium impact (automation benefits)"
+      Cache_TTL: "1800 seconds (30 minutes)"
+      
+    Puppeteer:
+      Purpose: "UI testing, validation & browser automation"
+      Capabilities:
+        - "Automated UI testing"
+        - "Screenshot capture & analysis"
+        - "Form interaction & validation"
+        - "Performance testing"
+      Token_Budget: "Medium impact (UI testing overhead)"
+      Cache_TTL: "Session only (no persistence)"
+
+Token_Economics:
+  Budget_Allocation:
+    Native_Operations:
+      Cost: "0 additional tokens"
+      Capabilities: "Core Context Engineering functionality"
+      Preferred_Usage: "Standard operations, basic analysis"
+      
+    Light_MCP:
+      Cost: "10-20% token overhead"
+      Capabilities: "Single MCP for specific enhancement"
+      Usage_Pattern: "Context7 for optimization, Puppeteer for testing"
+      
+    Medium_MCP:
+      Cost: "25-40% token overhead"
+      Capabilities: "2-3 MCPs for complex operations"
+      Usage_Pattern: "Context7+Sequential for analysis, Magic+Puppeteer for automation"
+      
+    Full_MCP_Stack:
+      Cost: "50-80% token overhead"
+      Capabilities: "All MCPs for maximum capability"
+      Usage_Pattern: "Critical operations requiring all capabilities"
+      Justification_Required: true
+
+Cache_Management:
+  Intelligent_Caching_Strategy:
+    Session_Cache:
+      Purpose: "Reduce duplicate MCP calls within session"
+      Implementation: "Hash-based result caching"
+      Hit_Rate_Target: "85% minimum"
+      
+    Semantic_Similarity:
+      Purpose: "Cache conceptually similar operations"
+      Implementation: "Embedding-based similarity matching"
+      Threshold: "0.8 similarity score"
+      
+    Progressive_Learning:
+      Purpose: "Improve cache effectiveness over time"
+      Implementation: "Usage pattern analysis & prediction"
+      Adaptation: "Auto-adjust TTL based on access patterns"
+      
+  TTL_Management:
+    Context7:
+      Default_TTL: "3600 seconds"
+      Dynamic_Adjustment: "Extend for frequently accessed contexts"
+      Invalidation_Triggers: "Context changes, user preferences"
+      
+    Sequential:
+      Default_TTL: "Session duration"
+      Persistence: "Maintain thinking chains within session"
+      Cleanup: "Clear on session end or explicit reset"
+      
+    Magic:
+      Default_TTL: "1800 seconds"
+      Pattern_Caching: "Cache automation patterns longer"
+      Adaptive_TTL: "Extend for successful patterns"
+      
+    Puppeteer:
+      Default_TTL: "Session only"
+      Reasoning: "UI state changes frequently"
+      Exception: "Screenshot results may cache briefly"
+
+Parallel_Execution:
+  Concurrent_MCP_Calls:
+    Optimization_Strategy: "Execute non-dependent MCP calls in parallel"
+    Dependency_Analysis: "Identify operation dependencies"
+    Batch_Processing: "Group related operations for efficiency"
+    
+  Performance_Benefits:
+    Latency_Reduction: "50-70% faster for independent operations"
+    Resource_Utilization: "Better system resource usage"
+    User_Experience: "Reduced waiting time"
+    
+  Implementation_Guidelines:
+    Safe_Parallelization: "Only parallelize independent operations"
+    Error_Handling: "Graceful degradation on partial failures"
+    Result_Coordination: "Merge parallel results coherently"
+
+Workflows:
+  Context_Engineering_Enhanced:
+    Light_Enhancement:
+      MCPs: "Context7 for optimization"
+      Use_Case: "Standard feature planning with context optimization"
+      Command: "/context-engineer 'feature' --mcp-context7"
+      
+    Medium_Enhancement:
+      MCPs: "Context7 + Sequential"
+      Use_Case: "Complex feature analysis requiring structured thinking"
+      Command: "/context-engineer 'complex feature' --mcp-context7 --mcp-sequential --think-hard"
+      
+    Full_Enhancement:
+      MCPs: "Context7 + Sequential + Magic"
+      Use_Case: "Enterprise-level feature planning with automation"
+      Command: "/context-engineer 'enterprise feature' --mcp-context7 --mcp-sequential --mcp-magic --ultrathink"
+      
+  Execution_Enhanced:
+    Standard_Execution:
+      MCPs: "Puppeteer for testing"
+      Use_Case: "Feature implementation with UI validation"
+      Command: "/execute-context feature --mcp-puppeteer --test"
+      
+    Optimized_Execution:
+      MCPs: "Magic + Puppeteer"
+      Use_Case: "Automated implementation with testing"
+      Command: "/execute-context feature --mcp-magic --mcp-puppeteer --batch"
+      
+    Enterprise_Execution:
+      MCPs: "Context7 + Sequential + Magic + Puppeteer"
+      Use_Case: "Mission-critical implementation with full validation"
+      Command: "/execute-context critical-feature --mcp-context7 --mcp-sequential --mcp-magic --mcp-puppeteer --validate"
+      
+  Status_Enhanced:
+    Health_Check:
+      MCPs: "Magic for pattern analysis"
+      Use_Case: "Intelligent system health assessment"
+      Command: "/context-status --mcp-magic --health"
+      
+    Deep_Analysis:
+      MCPs: "Context7 + Sequential + Magic"
+      Use_Case: "Comprehensive system analysis with insights"
+      Command: "/context-status --mcp-context7 --mcp-sequential --mcp-magic --deep"
+
+Quality_Control:
+  MCP_Health_Monitoring:
+    Availability_Checking: "Verify MCP server availability before use"
+    Performance_Monitoring: "Track MCP response times & quality"
+    Error_Rate_Tracking: "Monitor & alert on MCP failures"
+    
+  Graceful_Degradation:
+    MCP_Unavailable: "Fall back to native capabilities"
+    Partial_Failures: "Continue with available MCPs"
+    Quality_Threshold: "Disable underperforming MCPs temporarily"
+    
+  Result_Validation:
+    Output_Quality: "Validate MCP-enhanced results"
+    Consistency_Checking: "Ensure coherent multi-MCP results"
+    Confidence_Scoring: "Rate reliability of MCP-assisted operations"
+
+Command_Integration:
+  Flag_Based_Activation:
+    Explicit_Control: "User controls MCP usage via flags"
+    Smart_Defaults: "Suggest optimal MCP combinations"
+    Budget_Awareness: "Warn on high-cost MCP combinations"
+    
+  Auto_Suggestion_Engine:
+    Context_Analysis: "Suggest relevant MCPs based on operation"
+    Performance_History: "Recommend based on past success"
+    Budget_Optimization: "Balance capability vs cost"
+    
+  Integration_Patterns:
+    Single_MCP: "One MCP for specific enhancement"
+    Complementary_MCPs: "Multiple MCPs for synergistic benefits"
+    Sequential_MCPs: "Chain MCPs for complex workflows"
+
+Error_Recovery:
+  MCP_Failure_Handling:
+    Timeout_Management: "Graceful handling of MCP timeouts"
+    Network_Issues: "Retry logic with exponential backoff"
+    Server_Errors: "Fallback to alternative approaches"
+    
+  Partial_Failure_Recovery:
+    Continue_Without_MCP: "Complete operation using native capabilities"
+    Cache_Fallback: "Use cached results when available"
+    User_Notification: "Inform user of degraded capabilities"
+    
+  Recovery_Strategies:
+    Session_Reset: "Clear MCP cache & restart connections"
+    Alternative_MCPs: "Use different MCPs for same functionality"
+    Native_Fallback: "Complete critical operations without MCP"
+
+Best_Practices:
+  Efficiency_Guidelines:
+    Cache_First: "Always check cache before MCP calls"
+    Batch_Operations: "Group similar operations together"
+    Progressive_Enhancement: "Start simple, add MCPs as needed"
+    
+  Quality_Guidelines:
+    Validate_Results: "Verify MCP-enhanced output quality"
+    Monitor_Performance: "Track MCP impact on operations"
+    User_Feedback: "Collect feedback on MCP effectiveness"
+    
+  Cost_Management:
+    Budget_Tracking: "Monitor token usage for MCP operations"
+    ROI_Analysis: "Measure value delivered per token spent"
+    Optimization_Opportunities: "Identify cost reduction possibilities"
+
+Session_Management:
+  Cross_Session_Continuity:
+    State_Persistence: "Maintain MCP state across sessions"
+    Context_Continuity: "Preserve relevant MCP context"
+    Cache_Warmup: "Pre-load frequently used MCP results"
+    
+  Session_Optimization:
+    MCP_Preloading: "Initialize MCPs based on session patterns"
+    Cache_Priming: "Pre-populate cache with likely needed results"
+    Resource_Allocation: "Optimize MCP resource usage per session"
+    
+  Cleanup_Procedures:
+    Session_End: "Properly close MCP connections"
+    Cache_Cleanup: "Remove expired or unnecessary cache entries"
+    Resource_Release: "Free up system resources efficiently"

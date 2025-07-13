@@ -588,6 +588,7 @@ move_repository_files() {
     
     # Move context-engine contents if it exists in repository
     if [[ -d "$SOURCE_DIR/context-engine" ]]; then
+        log_verbose "Processing context-engine directory"
         local context_files=$(find "$SOURCE_DIR/context-engine" -type f)
         while IFS= read -r file; do
             if [[ -n "$file" ]]; then
@@ -599,10 +600,78 @@ move_repository_files() {
                 if [[ -f "$target_file" ]]; then
                     create_backup_if_exists "$target_file" "$(basename "$relative_path")"
                 fi
-                cp "$file" "$target_file"
+                if [[ "$DRY_RUN" != true ]]; then
+                    cp "$file" "$target_file" || {
+                        log_error "Failed to copy context-engine file: $file" "file-copy"
+                        return 1
+                    }
+                fi
                 print_status "Moved context-engine file: $relative_path"
             fi
         done <<< "$context_files"
+    fi
+    
+    # Move commands directory if it exists
+    if [[ -d "$SOURCE_DIR/commands" ]]; then
+        log_verbose "Processing commands directory"
+        local commands_target="$CLAUDE_PARENT_DIR/commands"
+        if [[ -e "$commands_target" ]]; then
+            log_verbose "Commands target exists, creating backup"
+            create_backup_if_exists "$commands_target" "commands"
+            rm -rf "$commands_target"
+        fi
+        if [[ "$DRY_RUN" != true ]]; then
+            log_verbose "Copying commands directory"
+            if cp -r "$SOURCE_DIR/commands" "$commands_target" 2>/dev/null; then
+                log_verbose "Commands copy successful"
+            else
+                log_error "Failed to copy commands directory" "file-copy"
+                return 1
+            fi
+        fi
+        print_status "Moved: commands"
+    fi
+    
+    # Move personas directory if it exists
+    if [[ -d "$SOURCE_DIR/personas" ]]; then
+        log_verbose "Processing personas directory"
+        local personas_target="$CLAUDE_PARENT_DIR/personas"
+        if [[ -e "$personas_target" ]]; then
+            log_verbose "Personas target exists, creating backup"
+            create_backup_if_exists "$personas_target" "personas"
+            rm -rf "$personas_target"
+        fi
+        if [[ "$DRY_RUN" != true ]]; then
+            log_verbose "Copying personas directory"
+            if cp -r "$SOURCE_DIR/personas" "$personas_target" 2>/dev/null; then
+                log_verbose "Personas copy successful"
+            else
+                log_error "Failed to copy personas directory" "file-copy"
+                return 1
+            fi
+        fi
+        print_status "Moved: personas"
+    fi
+    
+    # Move mcp directory if it exists  
+    if [[ -d "$SOURCE_DIR/mcp" ]]; then
+        log_verbose "Processing mcp directory"
+        local mcp_target="$CLAUDE_PARENT_DIR/mcp"
+        if [[ -e "$mcp_target" ]]; then
+            log_verbose "MCP target exists, creating backup"
+            create_backup_if_exists "$mcp_target" "mcp"
+            rm -rf "$mcp_target"
+        fi
+        if [[ "$DRY_RUN" != true ]]; then
+            log_verbose "Copying mcp directory"
+            if cp -r "$SOURCE_DIR/mcp" "$mcp_target" 2>/dev/null; then
+                log_verbose "MCP copy successful"
+            else
+                log_error "Failed to copy mcp directory" "file-copy"
+                return 1
+            fi
+        fi
+        print_status "Moved: mcp"
     fi
 }
 

@@ -1,0 +1,118 @@
+# Universal Constants & Legend System
+# Context Engineering System v2.0
+# Token-efficient communication foundation
+
+Universal_Legend:
+  # Logical operators & flow
+  "→": "leads to, results in, then"
+  "&": "and, with, plus"
+  "|": "or, alternative, option"
+  "∀": "for all, universal, applies to"
+  "∵": "because, due to, since"
+  "∴": "therefore, thus, so"
+  "≡": "equivalent to, same as"
+  "≠": "not equal, different from"
+  
+  # Status & states
+  "✅": "success, completed, passed"
+  "❌": "failure, error, blocked"
+  "⚠️": "warning, caution, attention"
+  "🔄": "cycle, update, refresh, process"
+  "⏸": "pause, halt, stopped"
+  "▶": "start, begin, execute"
+  "⏹": "stop, end, terminate"
+  "⚡": "fast, urgent, high priority"
+  "🎯": "target, goal, objective"
+  "📊": "metrics, analytics, data"
+  
+  # Technical abbreviations
+  cfg: "configuration"
+  impl: "implementation"
+  perf: "performance"
+  ops: "operations"
+  val: "validation"
+  env: "environment"
+  auth: "authentication"
+  db: "database"
+  api: "application programming interface"
+  ui: "user interface"
+  ux: "user experience"
+  qa: "quality assurance"
+  ci: "continuous integration"
+  cd: "continuous deployment"
+  mcp: "model context protocol"
+  uc: "ultra compressed"
+  
+  # Process & workflow
+  wf: "workflow"
+  req: "requirement"
+  spec: "specification"
+  doc: "documentation"
+  test: "testing"
+  deploy: "deployment"
+  monitor: "monitoring"
+  debug: "debugging"
+  opt: "optimization"
+  refact: "refactoring"
+
+Standard_Messages_Templates:
+  Success: "✅ {action} completed successfully"
+  Error: "❌ {action} failed: {reason}"
+  Warning: "⚠️ {action} needs attention: {details}"
+  Progress: "🔄 {action} in progress: {status}"
+  Target: "🎯 {action} targeting: {objective}"
+  
+Context_Compression_Symbols:
+  # Context management
+  "📋": "context, information, data"
+  "🧠": "thinking, analysis, processing"
+  "🔍": "search, find, investigate"
+  "🔧": "tool, utility, function"
+  "📦": "package, module, component"
+  "🌐": "network, web, global"
+  "💾": "storage, save, persist"
+  "⚙️": "settings, configuration, options"
+  
+Token_Economy_Constants:
+  Light_Operations: "<1K tokens"
+  Standard_Operations: "1K-5K tokens"
+  Heavy_Operations: "5K-20K tokens"
+  Critical_Operations: "20K+ tokens (requires justification)"
+  
+UltraCompressed_Triggers:
+  Context_Usage_Threshold: 75
+  Token_Budget_Pressure: "auto-activate --uc"
+  Large_Codebase_Files: 10000
+  Long_Session_Hours: 2
+
+Quality_Standards:
+  Relevance_Score_Target: 90
+  Noise_Threshold_Max: 10
+  Completeness_Score_Target: 100
+  Efficiency_Score_Target: 80
+
+Workflow_States:
+  Planned: "□"
+  InProgress: "⏳"
+  Completed: "✅"
+  Blocked: "🚫"
+  Paused: "⏸"
+  Archived: "📦"
+
+Priority_Levels:
+  Critical: "🔴"
+  High: "🟠"
+  Medium: "🟡"
+  Low: "🟢"
+  
+Persona_Indicators:
+  Architect: "🏗️"
+  Security: "🔒"
+  Performance: "⚡"
+  Testing: "🧪"
+  DevOps: "🚀"
+  Frontend: "🎨"
+  Backend: "⚙️"
+  Mobile: "📱"
+  AI: "🤖"
+  Data: "📊"
