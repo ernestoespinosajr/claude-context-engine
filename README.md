@@ -32,10 +32,22 @@ A revolutionary AI-assisted development system that uses **advanced Context Engi
 # Install complete system with all features
 ./install-context-engine.sh --full
 
+# Update existing Claude configuration (recommended for existing projects)
+./install-context-engine.sh --update
+
+# Update with cleanup of obsolete files (recommended for clean upgrade)
+./install-context-engine.sh --update --clean
+
 # Or install specific components only
 ./install-context-engine.sh --token-economy-only
 ./install-context-engine.sh --workflow-management-only
 ```
+
+**For existing Claude configurations:**
+- Use `--update` to safely upgrade your current `.claude/` setup
+- Use `--update --clean` to remove obsolete files during upgrade
+- Preserves existing configurations while adding new v2.0 features
+- `--clean` creates automatic backups before removing any files
 
 ### 2. Start with Token Efficiency
 ```bash
@@ -330,14 +342,17 @@ Every feature automatically passes through 4 levels of validation:
 # Complete system (recommended)
 ./install-context-engine.sh --full
 
+# Update existing installation with cleanup
+./install-context-engine.sh --update --clean
+
 # Modular installation
 ./install-context-engine.sh --token-economy-only
 ./install-context-engine.sh --mcp-only  
 ./install-context-engine.sh --personas-only
 ./install-context-engine.sh --workflow-management-only
 
-# Update existing installation
-./install-context-engine.sh --update
+# Clean installation (removes obsolete files)
+./install-context-engine.sh --full --clean
 ```
 
 ### Environment Configuration

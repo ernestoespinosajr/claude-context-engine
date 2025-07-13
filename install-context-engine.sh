@@ -20,6 +20,7 @@ INSTALL_FLAGS=false
 INSTALL_COMPRESSION=false
 INSTALL_WORKFLOW=false
 UPDATE_MODE=false
+CLEAN_MODE=false
 
 # Version information
 VERSION="2.0"
@@ -64,12 +65,19 @@ show_help() {
     echo "  --compression-only       Install only compression system"
     echo "  --workflow-management-only Install only workflow management"
     echo "  --update                 Update existing installation"
+    echo "  --clean                  Remove obsolete files and directories"
     echo "  --help                   Show this help message"
+    echo ""
+    echo "Cleaning Options:"
+    echo "  --clean can be combined with any installation option:"
+    echo "  $0 --update --clean      # Update and clean obsolete files"
+    echo "  $0 --full --clean        # Fresh install with cleanup"
     echo ""
     echo "Examples:"
     echo "  $0 --full                # Install everything"
     echo "  $0 --token-economy-only  # Install just token optimization"
     echo "  $0 --update              # Update existing installation"
+    echo "  $0 --update --clean      # Update and remove obsolete files"
     echo ""
 }
 
@@ -106,6 +114,10 @@ parse_arguments() {
                 ;;
             --update)
                 UPDATE_MODE=true
+                shift
+                ;;
+            --clean)
+                CLEAN_MODE=true
                 shift
                 ;;
             --help)
@@ -322,6 +334,134 @@ setup_compression_system() {
     fi
 }
 
+clean_obsolete_files() {
+    if [[ "$CLEAN_MODE" == false ]]; then
+        return 0
+    fi
+    
+    print_info "Starting cleanup of obsolete files and directories..."
+    
+    # Create backup directory with timestamp
+    local backup_dir=".claude/backups/cleanup-$(date +%Y%m%d-%H%M%S)"
+    mkdir -p "$backup_dir"
+    
+    # Define obsolete files and directories to clean
+    local obsolete_items=(
+        "features"                           # Old workflow directory name
+        ".claude/*.bak"                      # Backup files
+        ".claude/*.old"                      # Old files
+        ".claude/commands/shared/old-*"      # Old configuration files
+        "CLAUDE.md.bak"                      # CLAUDE.md backups
+        "CLAUDE.md.old"                      # Old CLAUDE.md files
+        ".claude/legacy"                     # Legacy directory if exists
+        ".claude/old-config"                 # Old config directory
+        "context-engine-old"                 # Old context-engine directory
+        "workflow/.old"                      # Old workflow files
+    )
+    
+    local files_to_clean=()
+    local dirs_to_clean=()
+    
+    # Identify actual files/directories that exist
+    for pattern in "${obsolete_items[@]}"; do
+        if [[ "$pattern" == *"*"* ]]; then
+            # Handle wildcard patterns
+            for item in $pattern; do
+                if [[ -e "$item" ]]; then
+                    if [[ -d "$item" ]]; then
+                        dirs_to_clean+=("$item")
+                    else
+                        files_to_clean+=("$item")
+                    fi
+                fi
+            done
+        else
+            # Handle exact matches
+            if [[ -e "$pattern" ]]; then
+                if [[ -d "$pattern" ]]; then
+                    dirs_to_clean+=("$pattern")
+                else
+                    files_to_clean+=("$pattern")
+                fi
+            fi
+        fi
+    done
+    
+    # Show what will be cleaned
+    if [[ ${#files_to_clean[@]} -eq 0 && ${#dirs_to_clean[@]} -eq 0 ]]; then
+        print_status "No obsolete files found. System is clean."
+        rmdir "$backup_dir" 2>/dev/null || true
+        return 0
+    fi
+    
+    echo ""
+    print_warning "The following obsolete items will be removed:"
+    
+    if [[ ${#dirs_to_clean[@]} -gt 0 ]]; then
+        echo -e "${YELLOW}Directories:${NC}"
+        for dir in "${dirs_to_clean[@]}"; do
+            echo "  📁 $dir"
+        done
+    fi
+    
+    if [[ ${#files_to_clean[@]} -gt 0 ]]; then
+        echo -e "${YELLOW}Files:${NC}"
+        for file in "${files_to_clean[@]}"; do
+            echo "  📄 $file"
+        done
+    fi
+    
+    echo ""
+    print_info "Backup will be created at: $backup_dir"
+    echo ""
+    
+    # Ask for confirmation
+    read -p "Continue with cleanup? (y/N): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        print_info "Cleanup cancelled by user."
+        rmdir "$backup_dir" 2>/dev/null || true
+        return 0
+    fi
+    
+    # Create backups and remove items
+    local cleaned_count=0
+    
+    # Backup and remove directories
+    for dir in "${dirs_to_clean[@]}"; do
+        if [[ -d "$dir" ]]; then
+            print_info "Backing up and removing directory: $dir"
+            cp -r "$dir" "$backup_dir/" 2>/dev/null || true
+            rm -rf "$dir"
+            ((cleaned_count++))
+            print_status "Removed: $dir"
+        fi
+    done
+    
+    # Backup and remove files
+    for file in "${files_to_clean[@]}"; do
+        if [[ -f "$file" ]]; then
+            print_info "Backing up and removing file: $file"
+            cp "$file" "$backup_dir/" 2>/dev/null || true
+            rm -f "$file"
+            ((cleaned_count++))
+            print_status "Removed: $file"
+        fi
+    done
+    
+    # Summary
+    echo ""
+    if [[ $cleaned_count -gt 0 ]]; then
+        print_status "Cleanup completed: $cleaned_count items removed"
+        print_info "Backup available at: $backup_dir"
+        print_info "You can restore files from backup if needed"
+    else
+        print_warning "No files were actually removed"
+        rmdir "$backup_dir" 2>/dev/null || true
+    fi
+    echo ""
+}
+
 install_glossary() {
     print_info "Installing universal glossary system..."
     
@@ -443,7 +583,12 @@ main() {
         print_info "Update mode: Refreshing existing installation"
     fi
     
+    if [[ "$CLEAN_MODE" == true ]]; then
+        print_info "Clean mode: Will remove obsolete files and directories"
+    fi
+    
     detect_environment
+    clean_obsolete_files
     create_directory_structure
     install_core_modules
     setup_token_economy
