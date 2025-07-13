@@ -414,10 +414,12 @@ create_backup_if_exists() {
             backup_random=$(date +%s)$$
         fi
         
-        local backup_file="$BACKUP_DIR/${timestamp}-${backup_random}-${backup_name}"
+        # Use a fixed backup directory for individual file backups
+        local file_backup_dir="$CLAUDE_PARENT_DIR/backups"
+        local backup_file="$file_backup_dir/${timestamp}-${backup_random}-${backup_name}"
         
-        mkdir -p "$BACKUP_DIR"
-        chmod 700 "$BACKUP_DIR" 2>/dev/null || log_warning "Failed to set restrictive permissions on backup directory"
+        mkdir -p "$file_backup_dir"
+        chmod 700 "$file_backup_dir" 2>/dev/null || log_warning "Failed to set restrictive permissions on backup directory"
         
         if cp "$file_path" "$backup_file"; then
             print_status "Backed up existing file: $backup_name -> $backup_file"
@@ -437,13 +439,8 @@ cleanup_on_exit() {
     # Return to original directory
     cd "$ORIGINAL_DIR" 2>/dev/null || true
     
-    # Generate error report if there were issues
-    if [[ $exit_code -ne 0 ]] || [[ $ERROR_COUNT -gt 0 ]] || [[ $WARNING_COUNT -gt 0 ]]; then
-        generate_error_report
-    fi
-    
-    # Rollback on failure if enabled and we're in installation phase
-    if [[ $exit_code -ne 0 ]] && [[ "$ROLLBACK_ON_FAILURE" = true ]] && [[ -n "$BACKUP_DIR" ]] && [[ "$INSTALLATION_PHASE" = true ]]; then
+    # Only do rollback if we're in installation phase AND there's an actual backup AND not in dry run
+    if [[ $exit_code -ne 0 ]] && [[ "$ROLLBACK_ON_FAILURE" = true ]] && [[ -n "$BACKUP_DIR" ]] && [[ -d "$BACKUP_DIR" ]] && [[ "$INSTALLATION_PHASE" = true ]] && [[ "$DRY_RUN" != true ]]; then
         echo -e "${YELLOW}Installation failed, attempting rollback...${NC}" >&2
         if rollback_installation; then
             echo -e "${GREEN}Rollback completed successfully${NC}" >&2
@@ -451,6 +448,11 @@ cleanup_on_exit() {
             echo -e "${RED}Rollback failed - manual intervention required${NC}" >&2
             echo -e "${YELLOW}Backup available at: $BACKUP_DIR${NC}" >&2
         fi
+    fi
+    
+    # Generate error report if there were issues (after rollback attempt)
+    if [[ $exit_code -ne 0 ]] || [[ $ERROR_COUNT -gt 0 ]] || [[ $WARNING_COUNT -gt 0 ]]; then
+        generate_error_report
     fi
     
     exit $exit_code
@@ -519,7 +521,6 @@ move_repository_files() {
     local repo_files=(
         "CLAUDE.md"
         "workflow"
-        "docs"
     )
     
     # Create necessary directories
@@ -535,10 +536,34 @@ move_repository_files() {
                 create_backup_if_exists "$target_path" "$(basename "$file")"
                 rm -rf "$target_path"
             fi
-            cp -r "$source_path" "$target_path"
+            if [[ "$DRY_RUN" != true ]]; then
+                cp -r "$source_path" "$target_path" || {
+                    log_error "Failed to copy $source_path to $target_path" "file-copy"
+                    return 1
+                }
+            fi
             print_status "Moved: $file"
+        else
+            log_warning "Source file not found: $source_path" "file-copy"
         fi
     done
+    
+    # Handle docs directory separately (avoid conflict with "old docs")
+    local docs_source="$SOURCE_DIR/docs"
+    local docs_target="$CLAUDE_PARENT_DIR/docs"
+    if [[ -d "$docs_source" ]]; then
+        if [[ -e "$docs_target" ]]; then
+            create_backup_if_exists "$docs_target" "docs"
+            rm -rf "$docs_target"
+        fi
+        if [[ "$DRY_RUN" != true ]]; then
+            cp -r "$docs_source" "$docs_target" || {
+                log_error "Failed to copy docs directory" "file-copy"
+                return 1
+            }
+        fi
+        print_status "Moved: docs"
+    fi
     
     # Move context-engine contents if it exists in repository
     if [[ -d "$SOURCE_DIR/context-engine" ]]; then
@@ -1367,6 +1392,39 @@ main() {
         echo -e "Log file: ${YELLOW}$LOG_FILE${NC}"
     fi
     echo ""
+    
+    # Check if existing directory exists and has files - create backup if needed
+    if [[ -d "$CLAUDE_PARENT_DIR" ]] && [[ "$(ls -A "$CLAUDE_PARENT_DIR" 2>/dev/null)" ]] && [[ "$DRY_RUN" != true ]]; then
+        echo -e "${YELLOW}Existing configuration found - creating backup...${NC}"
+        
+        # Create backup directory with secure random suffix
+        local backup_timestamp=$(date +%Y%m%d_%H%M%S)
+        local backup_random=""
+        if [[ -r /dev/urandom ]]; then
+            backup_random=$(head -c 8 /dev/urandom 2>/dev/null | od -An -tx1 | tr -d ' \n')
+        elif check_command openssl; then
+            backup_random=$(openssl rand -hex 8 2>/dev/null)
+        else
+            backup_random=$(date +%s)$$
+        fi
+        
+        BACKUP_DIR="$(dirname "$CLAUDE_PARENT_DIR")/context-engine-backup.${backup_timestamp}.${backup_random}"
+        
+        if mkdir -p "$BACKUP_DIR" && chmod 700 "$BACKUP_DIR"; then
+            # Backup existing files
+            if cd "$CLAUDE_PARENT_DIR" && find . -mindepth 1 -maxdepth 1 -exec cp -rP {} "$BACKUP_DIR/" \; 2>/dev/null; then
+                echo -e "${GREEN}Backup created: $BACKUP_DIR${NC}"
+                cd "$ORIGINAL_DIR"
+            else
+                log_warning "Failed to create complete backup" "backup"
+                BACKUP_DIR=""
+                cd "$ORIGINAL_DIR"
+            fi
+        else
+            log_warning "Failed to create backup directory" "backup"
+            BACKUP_DIR=""
+        fi
+    fi
     
     # Mark installation phase as starting
     INSTALLATION_PHASE=true
