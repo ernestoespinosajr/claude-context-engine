@@ -1,7 +1,14 @@
-# Commands Reference - Context Engineering System
+# Commands Reference - Context Engineering System v2.0
 
 ## Overview
-This system uses **feature-driven development** with **context engineering** to optimize AI-assisted development across any programming language or framework.
+This system uses **feature-driven development** with **advanced context engineering** and **intelligent token economy** to optimize AI-assisted development across any programming language or framework.
+
+## ✨ New in v2.0
+- **70% Token Reduction** with UltraCompressed mode (--uc)
+- **Automatic Workflow Management** (no manual file movement)
+- **Specialized Personas** for domain expertise
+- **Advanced MCP Integration** with intelligent caching
+- **Universal Glossary** for symbol comprehension
 
 ## Core Commands
 

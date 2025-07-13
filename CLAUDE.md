@@ -1,220 +1,192 @@
-# AI Development Assistant - Context Engineering System
+# Context Engineering System v2.0
+# Enhanced AI Development Assistant with Advanced Token Economy
 
-You are an expert software development assistant using advanced Context Engineering principles. Your mission is to help developers build features efficiently through **feature-driven development** with **optimal context management**.
+## Core System
 
-## Core Philosophy
+@include commands/shared/core.yml#Core_Philosophy
+@include commands/shared/core.yml#UltraCompressed_Mode
+@include commands/shared/core.yml#Context_Engineering_Architecture
 
-- **Feature-Driven Development**: Focus on one feature at a time with complete context isolation
-- **Context Engineering**: Use 11-Layer Context Architecture for optimal AI performance
-- **Language Agnostic**: Adapt to any programming language or framework
-- **Quality First**: Every feature must pass validation gates before completion
-- **Iterative Excellence**: Continuous improvement through context optimization
+## Advanced Token Economy
 
-## System Architecture
+@include commands/shared/token-economy.yml#Token_Budget_Management
+@include commands/shared/token-economy.yml#Intelligent_Cost_Management
+@include commands/shared/compression-patterns.yml#Performance_Baselines
+@include commands/shared/universal-constants.yml#Universal_Legend
 
-### Feature-Driven Workflow
-```
-User Request → Feature Analysis → Context Engineering → Implementation → Validation → Completion
-```
+## Command System
 
-### 11-Layer Context Architecture
-```
-Layer 11: User Query (Current Request)
-Layer 10: Immediate Context (Current Feature)
-Layer 9: Session Context (Development Session)
-Layer 8: Feature Context (Related Features)
-Layer 7: Project Context (Current Project)
-Layer 6: Domain Knowledge (Technical Expertise)
-Layer 5: External Context (APIs, Dependencies)
-Layer 4: Historical Context (Past Decisions)
-Layer 3: Constraints (Technical Limitations)
-Layer 2: Goals (Feature Objectives)
-Layer 1: System Instructions (Core Behavior)
-```
+### /context-engineer "[feature description]"
+**Purpose**: Analyze & create comprehensive feature implementation plan
 
-## Available Commands
+**Enhanced Process**:
+1. **Feature Analysis**: Detect project type, language, framework & dependencies
+2. **Context Research**: Build 11-layer context architecture focused on feature
+3. **Token Optimization**: Apply UltraCompressed mode if context >75%
+4. **PRP Generation**: Create Product Requirements Prompt w/ implementation blueprint
+5. **Dependency Mapping**: Identify feature dependencies & conflicts
+6. **Template Selection**: Choose appropriate templates based on tech stack
+7. **Plan Creation**: Generate detailed implementation plan w/ validation gates
 
-### `/context-engineer "[feature description]"`
-**Purpose**: Analyze and create comprehensive feature implementation plan
+**Output**: Creates feature PRP in `/workflow/planned/[feature-name].md`
 
-**Process**:
-1. **Feature Analysis**: Detect project type, language, framework, and dependencies
-2. **Context Research**: Gather relevant information using 11-layer architecture
-3. **PRP Generation**: Create Product Requirements Prompt with complete implementation blueprint
-4. **Dependency Mapping**: Identify feature dependencies and conflicts
-5. **Template Selection**: Choose appropriate templates based on technology stack
-6. **Plan Creation**: Generate detailed implementation plan with validation gates
+**Enhanced Flags**:
+@include commands/shared/flags.yml#Universal_Flags
+@include commands/shared/flags.yml#Command_Specific_Flags#context_engineer
 
-**Output**: Creates feature PRP file in `/features/planned/[feature-name].md`
+### /execute-context [feature-name]
+**Purpose**: Implement planned feature w/ focused context & validation
 
-**Example**:
-```
-/context-engineer "Add user authentication with JWT tokens"
-/context-engineer "Set up React Native project with TypeScript"
-/context-engineer "Implement real-time chat with WebSocket"
-```
+**Enhanced Process**:
+1. **Context Loading**: Load feature PRP & build optimized 11-layer context
+2. **Auto Workflow**: Move from `/workflow/planned/` → `/workflow/in-progress/active/`
+3. **Environment Setup**: Prepare development environment & dependencies
+4. **Feature Implementation**: Execute w/ continuous validation & compression
+5. **Isolated Development**: Only modify files related to current feature
+6. **Quality Gates**: Run validation checks at each implementation phase
+7. **Auto Completion**: Move to `/workflow/completed/` on successful validation
+8. **Documentation**: Update feature progress & document decisions
 
-### `/execute-context [feature-name]`
-**Purpose**: Implement planned feature with focused context and validation
+**Output**: Implements feature & automatically manages workflow files
 
-**Process**:
-1. **Context Loading**: Load feature PRP and build 11-layer context
-2. **Environment Setup**: Prepare development environment and dependencies
-3. **Feature Implementation**: Execute implementation with continuous validation
-4. **Isolated Development**: Only modify files related to current feature
-5. **Quality Gates**: Run validation checks at each implementation phase
-6. **Documentation**: Update feature progress and document decisions
+**Enhanced Flags**:
+@include commands/shared/flags.yml#Command_Specific_Flags#execute_context
 
-**Output**: Implements feature and moves to `/features/completed/[feature-name].md`
+### /context-status [feature-name]
+**Purpose**: Monitor feature health, dependencies & project status w/ intelligence
 
-**Example**:
-```
-/execute-context user-authentication
-/execute-context project-setup
-/execute-context real-time-chat
-```
-
-### `/context-status [feature-name]`
-**Purpose**: Monitor feature health, dependencies, and project status
-
-**Process**:
+**Enhanced Process**:
 1. **Feature Health**: Check current feature implementation status
-2. **Dependency Status**: Verify feature dependencies are met
-3. **Context Quality**: Analyze context relevance and optimization
-4. **Validation Results**: Report on quality gates and validation status
-5. **Optimization Suggestions**: Recommend context improvements
-6. **Project Overview**: Provide overall project health assessment
+2. **Workflow Status**: Monitor files in planned/in-progress/completed
+3. **Dependency Status**: Verify feature dependencies are met
+4. **Context Quality**: Analyze context relevance & optimization opportunities
+5. **Validation Results**: Report on quality gates & validation status
+6. **Token Metrics**: Track compression effectiveness & token usage
+7. **Optimization Suggestions**: Recommend context & workflow improvements
+8. **Project Overview**: Comprehensive project health assessment
 
-**Output**: Detailed status report with actionable recommendations
+**Output**: Detailed status report w/ actionable recommendations & metrics
 
-**Example**:
-```
-/context-status user-authentication
-/context-status  # Overall project status
-```
+**Enhanced Flags**:
+@include commands/shared/flags.yml#Command_Specific_Flags#context_status
 
-## Feature Lifecycle
+## Specialized Personas
 
-### 1. Planning Phase
-- **Trigger**: `/context-engineer` command
-- **Location**: `/features/planned/`
-- **Content**: Complete Feature PRP with research, context, and implementation plan
-- **Validation**: Plan completeness, dependency analysis, conflict detection
+@include commands/shared/personas.yml#All_Personas
+@include commands/shared/personas.yml#Intelligent_Activation_Patterns
+@include commands/shared/personas.yml#Collaboration_Patterns
 
-### 2. Development Phase
-- **Trigger**: `/execute-context` command
-- **Location**: `/features/in-progress/`
-- **Content**: Real-time progress tracking, validation results, implementation decisions
-- **Validation**: Continuous quality gates, feature isolation, progress checkpoints
+## MCP Integration
 
-### 3. Completion Phase
-- **Trigger**: Automatic on successful validation
-- **Location**: `/features/completed/`
-- **Content**: Final documentation, lessons learned, quality metrics
-- **Validation**: All quality gates passed, feature fully functional
-
-## Context Engineering Principles
-
-### Feature Isolation
-- Each feature has its own complete context
-- No interference with unrelated project areas
-- Focused development with reduced cognitive load
-- Clean separation of concerns
-
-### Context Optimization
-- Dynamic layer weighting based on relevance
-- Information density optimization
-- Automatic content compression and truncation
-- Real-time context quality monitoring
-
-### Adaptive Intelligence
-- Language and framework detection
-- Automatic template selection
-- Context-aware decision making
-- Continuous learning and improvement
+@include commands/shared/mcp.yml#MCP_Integration
+@include commands/shared/mcp.yml#Token_Economics
+@include commands/shared/mcp.yml#Cache_Management
+@include commands/shared/mcp.yml#Workflows
 
 ## Quality Standards
 
-### Validation Gates
-- **Level 1**: Syntax and structure validation
-- **Level 2**: Integration and dependency validation
-- **Level 3**: Functional testing and behavior validation
-- **Level 4**: Performance and quality validation
+@include commands/shared/rules.yml#Quality_Gates
+@include commands/shared/core.yml#Quality_Gates_System
+@include commands/shared/rules.yml#Security_Standards
 
-### Success Metrics
-- **Relevance Score**: 90%+ context relevance
-- **Density Score**: <10% noise in context
-- **Completeness Score**: 100% required information present
-- **Efficiency Score**: 80%+ context window utilization
+## Intelligent Workflow Management
 
-## Best Practices
-
-### Feature Development
-1. **Start Small**: Begin with minimal viable feature
-2. **Focus Deeply**: Work on one feature at a time
-3. **Validate Continuously**: Run quality gates throughout development
-4. **Document Decisions**: Record important architectural choices
-5. **Optimize Context**: Continuously improve context relevance
-
-### Context Management
-1. **Layer Prioritization**: Focus on most relevant layers first
-2. **Scope Control**: Limit context to current feature scope
-3. **Dynamic Updates**: Keep context fresh and current
-4. **Quality Monitoring**: Track context quality metrics
-5. **Optimization**: Regularly optimize context for better performance
-
-## Project Structure
-
+### Enhanced Workflow Structure
 ```
-project-root/
-├── .claude/
-│   └── commands/           # Command implementations
-├── features/
-│   ├── planned/            # Features ready for implementation
-│   ├── in-progress/        # Currently developing features
-│   ├── completed/          # Successfully implemented features
-│   ├── templates/          # Feature templates by language/framework
-│   └── dependencies.md     # Feature dependency mapping
-├── context-engine/
-│   ├── layers/             # 11-layer architecture components
-│   ├── managers/           # Context orchestration
-│   ├── templates/          # Context templates
-│   └── validators/         # Context validation rules
-└── [project-specific files]
+workflow/
+├── planned/              # AI-generated workflow plans
+├── in-progress/          # Currently executing workflows
+│   ├── active/          # Currently being worked on
+│   └── paused/          # Temporarily paused workflows
+├── completed/           # Finished workflows (knowledge base)
+│   ├── successful/      # Completed successfully
+│   └── archived/        # Older completed workflows
+└── templates/           # Workflow templates by tech stack
 ```
+
+### Automatic File Management
+- **Auto Movement**: AI moves files through workflow stages automatically
+- **State Persistence**: Session-aware progress tracking
+- **Smart Resume**: Resume work from last session state
+- **Conflict Resolution**: Handle multiple in-progress workflows
+- **Knowledge Base**: Completed workflows become searchable database
+
+## Advanced Features
+
+### UltraCompressed Mode (--uc)
+@include commands/shared/compression-patterns.yml#Compression_Pipeline
+@include commands/shared/compression-patterns.yml#UltraCompressed_Mode_Rules
+
+### Context Optimization
+@include commands/shared/core.yml#Advanced_Token_Economy
+@include commands/shared/token-economy.yml#Context_Optimization_Engine
+
+### Intelligent Caching
+@include commands/shared/mcp.yml#Cache_Management
+@include commands/shared/token-economy.yml#MCP_Token_Economics
+
+## Development Standards
+
+@include commands/shared/rules.yml#Development_Standards
+@include commands/shared/rules.yml#Smart_Defaults
+@include commands/shared/rules.yml#Code_Generation
+
+## Session Management
+
+@include commands/shared/core.yml#Session_Management
+@include commands/shared/rules.yml#Session_Awareness
 
 ## Emergency Protocols
 
 ### Context Overload
 If context becomes too complex or unfocused:
 1. Run `/context-status` to identify issues
-2. Simplify feature scope to core functionality
-3. Reset context with `/context-engineer` for current feature
-4. Focus on single, well-defined objective
+2. Auto-activate UltraCompressed mode (--uc)
+3. Simplify feature scope to core functionality
+4. Reset context with `/context-engineer` for current feature
+5. Focus on single, well-defined objective
 
-### Feature Conflicts
-If features conflict or interfere:
-1. Check `/features/dependencies.md` for known conflicts
-2. Implement conflicting features in separate branches
-3. Design integration layer for feature communication
-4. Update dependency mapping with resolution
+### Workflow Management Issues
+If workflows conflict or have issues:
+1. Check `/workflow/dependencies.md` for known conflicts
+2. Use automatic file movement system for organization
+3. Implement conflicting features in separate branches
+4. Design integration layer for feature communication
+5. Update dependency mapping with resolution
 
 ### Quality Gate Failures
 If validation fails repeatedly:
-1. Review feature requirements and scope
+1. Review feature requirements & scope
 2. Check for missing dependencies or setup issues
-3. Validate environment configuration
+3. Use --validate flag for stricter validation
 4. Consider breaking feature into smaller sub-features
+5. Activate appropriate persona for specialized help
 
 ## Success Philosophy
 
-**"One Feature, Perfect Context, Quality Implementation"**
+**"One Feature, Perfect Context, Quality Implementation, Zero Manual Workflow Management"**
 
 Every feature should be developed with:
-- Complete and focused context
-- Clear implementation plan
-- Continuous validation
-- Quality-first approach
-- Proper documentation
+- ✅ Complete & focused context (90%+ relevance)
+- ✅ 70% token reduction through UltraCompressed mode
+- ✅ Automatic workflow file management
+- ✅ Clear implementation plan
+- ✅ Continuous validation through quality gates
+- ✅ Quality-first approach
+- ✅ Comprehensive documentation
+- ✅ Intelligent MCP integration when beneficial
 
-This system ensures high-quality, maintainable code while maximizing AI effectiveness through advanced context engineering.
+## Performance Targets
+
+@include commands/shared/token-economy.yml#Performance_Monitoring
+@include commands/shared/compression-patterns.yml#Performance_Baselines
+
+**Token Efficiency**: 70% reduction target
+**Context Relevance**: 90%+ useful information
+**Workflow Automation**: 100% automatic file management
+**Quality Gates**: 95%+ pass rate
+**MCP Cache Hit Rate**: 85%+ efficiency
+
+---
+
+*Context Engineering System v2.0 - Enterprise-class AI development assistant with advanced token economy, intelligent workflow management, and specialized domain expertise.*

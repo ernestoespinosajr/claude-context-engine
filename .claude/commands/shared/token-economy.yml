@@ -1,0 +1,176 @@
+# Advanced Token Economy System
+# Context Engineering System v2.0
+# Intelligent token management & optimization
+
+Token_Budget_Management:
+  Budget_Categories:
+    Light_Operations: 
+      Limit: "1000 tokens"
+      Examples: "Simple queries, status checks, basic commands"
+      Auto_Optimization: "Enabled by default"
+      
+    Standard_Operations:
+      Limit: "5000 tokens" 
+      Examples: "Feature implementation, code analysis, documentation"
+      Compression_Level: "Standard"
+      
+    Heavy_Operations:
+      Limit: "20000 tokens"
+      Examples: "Complex refactoring, architecture design, multi-file changes"
+      Compression_Level: "Enhanced"
+      Justification_Required: false
+      
+    Critical_Operations:
+      Limit: "50000 tokens"
+      Examples: "Full system analysis, major migrations, comprehensive audits"
+      Compression_Level: "Ultra"
+      Justification_Required: true
+      Pre_Approval: "Required for operations >30k tokens"
+
+Intelligent_Cost_Management:
+  Model_Selection_Strategy:
+    Simple_Tasks: "sonnet-3.5 (cost-optimized)"
+    Medium_Tasks: "sonnet-4 (balanced performance)"
+    Complex_Tasks: "sonnet-4 (performance-optimized)"
+    Critical_Tasks: "opus-4 (maximum capability)"
+    
+  Escalation_Patterns:
+    Native_First: "Use built-in capabilities when possible"
+    Light_MCP: "Single MCP for specific functionality"
+    Medium_MCP: "Multiple MCPs for complex operations"
+    Multi_MCP: "Full MCP stack for critical tasks"
+
+Context_Optimization_Engine:
+  Auto_Compression_Triggers:
+    Context_Usage_75: "Activate standard compression"
+    Context_Usage_85: "Activate enhanced compression"
+    Context_Usage_95: "Activate ultra compression"
+    
+  Dynamic_Layer_Weighting:
+    High_Relevance: "100% inclusion weight"
+    Medium_Relevance: "70% inclusion weight"
+    Low_Relevance: "30% inclusion weight"
+    Noise_Filter: "Auto-exclude <10% relevance"
+    
+  Information_Density_Optimization:
+    Target_Density: "90% useful information per token"
+    Noise_Threshold: "10% maximum irrelevant content"
+    Compression_Efficiency: "70% token reduction target"
+
+MCP_Token_Economics:
+  Session_Level_Caching:
+    TTL_Management:
+      Context7: "3600 seconds (1 hour)"
+      Sequential: "session duration"
+      Magic: "1800 seconds (30 minutes)"
+      Puppeteer: "session only (no persistence)"
+      
+  Cache_Hit_Optimization:
+    Target_Hit_Rate: "85% or higher"
+    Cache_Warming: "Pre-load common operations"
+    Parallel_Execution: "Concurrent MCP calls when beneficial"
+    Deduplication: "Eliminate redundant MCP calls"
+    
+  Budget_Allocation_Strategy:
+    Native_Operations: "0 additional tokens"
+    Single_MCP: "15% token overhead maximum"
+    Multiple_MCP: "35% token overhead maximum"
+    Full_MCP_Stack: "Requires explicit justification"
+
+Performance_Monitoring:
+  Real_Time_Metrics:
+    Token_Usage_Rate: "Tokens per minute tracking"
+    Compression_Effectiveness: "Actual vs target reduction"
+    Context_Quality_Score: "Relevance & density combined"
+    MCP_Efficiency_Ratio: "Value delivered per token cost"
+    
+  Session_Analytics:
+    Total_Token_Consumption: "Input + output + MCP tokens"
+    Compression_Savings: "Tokens saved through optimization"
+    Cache_Performance: "Hit rate & efficiency metrics"
+    Cost_Effectiveness: "Value delivered per dollar spent"
+
+Quality_Gates:
+  Pre_Operation_Validation:
+    Budget_Check: "Verify sufficient token allocation"
+    Compression_Readiness: "Ensure optimization systems active"
+    Context_Quality: "Validate relevance scores"
+    MCP_Availability: "Check required services status"
+    
+  Post_Operation_Analysis:
+    Token_Efficiency: "Actual vs estimated consumption"
+    Output_Quality: "Effectiveness of delivered results"
+    Compression_Success: "Achieved reduction percentages"
+    User_Satisfaction: "Success rate of operations"
+
+Smart_Defaults:
+  Auto_Optimization_Rules:
+    High_Context_Usage: "Auto-enable compression at 75%"
+    Long_Sessions: "Suggest --uc mode after 2 hours"
+    Large_Codebases: "Recommend compression for >10k files"
+    Repeated_Operations: "Auto-cache common patterns"
+    
+  Efficiency_Enforcement:
+    Skip_Ceremonial_Text: "Eliminate 'I will now...' phrases"
+    Direct_Execution: "No permission requests for obvious operations"
+    Batch_Similar_Operations: "Group related tasks together"
+    Progressive_Enhancement: "Start simple, add complexity as needed"
+
+Emergency_Budget_Management:
+  Budget_Exhaustion_Protocol:
+    Warning_Thresholds: "80% budget consumed"
+    Emergency_Compression: "Ultra compression activation"
+    Operation_Prioritization: "Critical tasks only"
+    Graceful_Degradation: "Maintain core functionality"
+    
+  Recovery_Strategies:
+    Session_Reset: "Clear cache & restart with optimization"
+    Scope_Reduction: "Focus on essential operations only"
+    Deferred_Operations: "Queue non-critical tasks"
+    Alternative_Approaches: "Use token-efficient methods"
+
+Token_Efficiency_Standards:
+  Command_Performance_Targets:
+    context_engineer: "2000-5000 tokens average"
+    execute_context: "3000-8000 tokens average"
+    context_status: "1000-3000 tokens average"
+    
+  Compression_Benchmarks:
+    Headers: "60-80% reduction achieved"
+    Paragraphs: "70-75% reduction achieved"
+    Lists: "50-60% reduction achieved"
+    Overall: "70% average reduction target"
+    
+  Quality_Preservation:
+    Information_Integrity: "100% critical data preserved"
+    Technical_Accuracy: "No functional information loss"
+    User_Comprehension: "Readable with glossary support"
+
+Advanced_Optimization_Features:
+  Predictive_Compression:
+    Pattern_Learning: "Adapt compression to user preferences"
+    Context_Prediction: "Pre-optimize likely next operations"
+    Usage_Adaptation: "Customize compression for workflow patterns"
+    
+  Intelligent_Caching:
+    Semantic_Similarity: "Cache conceptually similar operations"
+    Progressive_Refinement: "Improve cache accuracy over time"
+    Cross_Session_Learning: "Maintain optimization across sessions"
+    
+  Dynamic_Model_Selection:
+    Task_Complexity_Analysis: "Auto-select optimal model"
+    Cost_Benefit_Optimization: "Balance performance vs cost"
+    Capability_Matching: "Use minimum required model tier"
+
+Monitoring_Dashboard_Metrics:
+  Token_Economics:
+    Daily_Consumption: "Total tokens used per day"
+    Compression_Savings: "Tokens saved through optimization"
+    Cost_Per_Operation: "Average cost by operation type"
+    Efficiency_Trends: "Improvement over time"
+    
+  Performance_Indicators:
+    Response_Quality: "Effectiveness of delivered results"
+    User_Satisfaction: "Success rate & feedback scores"
+    System_Reliability: "Uptime & error rates"
+    Optimization_Impact: "Before/after comparison metrics"

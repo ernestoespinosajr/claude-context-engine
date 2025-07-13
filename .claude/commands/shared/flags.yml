@@ -1,0 +1,281 @@
+# Advanced Flag System
+# Context Engineering System v2.0
+# Universal flags for enhanced command functionality
+
+Universal_Flags:
+  # Execution & Planning
+  "--plan":
+    Description: "Show execution plan before implementation"
+    Usage: "All commands"
+    Token_Impact: "Minimal (+100-200 tokens)"
+    
+  "--think":
+    Description: "Enable basic analytical thinking"
+    Usage: "All commands"
+    Token_Impact: "Light (+200-500 tokens)"
+    
+  "--think-hard":
+    Description: "Enable deep analytical thinking"
+    Usage: "Complex operations"
+    Token_Impact: "Medium (+500-1500 tokens)"
+    
+  "--ultrathink":
+    Description: "Enable maximum depth analysis"
+    Usage: "Critical operations only"
+    Token_Impact: "Heavy (+1500-5000 tokens)"
+
+  # Token Efficiency Flags
+  "--uc":
+    Description: "Activate UltraCompressed mode"
+    Usage: "All commands"
+    Token_Impact: "Negative (-70% reduction)"
+    Auto_Trigger: "Context usage >75%"
+    
+  "--compress":
+    Description: "Enable context compression"
+    Usage: "All commands" 
+    Token_Impact: "Negative (-40% reduction)"
+    
+  "--batch":
+    Description: "Batch similar operations"
+    Usage: "Multi-step processes"
+    Token_Impact: "Negative (-20% overhead reduction)"
+    
+  "--cache":
+    Description: "Use MCP caching system"
+    Usage: "MCP-enabled commands"
+    Token_Impact: "Negative (-30% MCP overhead)"
+
+  # Interaction Modes
+  "--interactive":
+    Description: "Enable interactive mode with prompts"
+    Usage: "All commands"
+    Token_Impact: "Variable (+context-dependent)"
+    
+  "--watch":
+    Description: "Continuous monitoring mode"
+    Usage: "context-status, long-running operations"
+    Token_Impact: "Medium (+ongoing usage)"
+    
+  "--verbose":
+    Description: "Detailed output with explanations"
+    Usage: "All commands"
+    Token_Impact: "Medium (+30% increase)"
+    
+  "--quiet":
+    Description: "Minimal output, results only"
+    Usage: "All commands"
+    Token_Impact: "Negative (-50% output reduction)"
+
+  # Quality & Validation
+  "--validate":
+    Description: "Strict validation at all quality gates"
+    Usage: "execute-context, critical operations"
+    Token_Impact: "Medium (+validation overhead)"
+    
+  "--test":
+    Description: "Execute testing validation"
+    Usage: "execute-context"
+    Token_Impact: "Medium (+test execution)"
+    
+  "--benchmark":
+    Description: "Performance measurement & analysis"
+    Usage: "Performance-focused operations"
+    Token_Impact: "Light (+metrics collection)"
+    
+  "--security":
+    Description: "Security-focused analysis"
+    Usage: "All commands"
+    Token_Impact: "Medium (+security validation)"
+
+Command_Specific_Flags:
+  context_engineer:
+    "--lang=[language]":
+      Description: "Target specific programming language"
+      Examples: "--lang=typescript, --lang=python, --lang=rust"
+      Token_Impact: "Light (focused context)"
+      
+    "--framework=[framework]":
+      Description: "Target specific framework"
+      Examples: "--framework=react-native, --framework=fastapi"
+      Token_Impact: "Light (focused context)"
+      
+    "--template=[template]":
+      Description: "Use specific template"
+      Examples: "--template=mobile, --template=api, --template=web"
+      Token_Impact: "Negative (template reuse)"
+      
+    "--complexity=[level]":
+      Description: "Set complexity level"
+      Values: "simple, standard, complex, enterprise"
+      Token_Impact: "Variable (scales with complexity)"
+
+  execute_context:
+    "--incremental":
+      Description: "Incremental implementation approach"
+      Usage: "Large features requiring phased implementation"
+      Token_Impact: "Medium (multiple phases)"
+      
+    "--rollback":
+      Description: "Enable rollback capability"
+      Usage: "High-risk implementations"
+      Token_Impact: "Light (+rollback planning)"
+      
+    "--parallel":
+      Description: "Parallel processing of tasks"
+      Usage: "Multi-component features"
+      Token_Impact: "Medium (parallel coordination)"
+      
+    "--isolate":
+      Description: "Strict feature isolation"
+      Usage: "Complex codebases"
+      Token_Impact: "Light (focused scope)"
+
+  context_status:
+    "--deep":
+      Description: "Deep analysis of system state"
+      Usage: "Comprehensive health checks"
+      Token_Impact: "Heavy (thorough analysis)"
+      
+    "--recommendations":
+      Description: "Generate improvement suggestions"
+      Usage: "Optimization scenarios"
+      Token_Impact: "Medium (analysis + suggestions)"
+      
+    "--metrics":
+      Description: "Detailed metrics collection"
+      Usage: "Performance monitoring"
+      Token_Impact: "Light (metrics gathering)"
+      
+    "--health":
+      Description: "System health assessment"
+      Usage: "Regular status checks"
+      Token_Impact: "Light (health indicators)"
+      
+    "--workflow-overview":
+      Description: "Show workflow status summary"
+      Usage: "Project management"
+      Token_Impact: "Light (status aggregation)"
+      
+    "--workflow-metrics":
+      Description: "Detailed workflow analytics"
+      Usage: "Performance analysis"
+      Token_Impact: "Medium (comprehensive metrics)"
+      
+    "--cache-stats":
+      Description: "MCP cache performance statistics"
+      Usage: "System optimization"
+      Token_Impact: "Light (cache metrics)"
+
+Persona_Integration_Flags:
+  "--persona-architect":
+    Description: "Activate architecture specialist"
+    Focus: "System design, patterns, scalability"
+    Token_Impact: "Medium (specialized context)"
+    
+  "--persona-security":
+    Description: "Activate security specialist"
+    Focus: "Security analysis, vulnerabilities, compliance"
+    Token_Impact: "Medium (security context)"
+    
+  "--persona-performance":
+    Description: "Activate performance specialist"
+    Focus: "Optimization, benchmarking, efficiency"
+    Token_Impact: "Medium (performance context)"
+    
+  "--persona-testing":
+    Description: "Activate testing specialist"
+    Focus: "Test strategy, QA, validation"
+    Token_Impact: "Medium (testing context)"
+    
+  "--persona-devops":
+    Description: "Activate DevOps specialist"
+    Focus: "Deployment, CI/CD, operations"
+    Token_Impact: "Medium (DevOps context)"
+    
+  "--persona-frontend":
+    Description: "Activate frontend specialist"
+    Focus: "UI/UX, user experience, frontend tech"
+    Token_Impact: "Medium (frontend context)"
+    
+  "--persona-backend":
+    Description: "Activate backend specialist"
+    Focus: "Server logic, APIs, data management"
+    Token_Impact: "Medium (backend context)"
+    
+  "--persona-mobile":
+    Description: "Activate mobile specialist"
+    Focus: "Mobile development, React Native, native features"
+    Token_Impact: "Medium (mobile context)"
+
+MCP_Integration_Flags:
+  "--mcp-context7":
+    Description: "Use Context7 for advanced context management"
+    Token_Impact: "Medium (MCP overhead + context optimization)"
+    Cache_TTL: "3600 seconds"
+    
+  "--mcp-sequential":
+    Description: "Use Sequential for structured thinking"
+    Token_Impact: "Medium (MCP overhead + structured analysis)"
+    Cache_TTL: "Session duration"
+    
+  "--mcp-magic":
+    Description: "Use Magic for automation & optimization"
+    Token_Impact: "Medium (MCP overhead + automation benefits)"
+    Cache_TTL: "1800 seconds"
+    
+  "--mcp-puppeteer":
+    Description: "Use Puppeteer for UI testing & validation"
+    Token_Impact: "Medium (MCP overhead + UI testing)"
+    Cache_TTL: "Session only"
+
+Flag_Combination_Rules:
+  Efficiency_Combinations:
+    Recommended: "--uc --cache --compress"
+    Description: "Maximum token efficiency combination"
+    
+  Analysis_Combinations:
+    Light: "--think --plan"
+    Medium: "--think-hard --validate"
+    Heavy: "--ultrathink --deep --recommendations"
+    
+  Development_Combinations:
+    Planning: "--plan --think --persona-architect"
+    Implementation: "--validate --test --incremental"
+    Optimization: "--uc --compress --benchmark"
+
+Auto_Flag_Activation:
+  Context_Based_Triggers:
+    High_Context_Usage: "Auto-enable --uc at 75% usage"
+    Long_Sessions: "Suggest --uc after 2 hours"
+    Large_Codebases: "Recommend --compress for >10k files"
+    Security_Keywords: "Auto-suggest --persona-security for auth/security"
+    Performance_Keywords: "Auto-suggest --persona-performance for optimization"
+    
+  Intelligent_Suggestions:
+    Budget_Pressure: "Suggest efficiency flags"
+    Error_Patterns: "Recommend validation flags"
+    Complex_Operations: "Suggest thinking flags"
+    Repetitive_Tasks: "Recommend batch processing"
+
+Flag_Validation_Rules:
+  Conflict_Detection:
+    "--verbose + --quiet": "Conflicting output modes"
+    "--uc + --verbose": "Contradictory verbosity settings"
+    Multiple_Personas: "Max 2 personas per command"
+    
+  Resource_Management:
+    Heavy_Flag_Combinations: "Warn on high token usage combinations"
+    MCP_Overload: "Limit concurrent MCP flags"
+    Budget_Validation: "Check token budget before execution"
+
+Performance_Monitoring:
+  Flag_Impact_Tracking:
+    Token_Usage_Per_Flag: "Monitor actual vs estimated token impact"
+    Execution_Time_Impact: "Track performance overhead per flag"
+    Quality_Improvement: "Measure effectiveness of quality flags"
+    
+  Usage_Analytics:
+    Popular_Combinations: "Track most effective flag combinations"
+    User_Patterns: "Learn user preferences for auto-suggestions"
+    Optimization_Opportunities: "Identify efficiency improvements"

@@ -15,7 +15,8 @@
       "Bash(rm:*)",
       "Bash(npm uninstall:*)",
       "Bash(curl:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

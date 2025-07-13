@@ -1,12 +1,23 @@
-# Feature Dependencies
+# Workflow Dependencies & Management
+# Context Engineering System v2.0 - Intelligent Workflow Tracking
 
-This file tracks dependencies between features to ensure proper implementation order.
+This file tracks dependencies between workflows to ensure proper implementation order and automatic file management.
 
-## Dependency Rules
+## Automatic Workflow Management
 
-1. **Core Features**: Independent features that can be implemented first
-2. **Dependent Features**: Features that require other features to be completed
-3. **Conflicting Features**: Features that cannot coexist or need coordination
+### Workflow States & Auto-Movement
+- **planned/**: AI-generated workflow plans (created by `/context-engineer`)
+- **in-progress/active/**: Currently being worked on (moved by `/execute-context`)
+- **in-progress/paused/**: Temporarily paused workflows
+- **completed/successful/**: Successfully completed workflows
+- **completed/archived/**: Older completed workflows
+
+### Dependency Rules
+
+1. **Core Workflows**: Independent workflows that can be implemented first
+2. **Dependent Workflows**: Workflows that require other workflows to be completed
+3. **Conflicting Workflows**: Workflows that cannot coexist or need coordination
+4. **Auto Management**: AI automatically moves files between directories based on status
 
 ## Current Dependencies
 

@@ -125,3 +125,6 @@ EOF
 
 # analysis
 analysis/
+
+# Old files
+old docs/
