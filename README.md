@@ -3,6 +3,17 @@
 
 A revolutionary AI-assisted development system that uses **advanced Context Engineering** principles with **intelligent token economy** and **automatic workflow management** to optimize AI performance through **feature-driven development** across any programming language or framework.
 
+## 🚀 Quick Installation
+
+### 1. Clone the Repository
+```bash
+# Clone the Context Engineering System
+git clone https://github.com/ernestoespinosajr/claude-context-engine.git
+
+# Navigate to the directory
+cd claude-context-engine
+```
+
 ## 🎯 What's New in v2.0
 
 ### ⚡ 70% Token Reduction
@@ -25,31 +36,33 @@ A revolutionary AI-assisted development system that uses **advanced Context Engi
 - **Intelligent Caching**: 85%+ hit rate with optimized TTL
 - **Parallel Processing**: Concurrent operations for speed
 
-## 🚀 Ultra-Quick Start
+### 2. Installation Options
 
-### 1. One-Command Installation
 ```bash
-# Install complete system with all features
+# Global installation (recommended - available in all projects)
 ./install-context-engine.sh --full
 
-# Update existing Claude configuration (recommended for existing projects)
-./install-context-engine.sh --update
-
-# Update with cleanup of obsolete files (recommended for clean upgrade)
+# Update existing installation with cleanup
 ./install-context-engine.sh --update --clean
 
-# Or install specific components only
-./install-context-engine.sh --token-economy-only
-./install-context-engine.sh --workflow-management-only
+# Custom location installation
+./install-context-engine.sh --full --dir /opt/claude
+
+# Project-specific installation
+./install-context-engine.sh --full --dir ./my-project/.claude
 ```
 
+**Installation Types:**
+- **Global (`~/.claude/`)**: Available system-wide for all projects
+- **Custom directory**: Install to any location with `--dir <path>`
+- **Project-specific**: Install directly in your project directory
+
 **For existing Claude configurations:**
-- Use `--update` to safely upgrade your current `.claude/` setup
+- Use `--update` to safely upgrade your current setup
 - Use `--update --clean` to remove obsolete files during upgrade
-- Preserves existing configurations while adding new v2.0 features
 - `--clean` creates automatic backups before removing any files
 
-### 2. Start with Token Efficiency
+### 3. Start with Token Efficiency
 ```bash
 # Plan with automatic compression (70% token reduction)
 /context-engineer "Add user authentication" --uc --persona-security
@@ -337,13 +350,16 @@ Every feature automatically passes through 4 levels of validation:
 
 ## 🛠️ Installation & Configuration
 
-### Quick Installation
+### Installation Options
 ```bash
-# Complete system (recommended)
+# Global installation (recommended - available system-wide)
 ./install-context-engine.sh --full
 
 # Update existing installation with cleanup
 ./install-context-engine.sh --update --clean
+
+# Custom location installation
+./install-context-engine.sh --full --dir /opt/claude
 
 # Modular installation
 ./install-context-engine.sh --token-economy-only
@@ -352,7 +368,7 @@ Every feature automatically passes through 4 levels of validation:
 ./install-context-engine.sh --workflow-management-only
 
 # Clean installation (removes obsolete files)
-./install-context-engine.sh --full --clean
+./install-context-engine.sh --full --clean --dir ./custom-location
 ```
 
 ### Environment Configuration
@@ -459,6 +475,8 @@ The Context Engineering System v2.0 is designed for continuous evolution:
 
 ```bash
 # Get started in 30 seconds
+git clone https://github.com/ernestoespinosajr/claude-context-engine.git
+cd claude-context-engine
 ./install-context-engine.sh --full
 /context-engineer "Your first amazing feature" --uc
 ```

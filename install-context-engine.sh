@@ -21,6 +21,8 @@ INSTALL_COMPRESSION=false
 INSTALL_WORKFLOW=false
 UPDATE_MODE=false
 CLEAN_MODE=false
+CUSTOM_DIR=""
+DEFAULT_CLAUDE_DIR="$HOME/.claude"
 
 # Version information
 VERSION="2.0"
@@ -66,7 +68,12 @@ show_help() {
     echo "  --workflow-management-only Install only workflow management"
     echo "  --update                 Update existing installation"
     echo "  --clean                  Remove obsolete files and directories"
+    echo "  --dir <path>             Custom installation directory (default: ~/.claude)"
     echo "  --help                   Show this help message"
+    echo ""
+    echo "Installation Location:"
+    echo "  Default: ~/.claude (global Claude configuration)"
+    echo "  Custom:  --dir /path/to/custom/location"
     echo ""
     echo "Cleaning Options:"
     echo "  --clean can be combined with any installation option:"
@@ -74,10 +81,11 @@ show_help() {
     echo "  $0 --full --clean        # Fresh install with cleanup"
     echo ""
     echo "Examples:"
-    echo "  $0 --full                # Install everything"
-    echo "  $0 --token-economy-only  # Install just token optimization"
+    echo "  $0 --full                # Install to ~/.claude (global)"
+    echo "  $0 --full --dir /opt/claude  # Install to custom location"
     echo "  $0 --update              # Update existing installation"
     echo "  $0 --update --clean      # Update and remove obsolete files"
+    echo "  $0 --token-economy-only --dir ./my-claude  # Custom location"
     echo ""
 }
 
@@ -120,6 +128,16 @@ parse_arguments() {
                 CLEAN_MODE=true
                 shift
                 ;;
+            --dir)
+                if [[ -n "$2" && "$2" != --* ]]; then
+                    CUSTOM_DIR="$2"
+                    shift 2
+                else
+                    print_error "--dir requires a directory path"
+                    show_help
+                    exit 1
+                fi
+                ;;
             --help)
                 show_help
                 exit 0
@@ -141,17 +159,51 @@ parse_arguments() {
     fi
 }
 
+setup_installation_directory() {
+    # Determine installation directory
+    if [[ -n "$CUSTOM_DIR" ]]; then
+        CLAUDE_DIR="$CUSTOM_DIR"
+        print_info "Using custom installation directory: $CLAUDE_DIR"
+    else
+        CLAUDE_DIR="$DEFAULT_CLAUDE_DIR"
+        print_info "Using default installation directory: $CLAUDE_DIR"
+    fi
+    
+    # Expand tilde if present
+    CLAUDE_DIR="${CLAUDE_DIR/#\~/$HOME}"
+    
+    # Create base directory if it doesn't exist
+    if [[ ! -d "$CLAUDE_DIR" ]]; then
+        print_info "Creating installation directory: $CLAUDE_DIR"
+        mkdir -p "$CLAUDE_DIR"
+    fi
+    
+    # Change to installation directory
+    print_info "Changing to installation directory..."
+    cd "$CLAUDE_DIR" || {
+        print_error "Failed to change to directory: $CLAUDE_DIR"
+        exit 1
+    }
+    
+    print_status "Installation directory set: $(pwd)"
+}
+
 detect_environment() {
     print_info "Detecting environment..."
     
-    # Check if we're in a Context Engineering project
-    if [[ ! -f "CLAUDE.md" ]]; then
-        print_warning "No CLAUDE.md found. This may not be a Context Engineering project."
-        read -p "Continue anyway? (y/N): " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            print_error "Installation cancelled."
-            exit 1
+    # For global installation, we don't need CLAUDE.md in current directory
+    if [[ "$CLAUDE_DIR" == "$DEFAULT_CLAUDE_DIR" ]]; then
+        print_info "Global installation mode - no project-specific requirements"
+    else
+        # For custom directory, check if we're in a Context Engineering project
+        if [[ ! -f "CLAUDE.md" ]]; then
+            print_warning "No CLAUDE.md found. This may not be a Context Engineering project."
+            read -p "Continue anyway? (y/N): " -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                print_error "Installation cancelled."
+                exit 1
+            fi
         fi
     fi
     
@@ -178,31 +230,35 @@ detect_environment() {
 create_directory_structure() {
     print_info "Creating Context Engineering directory structure..."
     
-    # Create main .claude directory
-    mkdir -p .claude/commands/shared
-    mkdir -p .claude/personas
-    mkdir -p .claude/mcp
-    mkdir -p .claude/docs
-    
-    # Create workflow directories (enhanced structure)
-    mkdir -p workflow/planned
-    mkdir -p workflow/in-progress/active
-    mkdir -p workflow/in-progress/paused
-    mkdir -p workflow/completed/successful
-    mkdir -p workflow/completed/archived
-    mkdir -p workflow/templates
-    
-    # Create context-engine directories
-    mkdir -p context-engine/layers
-    mkdir -p context-engine/managers
-    mkdir -p context-engine/templates
-    mkdir -p context-engine/validators
-    
-    # Create docs directory
+    # Create main commands directory structure
+    mkdir -p commands/shared
+    mkdir -p personas
+    mkdir -p mcp
     mkdir -p docs
-    mkdir -p help-docs
+    
+    # For non-global installations, also create project-specific directories
+    if [[ "$CLAUDE_DIR" != "$DEFAULT_CLAUDE_DIR" ]]; then
+        # Create workflow directories (enhanced structure)
+        mkdir -p workflow/planned
+        mkdir -p workflow/in-progress/active
+        mkdir -p workflow/in-progress/paused
+        mkdir -p workflow/completed/successful
+        mkdir -p workflow/completed/archived
+        mkdir -p workflow/templates
+        
+        # Create context-engine directories
+        mkdir -p context-engine/layers
+        mkdir -p context-engine/managers
+        mkdir -p context-engine/templates
+        mkdir -p context-engine/validators
+        
+        # Create docs directory
+        mkdir -p docs
+        mkdir -p help-docs
+    fi
     
     print_status "Directory structure created successfully"
+    print_info "Installation location: $(pwd)"
 }
 
 install_core_modules() {
@@ -339,58 +395,77 @@ clean_obsolete_files() {
         return 0
     fi
     
-    print_info "Starting intelligent cleanup of .claude directory..."
+    print_info "Starting intelligent cleanup of Claude directory..."
     
     # Create backup directory with timestamp
-    local backup_dir=".claude/backups/cleanup-$(date +%Y%m%d-%H%M%S)"
+    local backup_dir="backups/cleanup-$(date +%Y%m%d-%H%M%S)"
     mkdir -p "$backup_dir"
     
     # Define the VALID structure for Context Engineering System v2.0
     local valid_structure=(
         # Valid directories
-        ".claude/commands"
-        ".claude/commands/shared"
-        ".claude/personas"
-        ".claude/mcp"
-        ".claude/docs"
-        ".claude/backups"
+        "commands"
+        "commands/shared"
+        "personas"
+        "mcp"
+        "docs"
+        "backups"
         
-        # Valid files in .claude/commands/shared/
-        ".claude/commands/shared/core.yml"
-        ".claude/commands/shared/token-economy.yml"
-        ".claude/commands/shared/compression-patterns.yml"
-        ".claude/commands/shared/universal-constants.yml"
-        ".claude/commands/shared/flags.yml"
-        ".claude/commands/shared/personas.yml"
-        ".claude/commands/shared/mcp.yml"
-        ".claude/commands/shared/rules.yml"
+        # Valid files in commands/shared/
+        "commands/shared/core.yml"
+        "commands/shared/token-economy.yml"
+        "commands/shared/compression-patterns.yml"
+        "commands/shared/universal-constants.yml"
+        "commands/shared/flags.yml"
+        "commands/shared/personas.yml"
+        "commands/shared/mcp.yml"
+        "commands/shared/rules.yml"
         
         # Valid command files
-        ".claude/commands/context-engineer.md"
-        ".claude/commands/execute-context.md"
-        ".claude/commands/context-status.md"
+        "commands/context-engineer.md"
+        "commands/execute-context.md"
+        "commands/context-status.md"
         
         # Valid root files
-        ".claude/installation-report.md"
-        ".claude/settings.local.json"
+        "installation-report.md"
+        "settings.local.json"
     )
     
-    # Get ALL current files and directories in .claude
-    local all_items=()
-    if [[ -d ".claude" ]]; then
-        while IFS= read -r -d '' item; do
-            # Remove the leading ./ from find output
-            item="${item#./}"
-            all_items+=("$item")
-        done < <(find .claude -type f -o -type d | sed 's|^\./||' | sort -u | tr '\n' '\0')
+    # For non-global installations, add project-specific valid items
+    if [[ "$CLAUDE_DIR" != "$DEFAULT_CLAUDE_DIR" ]]; then
+        valid_structure+=(
+            "workflow"
+            "workflow/planned"
+            "workflow/in-progress"
+            "workflow/in-progress/active"
+            "workflow/in-progress/paused"
+            "workflow/completed"
+            "workflow/completed/successful"
+            "workflow/completed/archived"
+            "workflow/templates"
+            "context-engine"
+            "context-engine/layers"
+            "context-engine/managers"
+            "context-engine/templates"
+            "context-engine/validators"
+            "help-docs"
+        )
     fi
+    
+    # Get ALL current files and directories in current installation directory
+    local all_items=()
+    while IFS= read -r -d '' item; do
+        # Remove the leading ./ from find output
+        item="${item#./}"
+        all_items+=("$item")
+    done < <(find . -maxdepth 4 -type f -o -type d | sed 's|^\./||' | sort -u | tr '\n' '\0')
     
     # Identify obsolete items (exist but not in valid structure)
     local items_to_remove=()
     
     for item in "${all_items[@]}"; do
-        # Skip .claude root directory and backup directories content
-        if [[ "$item" == ".claude" ]] || [[ "$item" == .claude/backups/* ]]; then
+        # Skip current directory and backup directories content
+        if [[ "$item" == "." ]] || [[ "$item" == backups/* ]]; then
             continue
         fi
         
@@ -403,8 +478,8 @@ clean_obsolete_files() {
             fi
         done
         
-        # Also allow any files in .claude/backups/ (created by this system)
-        if [[ "$item" == .claude/backups/* ]]; then
+        # Also allow any files in backups/ (created by this system)
+        if [[ "$item" == backups/* ]]; then
             is_valid=true
         fi
         
@@ -464,11 +539,9 @@ clean_obsolete_files() {
         return 0
     fi
     
-    # Create complete backup of .claude before any changes
-    if [[ -d ".claude" ]]; then
-        print_info "Creating complete backup of .claude directory..."
-        cp -r .claude "$backup_dir/claude-backup" 2>/dev/null || true
-    fi
+    # Create complete backup before any changes
+    print_info "Creating complete backup of installation directory..."
+    cp -r . "$backup_dir/full-backup" 2>/dev/null || true
     
     # Remove obsolete items
     local cleaned_count=0
@@ -496,8 +569,8 @@ clean_obsolete_files() {
     echo ""
     if [[ $cleaned_count -gt 0 ]]; then
         print_status "🎉 Cleanup completed: $cleaned_count items removed"
-        print_info "Complete backup available at: $backup_dir/claude-backup/"
-        print_info "You can restore the entire .claude directory if needed"
+        print_info "Complete backup available at: $backup_dir/full-backup/"
+        print_info "You can restore the entire installation if needed"
         print_status "System is now clean and ready for Context Engineering System v2.0"
     else
         print_warning "No files were actually removed"
@@ -631,6 +704,7 @@ main() {
         print_info "Clean mode: Will remove obsolete files and directories"
     fi
     
+    setup_installation_directory
     detect_environment
     clean_obsolete_files
     create_directory_structure
@@ -648,11 +722,19 @@ main() {
     echo ""
     print_status "🎉 Context Engineering System v${VERSION} installation completed!"
     echo ""
+    print_info "Installation location: $CLAUDE_DIR"
     print_info "Next steps:"
-    echo "  1. Review the glossary: docs/context-engine-glossary.md"
-    echo "  2. Try a command: /context-engineer \"Add user authentication\""
-    echo "  3. Use --uc flag for token efficiency"
-    echo "  4. Check installation report: .claude/installation-report.md"
+    if [[ "$CLAUDE_DIR" == "$DEFAULT_CLAUDE_DIR" ]]; then
+        echo "  1. Global installation ready - available in all projects"
+        echo "  2. Try a command: /context-engineer \"Add user authentication\""
+        echo "  3. Use --uc flag for token efficiency"
+        echo "  4. Check installation report: $CLAUDE_DIR/installation-report.md"
+    else
+        echo "  1. Review the glossary: docs/context-engine-glossary.md"
+        echo "  2. Try a command: /context-engineer \"Add user authentication\""
+        echo "  3. Use --uc flag for token efficiency"
+        echo "  4. Check installation report: installation-report.md"
+    fi
     echo ""
     print_info "Performance targets: 70% token reduction, 90% context relevance, 100% workflow automation"
     echo ""
