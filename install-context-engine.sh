@@ -396,9 +396,10 @@ clean_obsolete_files() {
     fi
     
     print_info "Starting intelligent cleanup of Claude directory..."
+    print_warning "SAFETY: Only cleaning files within: $CLAUDE_DIR"
     
-    # Create backup directory with timestamp
-    local backup_dir="backups/cleanup-$(date +%Y%m%d-%H%M%S)"
+    # Create backup directory with timestamp inside the installation directory
+    local backup_dir="$CLAUDE_DIR/backups/cleanup-$(date +%Y%m%d-%H%M%S)"
     mkdir -p "$backup_dir"
     
     # Define the VALID structure for Context Engineering System v2.0
@@ -452,20 +453,23 @@ clean_obsolete_files() {
         )
     fi
     
-    # Get ALL current files and directories in current installation directory
+    # Get ALL current files and directories ONLY in the installation directory
+    # IMPORTANT: Only scan the actual installation directory, never the project root
     local all_items=()
-    while IFS= read -r -d '' item; do
-        # Remove the leading ./ from find output
-        item="${item#./}"
-        all_items+=("$item")
-    done < <(find . -maxdepth 4 -type f -o -type d | sed 's|^\./||' | sort -u | tr '\n' '\0')
+    if [[ -d "$CLAUDE_DIR" ]]; then
+        while IFS= read -r -d '' item; do
+            # Make path relative to installation directory
+            item="${item#$CLAUDE_DIR/}"
+            all_items+=("$item")
+        done < <(find "$CLAUDE_DIR" -maxdepth 4 -type f -o -type d | grep -v "^$CLAUDE_DIR$" | sort -u | tr '\n' '\0')
+    fi
     
     # Identify obsolete items (exist but not in valid structure)
     local items_to_remove=()
     
     for item in "${all_items[@]}"; do
-        # Skip current directory and backup directories content
-        if [[ "$item" == "." ]] || [[ "$item" == backups/* ]]; then
+        # Skip empty items and backup directories content
+        if [[ -z "$item" ]] || [[ "$item" == backups/* ]]; then
             continue
         fi
         
@@ -484,20 +488,26 @@ clean_obsolete_files() {
         fi
         
         if [[ "$is_valid" == false ]]; then
-            items_to_remove+=("$item")
+            # Ensure we're only adding items that are actually in the installation directory
+            items_to_remove+=("$CLAUDE_DIR/$item")
         fi
     done
     
-    # Also check for old root directories that should be migrated/removed
-    local old_root_dirs=(
-        "features"  # Should be migrated to workflow
-    )
-    
-    for old_dir in "${old_root_dirs[@]}"; do
-        if [[ -d "$old_dir" ]]; then
-            items_to_remove+=("$old_dir")
-        fi
-    done
+    # For non-global installations, also check for old root directories in the original location
+    # ONLY if we're not in a global installation
+    if [[ "$CLAUDE_DIR" != "$DEFAULT_CLAUDE_DIR" ]]; then
+        local old_root_dirs=(
+            "features"  # Should be migrated to workflow
+        )
+        
+        # Go back to original directory to check for these
+        local original_dir="$(dirname "$CLAUDE_DIR")"
+        for old_dir in "${old_root_dirs[@]}"; do
+            if [[ -d "$original_dir/$old_dir" ]]; then
+                items_to_remove+=("$original_dir/$old_dir")
+            fi
+        done
+    fi
     
     # Show what will be cleaned
     if [[ ${#items_to_remove[@]} -eq 0 ]]; then
@@ -541,7 +551,7 @@ clean_obsolete_files() {
     
     # Create complete backup before any changes
     print_info "Creating complete backup of installation directory..."
-    cp -r . "$backup_dir/full-backup" 2>/dev/null || true
+    cp -r "$CLAUDE_DIR" "$backup_dir/full-backup" 2>/dev/null || true
     
     # Remove obsolete items
     local cleaned_count=0
