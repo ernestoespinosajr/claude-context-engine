@@ -339,56 +339,93 @@ clean_obsolete_files() {
         return 0
     fi
     
-    print_info "Starting cleanup of obsolete files and directories..."
+    print_info "Starting intelligent cleanup of .claude directory..."
     
     # Create backup directory with timestamp
     local backup_dir=".claude/backups/cleanup-$(date +%Y%m%d-%H%M%S)"
     mkdir -p "$backup_dir"
     
-    # Define obsolete files and directories to clean
-    local obsolete_items=(
-        "features"                           # Old workflow directory name
-        ".claude/*.bak"                      # Backup files
-        ".claude/*.old"                      # Old files
-        ".claude/commands/shared/old-*"      # Old configuration files
-        "CLAUDE.md.bak"                      # CLAUDE.md backups
-        "CLAUDE.md.old"                      # Old CLAUDE.md files
-        ".claude/legacy"                     # Legacy directory if exists
-        ".claude/old-config"                 # Old config directory
-        "context-engine-old"                 # Old context-engine directory
-        "workflow/.old"                      # Old workflow files
+    # Define the VALID structure for Context Engineering System v2.0
+    local valid_structure=(
+        # Valid directories
+        ".claude/commands"
+        ".claude/commands/shared"
+        ".claude/personas"
+        ".claude/mcp"
+        ".claude/docs"
+        ".claude/backups"
+        
+        # Valid files in .claude/commands/shared/
+        ".claude/commands/shared/core.yml"
+        ".claude/commands/shared/token-economy.yml"
+        ".claude/commands/shared/compression-patterns.yml"
+        ".claude/commands/shared/universal-constants.yml"
+        ".claude/commands/shared/flags.yml"
+        ".claude/commands/shared/personas.yml"
+        ".claude/commands/shared/mcp.yml"
+        ".claude/commands/shared/rules.yml"
+        
+        # Valid command files
+        ".claude/commands/context-engineer.md"
+        ".claude/commands/execute-context.md"
+        ".claude/commands/context-status.md"
+        
+        # Valid root files
+        ".claude/installation-report.md"
+        ".claude/settings.local.json"
     )
     
-    local files_to_clean=()
-    local dirs_to_clean=()
+    # Get ALL current files and directories in .claude
+    local all_items=()
+    if [[ -d ".claude" ]]; then
+        while IFS= read -r -d '' item; do
+            # Remove the leading ./ from find output
+            item="${item#./}"
+            all_items+=("$item")
+        done < <(find .claude -type f -o -type d | sed 's|^\./||' | sort -u | tr '\n' '\0')
+    fi
     
-    # Identify actual files/directories that exist
-    for pattern in "${obsolete_items[@]}"; do
-        if [[ "$pattern" == *"*"* ]]; then
-            # Handle wildcard patterns
-            for item in $pattern; do
-                if [[ -e "$item" ]]; then
-                    if [[ -d "$item" ]]; then
-                        dirs_to_clean+=("$item")
-                    else
-                        files_to_clean+=("$item")
-                    fi
-                fi
-            done
-        else
-            # Handle exact matches
-            if [[ -e "$pattern" ]]; then
-                if [[ -d "$pattern" ]]; then
-                    dirs_to_clean+=("$pattern")
-                else
-                    files_to_clean+=("$pattern")
-                fi
+    # Identify obsolete items (exist but not in valid structure)
+    local items_to_remove=()
+    
+    for item in "${all_items[@]}"; do
+        # Skip .claude root directory and backup directories content
+        if [[ "$item" == ".claude" ]] || [[ "$item" == .claude/backups/* ]]; then
+            continue
+        fi
+        
+        # Check if item is in valid structure
+        local is_valid=false
+        for valid_item in "${valid_structure[@]}"; do
+            if [[ "$item" == "$valid_item" ]]; then
+                is_valid=true
+                break
             fi
+        done
+        
+        # Also allow any files in .claude/backups/ (created by this system)
+        if [[ "$item" == .claude/backups/* ]]; then
+            is_valid=true
+        fi
+        
+        if [[ "$is_valid" == false ]]; then
+            items_to_remove+=("$item")
+        fi
+    done
+    
+    # Also check for old root directories that should be migrated/removed
+    local old_root_dirs=(
+        "features"  # Should be migrated to workflow
+    )
+    
+    for old_dir in "${old_root_dirs[@]}"; do
+        if [[ -d "$old_dir" ]]; then
+            items_to_remove+=("$old_dir")
         fi
     done
     
     # Show what will be cleaned
-    if [[ ${#files_to_clean[@]} -eq 0 && ${#dirs_to_clean[@]} -eq 0 ]]; then
+    if [[ ${#items_to_remove[@]} -eq 0 ]]; then
         print_status "No obsolete files found. System is clean."
         rmdir "$backup_dir" 2>/dev/null || true
         return 0
@@ -396,23 +433,26 @@ clean_obsolete_files() {
     
     echo ""
     print_warning "The following obsolete items will be removed:"
+    echo -e "${YELLOW}📋 Complete cleanup analysis:${NC}"
     
-    if [[ ${#dirs_to_clean[@]} -gt 0 ]]; then
-        echo -e "${YELLOW}Directories:${NC}"
-        for dir in "${dirs_to_clean[@]}"; do
-            echo "  📁 $dir"
-        done
-    fi
+    local files_count=0
+    local dirs_count=0
     
-    if [[ ${#files_to_clean[@]} -gt 0 ]]; then
-        echo -e "${YELLOW}Files:${NC}"
-        for file in "${files_to_clean[@]}"; do
-            echo "  📄 $file"
-        done
-    fi
+    for item in "${items_to_remove[@]}"; do
+        if [[ -d "$item" ]]; then
+            echo "  📁 $item/"
+            ((dirs_count++))
+        else
+            echo "  📄 $item"
+            ((files_count++))
+        fi
+    done
     
     echo ""
+    print_info "Summary: $files_count files and $dirs_count directories will be removed"
     print_info "Backup will be created at: $backup_dir"
+    echo ""
+    print_warning "This will clean ALL non-Context Engineering System files from .claude/"
     echo ""
     
     # Ask for confirmation
@@ -424,37 +464,41 @@ clean_obsolete_files() {
         return 0
     fi
     
-    # Create backups and remove items
+    # Create complete backup of .claude before any changes
+    if [[ -d ".claude" ]]; then
+        print_info "Creating complete backup of .claude directory..."
+        cp -r .claude "$backup_dir/claude-backup" 2>/dev/null || true
+    fi
+    
+    # Remove obsolete items
     local cleaned_count=0
     
-    # Backup and remove directories
-    for dir in "${dirs_to_clean[@]}"; do
-        if [[ -d "$dir" ]]; then
-            print_info "Backing up and removing directory: $dir"
-            cp -r "$dir" "$backup_dir/" 2>/dev/null || true
-            rm -rf "$dir"
+    for item in "${items_to_remove[@]}"; do
+        if [[ -e "$item" ]]; then
+            print_info "Removing: $item"
+            if [[ -d "$item" ]]; then
+                rm -rf "$item"
+            else
+                rm -f "$item"
+            fi
             ((cleaned_count++))
-            print_status "Removed: $dir"
+            print_status "✅ Removed: $item"
         fi
     done
     
-    # Backup and remove files
-    for file in "${files_to_clean[@]}"; do
-        if [[ -f "$file" ]]; then
-            print_info "Backing up and removing file: $file"
-            cp "$file" "$backup_dir/" 2>/dev/null || true
-            rm -f "$file"
-            ((cleaned_count++))
-            print_status "Removed: $file"
-        fi
-    done
+    # Handle features to workflow migration if needed
+    if [[ -d "features" ]] && [[ ! -d "workflow" ]]; then
+        print_info "Migrating 'features' directory to 'workflow'..."
+        mv features workflow 2>/dev/null && print_status "✅ Migrated: features/ → workflow/"
+    fi
     
     # Summary
     echo ""
     if [[ $cleaned_count -gt 0 ]]; then
-        print_status "Cleanup completed: $cleaned_count items removed"
-        print_info "Backup available at: $backup_dir"
-        print_info "You can restore files from backup if needed"
+        print_status "🎉 Cleanup completed: $cleaned_count items removed"
+        print_info "Complete backup available at: $backup_dir/claude-backup/"
+        print_info "You can restore the entire .claude directory if needed"
+        print_status "System is now clean and ready for Context Engineering System v2.0"
     else
         print_warning "No files were actually removed"
         rmdir "$backup_dir" 2>/dev/null || true
