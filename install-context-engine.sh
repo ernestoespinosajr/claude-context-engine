@@ -1396,7 +1396,15 @@ clean_context_engine() {
 }
 
 validate_installation() {
-    print_info "Validating Context Engine installation..."
+    if [[ "$INSTALL_MODE" == "project" ]]; then
+        validate_project_installation
+    else
+        validate_global_installation
+    fi
+}
+
+validate_global_installation() {
+    print_info "Validating global Context Engine installation..."
     
     local validation_passed=true
     local required_files=(
@@ -1432,10 +1440,51 @@ validate_installation() {
     fi
     
     if [[ "$validation_passed" == true ]]; then
-        print_status "Installation validation passed ✅"
+        print_status "Global installation validation passed ✅"
         return 0
     else
-        print_error "Installation validation failed ❌"
+        print_error "Global installation validation failed ❌"
+        return 1
+    fi
+}
+
+validate_project_installation() {
+    print_info "Validating project-specific installation..."
+    
+    local validation_passed=true
+    local project_path="$PROJECT_DIR"
+    if [[ ! "$project_path" = /* ]]; then
+        project_path="$(pwd)/$project_path"
+    fi
+    
+    # Check project-specific files
+    local project_files=(
+        "$project_path/.claude/CLAUDE.md"
+        "$project_path/workflow"
+    )
+    
+    for file in "${project_files[@]}"; do
+        if [[ -e "$file" ]]; then
+            print_status "✓ $(basename "$file")"
+        else
+            print_error "✗ Missing: $file"
+            validation_passed=false
+        fi
+    done
+    
+    # Check global installation exists (required for project mode)
+    if [[ -f "$CLAUDE_PARENT_DIR/CLAUDE.md" ]]; then
+        print_status "✓ Global installation detected"
+    else
+        print_error "✗ Global installation missing (required for project mode)"
+        validation_passed=false
+    fi
+    
+    if [[ "$validation_passed" == true ]]; then
+        print_status "Project installation validation passed ✅"
+        return 0
+    else
+        print_error "Project installation validation failed ❌"
         return 1
     fi
 }
