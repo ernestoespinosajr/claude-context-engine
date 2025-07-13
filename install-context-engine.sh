@@ -531,16 +531,25 @@ move_repository_files() {
         local source_path="$SOURCE_DIR/$file"
         local target_path="$CLAUDE_PARENT_DIR/$file"
         
+        log_verbose "Processing file: $file"
+        log_verbose "Source path: $source_path"
+        log_verbose "Target path: $target_path"
+        
         if [[ -e "$source_path" ]]; then
+            log_verbose "Source exists, proceeding with copy"
             if [[ -e "$target_path" ]]; then
+                log_verbose "Target exists, creating backup"
                 create_backup_if_exists "$target_path" "$(basename "$file")"
                 rm -rf "$target_path"
             fi
             if [[ "$DRY_RUN" != true ]]; then
-                cp -r "$source_path" "$target_path" || {
+                log_verbose "Copying $source_path to $target_path"
+                if cp -r "$source_path" "$target_path" 2>/dev/null; then
+                    log_verbose "Copy successful for $file"
+                else
                     log_error "Failed to copy $source_path to $target_path" "file-copy"
                     return 1
-                }
+                fi
             fi
             print_status "Moved: $file"
         else
@@ -551,18 +560,30 @@ move_repository_files() {
     # Handle docs directory separately (avoid conflict with "old docs")
     local docs_source="$SOURCE_DIR/docs"
     local docs_target="$CLAUDE_PARENT_DIR/docs"
+    
+    log_verbose "Processing docs directory"
+    log_verbose "Docs source: $docs_source"
+    log_verbose "Docs target: $docs_target"
+    
     if [[ -d "$docs_source" ]]; then
+        log_verbose "Docs source directory exists"
         if [[ -e "$docs_target" ]]; then
+            log_verbose "Docs target exists, creating backup"
             create_backup_if_exists "$docs_target" "docs"
             rm -rf "$docs_target"
         fi
         if [[ "$DRY_RUN" != true ]]; then
-            cp -r "$docs_source" "$docs_target" || {
+            log_verbose "Copying docs directory"
+            if cp -r "$docs_source" "$docs_target" 2>/dev/null; then
+                log_verbose "Docs copy successful"
+            else
                 log_error "Failed to copy docs directory" "file-copy"
                 return 1
-            }
+            fi
         fi
         print_status "Moved: docs"
+    else
+        log_verbose "Docs source directory not found, skipping"
     fi
     
     # Move context-engine contents if it exists in repository
@@ -1430,24 +1451,42 @@ main() {
     INSTALLATION_PHASE=true
     
     # Installation process
+    log_verbose "Starting installation process"
     detect_claude_cli
     
     log "Installation mode: $INSTALL_MODE"
     
     # Clean incorrect structure from previous installations
+    log_verbose "Step 1: Cleaning incorrect structure"
     clean_incorrect_structure
     
     # Create directories
+    log_verbose "Step 2: Creating directory structure"
     create_directory_structure
     
     # Move repository files to correct locations
-    move_repository_files
+    log_verbose "Step 3: Moving repository files"
+    if ! move_repository_files; then
+        log_error "Failed during move_repository_files step" "installation"
+        return 1
+    fi
+    log_verbose "Step 3 completed successfully"
     
     # Install core files
-    create_yml_files
+    log_verbose "Step 4: Installing core files"
+    if ! create_yml_files; then
+        log_error "Failed during create_yml_files step" "installation"
+        return 1
+    fi
+    log_verbose "Step 4 completed successfully"
     
     # Create MCP configuration
-    create_mcp_configuration
+    log_verbose "Step 5: Creating MCP configuration"
+    if ! create_mcp_configuration; then
+        log_error "Failed during create_mcp_configuration step" "installation"
+        return 1
+    fi
+    log_verbose "Step 5 completed successfully"
     
     # Project-specific installation
     if [[ "$INSTALL_MODE" == "project" ]]; then
