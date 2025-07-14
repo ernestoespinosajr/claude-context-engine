@@ -752,6 +752,16 @@ create_mcp_configuration() {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-fetch"],
       "description": "Web content fetching and processing"
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "description": "Up-to-date code documentation for LLMs and AI code editors"
+    },
+    "magic": {
+      "command": "npx",
+      "args": ["-y", "@magicuidesign/mcp"],
+      "description": "Official MCP server for Magic UI components and design system"
     }
   }
 }

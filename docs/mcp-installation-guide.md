@@ -34,6 +34,16 @@ The installer **automatically creates** `~/.claude/mcp.json`:
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-fetch"],
       "description": "Web content fetching and processing"
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "description": "Up-to-date code documentation for LLMs and AI code editors"
+    },
+    "magic": {
+      "command": "npx",
+      "args": ["-y", "@magicuidesign/mcp"],
+      "description": "Official MCP server for Magic UI components and design system"
     }
   }
 }
@@ -82,6 +92,24 @@ Claude Desktop will:
   /context-engineer "Add news feed integration" --mcp-fetch --persona-architect
   ```
 
+### 📚 Context7
+- **Purpose**: Up-to-date code documentation for LLMs and AI code editors
+- **Usage**: `--mcp-context7` or `--mc7`
+- **Best for**: Getting current documentation, library-specific code examples, version-specific implementations
+- **Example**:
+  ```bash
+  /context-engineer "Implement Next.js 14 server components" --mcp-context7
+  ```
+
+### ✨ Magic UI
+- **Purpose**: Official MCP server for Magic UI components and design system
+- **Usage**: `--mcp-magic` or `--mmag`
+- **Best for**: UI component development, design system integration, React component generation
+- **Example**:
+  ```bash
+  /context-engineer "Add animated hero section" --mcp-magic --persona-architect
+  ```
+
 ## ✅ Verification and Testing
 
 ### Check Configuration
@@ -103,6 +131,12 @@ python3 -m json.tool ~/.claude/mcp.json
 
 # Test fetch capabilities
 /context-engineer "API integration design" --mcp-fetch --think
+
+# Test context7 documentation
+/context-engineer "Implement React hooks" --mcp-context7
+
+# Test magic UI components
+/context-engineer "Create animated landing page" --mcp-magic
 ```
 
 ### Verify in Claude Desktop
@@ -222,6 +256,18 @@ python3 -m json.tool ~/.claude/mcp.json
    - Web content analysis
    - Real-time data processing
    - Content aggregation
+
+4. **Context7** (`--mcp-context7`):
+   - Getting up-to-date library documentation
+   - Version-specific code examples
+   - Framework-specific implementations
+   - Current best practices research
+
+5. **Magic UI** (`--mcp-magic`):
+   - UI component development
+   - Design system integration
+   - Animated component creation
+   - React component library usage
 
 ### Performance Tips
 
