@@ -1253,6 +1253,19 @@ install_project_structure() {
         cp -r "$SOURCE_DIR/workflow/templates/"* "$project_path/workflow/templates/" 2>/dev/null || true
     fi
     
+    # Copy MCP configuration to project directory for MCP server access
+    if [[ -f "$CLAUDE_PARENT_DIR/.mcp.json" ]] && [[ "$DRY_RUN" != true ]]; then
+        log_verbose "Copying MCP configuration to project"
+        if cp "$CLAUDE_PARENT_DIR/.mcp.json" "$project_path/.mcp.json"; then
+            print_status "Installed MCP configuration to project: $project_path/.mcp.json"
+        else
+            log_warning "Failed to copy MCP configuration to project" "mcp-copy"
+        fi
+    else
+        log_warning "Global MCP configuration not found at $CLAUDE_PARENT_DIR/.mcp.json" "mcp-copy"
+        print_info "Run global installation first to create MCP template"
+    fi
+    
     # Create project CLAUDE.md in .claude/ subdirectory to avoid global conflicts
     # This follows Claude CLI's local project configuration pattern
     if [[ "$DRY_RUN" != true ]]; then
@@ -1466,6 +1479,7 @@ validate_project_installation() {
     local project_files=(
         "$project_path/.claude/CLAUDE.md"
         "$project_path/workflow"
+        "$project_path/.mcp.json"
     )
     
     for file in "${project_files[@]}"; do

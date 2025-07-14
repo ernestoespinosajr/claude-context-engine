@@ -17,7 +17,7 @@ When you run:
 
 The installer **automatically creates** `~/.claude/.mcp.json`:
 
-> **Important**: MCP servers are configured at the project level. The `.mcp.json` file must be present in your working project directory for MCP features to work. The global installation creates the template, but you'll need to copy it to your project.
+> **Important**: MCP servers are configured at the project level. The `.mcp.json` file must be present in your working project directory for MCP features to work. Use `./install-context-engine.sh --project .` to automatically set up MCP in your project.
 
 ```json
 {
@@ -60,20 +60,23 @@ Claude Desktop will:
 3. 🚀 **Launch** the server in the background
 4. ✅ **Connect** and start using the capabilities
 
-### Step 3: Project Setup
+### Step 3: Project Setup (Automatic)
 
-For each project where you want to use MCP servers:
+The installer can automatically set up MCP for specific projects:
 
 ```bash
-# Copy the MCP configuration to your project directory
-cp ~/.claude/.mcp.json /path/to/your/project/.mcp.json
+# Automatic project setup (includes .mcp.json copy)
+./install-context-engine.sh --project /path/to/your/project
 
-# Or navigate to your project and copy
-cd your-project-directory
-cp ~/.claude/.mcp.json .mcp.json
+# Or from within your project directory
+./install-context-engine.sh --project .
 ```
 
-This ensures MCP servers are available when working in that specific project.
+This automatically:
+- Creates project workflow structure
+- Copies `.mcp.json` to your project directory
+- Sets up project-specific configuration
+- Ensures MCP servers are available for that project
 
 ## 🔧 Available MCP Servers
 
@@ -120,7 +123,7 @@ This ensures MCP servers are available when working in that specific project.
 # View global MCP configuration template
 cat ~/.claude/.mcp.json
 
-# View project MCP configuration  
+# View project MCP configuration (after running --project setup)
 cat .mcp.json
 
 # Check if file exists and is valid JSON
@@ -185,11 +188,17 @@ python3 -m json.tool .mcp.json
    # Check global template
    cat ~/.claude/.mcp.json
    
-   # Check project configuration
+   # Check project configuration (if using --project setup)
    cat .mcp.json
    ```
+   
+3. **Ensure project setup was run**:
+   ```bash
+   # If .mcp.json is missing, run project setup
+   ./install-context-engine.sh --project .
+   ```
 
-3. **Restart Claude Desktop**:
+4. **Restart Claude Desktop**:
    - Close completely
    - Reopen application
    - Try MCP command again
