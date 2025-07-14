@@ -15,7 +15,9 @@ When you run:
 ./install-context-engine.sh --global
 ```
 
-The installer **automatically creates** `~/.claude/mcp.json`:
+The installer **automatically creates** `~/.claude/.mcp.json`:
+
+> **Important**: MCP servers are configured at the project level. The `.mcp.json` file must be present in your working project directory for MCP features to work. The global installation creates the template, but you'll need to copy it to your project.
 
 ```json
 {
@@ -29,11 +31,6 @@ The installer **automatically creates** `~/.claude/mcp.json`:
       "command": "npx", 
       "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
       "description": "Browser automation and web interaction capabilities"
-    },
-    "fetch": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"],
-      "description": "Web content fetching and processing"
     },
     "context7": {
       "command": "npx",
@@ -54,7 +51,7 @@ The installer **automatically creates** `~/.claude/mcp.json`:
 **No manual installation needed!** When you first use an MCP flag:
 
 ```bash
-/context-engineer "Add web scraping feature" --mcp-fetch
+/context-engineer "Add browser automation feature" --mcp-puppeteer
 ```
 
 Claude Desktop will:
@@ -62,6 +59,21 @@ Claude Desktop will:
 2. 📦 **Download** the server automatically via `npx`
 3. 🚀 **Launch** the server in the background
 4. ✅ **Connect** and start using the capabilities
+
+### Step 3: Project Setup
+
+For each project where you want to use MCP servers:
+
+```bash
+# Copy the MCP configuration to your project directory
+cp ~/.claude/.mcp.json /path/to/your/project/.mcp.json
+
+# Or navigate to your project and copy
+cd your-project-directory
+cp ~/.claude/.mcp.json .mcp.json
+```
+
+This ensures MCP servers are available when working in that specific project.
 
 ## 🔧 Available MCP Servers
 
@@ -81,15 +93,6 @@ Claude Desktop will:
 - **Example**:
   ```bash
   /execute-context frontend-testing --mcp-puppeteer --persona-testing
-  ```
-
-### 📥 Fetch
-- **Purpose**: Web content retrieval and processing
-- **Usage**: `--mcp-fetch` or `--mfetch`
-- **Best for**: API integration, web scraping, content analysis
-- **Example**:
-  ```bash
-  /context-engineer "Add news feed integration" --mcp-fetch --persona-architect
   ```
 
 ### 📚 Context7
@@ -114,11 +117,14 @@ Claude Desktop will:
 
 ### Check Configuration
 ```bash
-# View MCP configuration
-cat ~/.claude/mcp.json
+# View global MCP configuration template
+cat ~/.claude/.mcp.json
+
+# View project MCP configuration  
+cat .mcp.json
 
 # Check if file exists and is valid JSON
-python3 -m json.tool ~/.claude/mcp.json
+python3 -m json.tool .mcp.json
 ```
 
 ### Test MCP Functionality
@@ -128,9 +134,6 @@ python3 -m json.tool ~/.claude/mcp.json
 
 # Test puppeteer (requires browser)
 /execute-context ui-automation --mcp-puppeteer --test
-
-# Test fetch capabilities
-/context-engineer "API integration design" --mcp-fetch --think
 
 # Test context7 documentation
 /context-engineer "Implement React hooks" --mcp-context7
@@ -179,7 +182,11 @@ python3 -m json.tool ~/.claude/mcp.json
 
 2. **Verify MCP configuration**:
    ```bash
-   cat ~/.claude/mcp.json
+   # Check global template
+   cat ~/.claude/.mcp.json
+   
+   # Check project configuration
+   cat .mcp.json
    ```
 
 3. **Restart Claude Desktop**:
@@ -227,7 +234,7 @@ python3 -m json.tool ~/.claude/mcp.json
 **Solutions**:
 1. **Backup current config**:
    ```bash
-   cp ~/.claude/mcp.json ~/.claude/mcp.json.backup
+   cp .mcp.json .mcp.json.backup
    ```
 
 2. **Recreate configuration**:
@@ -250,12 +257,6 @@ python3 -m json.tool ~/.claude/mcp.json
    - Web scraping projects
    - Screenshot automation
    - Browser-based testing
-
-3. **Fetch** (`--mcp-fetch`):
-   - API integrations
-   - Web content analysis
-   - Real-time data processing
-   - Content aggregation
 
 4. **Context7** (`--mcp-context7`):
    - Getting up-to-date library documentation
@@ -300,13 +301,13 @@ npm cache clean --force
 ### Monitoring MCP Health
 ```bash
 # Check MCP configuration validity
-python3 -m json.tool ~/.claude/mcp.json >/dev/null && echo "✅ MCP config valid" || echo "❌ MCP config invalid"
+python3 -m json.tool .mcp.json >/dev/null && echo "✅ MCP config valid" || echo "❌ MCP config invalid"
 
 # Test Node.js and npx
 npx --version
 
-# Verify Claude Desktop can access MCP config
-ls -la ~/.claude/mcp.json
+# Verify project MCP config exists
+ls -la .mcp.json
 ```
 
 ---

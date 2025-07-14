@@ -730,10 +730,10 @@ move_repository_files() {
 create_mcp_configuration() {
     print_info "Creating MCP configuration for Claude CLI..."
     
-    local mcp_config="$CLAUDE_PARENT_DIR/mcp.json"
+    local mcp_config="$CLAUDE_PARENT_DIR/.mcp.json"
     
-    # Backup existing mcp.json if it exists
-    create_backup_if_exists "$mcp_config" "mcp.json"
+    # Backup existing .mcp.json if it exists
+    create_backup_if_exists "$mcp_config" ".mcp.json"
     
     cat > "$mcp_config" << 'EOF'
 {
@@ -747,11 +747,6 @@ create_mcp_configuration() {
       "command": "npx", 
       "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
       "description": "Browser automation and web interaction capabilities"
-    },
-    "fetch": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"],
-      "description": "Web content fetching and processing"
     },
     "context7": {
       "command": "npx",
@@ -1427,7 +1422,7 @@ validate_global_installation() {
         "$CLAUDE_PARENT_DIR/commands/shared/mcp.yml"
         "$CLAUDE_PARENT_DIR/commands/shared/rules.yml"
         "$CLAUDE_PARENT_DIR/CLAUDE.md"
-        "$CLAUDE_PARENT_DIR/mcp.json"
+        "$CLAUDE_PARENT_DIR/.mcp.json"
     )
     
     for file in "${required_files[@]}"; do
@@ -1524,7 +1519,7 @@ create_installation_report() {
 ### Configuration Files
 ✅ CLAUDE.md installed to: ${CLAUDE_PARENT_DIR}/CLAUDE.md
 ✅ YML files installed to: ${CLAUDE_PARENT_DIR}/commands/shared/
-✅ MCP configuration: ${CLAUDE_PARENT_DIR}/mcp.json
+✅ MCP configuration: ${CLAUDE_PARENT_DIR}/.mcp.json
 ✅ Workflow structure: ${CLAUDE_PARENT_DIR}/workflow/
 
 ### Claude CLI Integration
@@ -1548,7 +1543,7 @@ create_installation_report() {
 
 - **Main Configuration**: ${CLAUDE_PARENT_DIR}/CLAUDE.md
 - **YML Configurations**: ${CLAUDE_PARENT_DIR}/commands/shared/
-- **MCP Configuration**: ${CLAUDE_PARENT_DIR}/mcp.json
+- **MCP Configuration**: ${CLAUDE_PARENT_DIR}/.mcp.json
 - **Workflow Structure**: ${CLAUDE_PARENT_DIR}/workflow/
 - **Documentation**: ${CLAUDE_PARENT_DIR}/docs/
 - **Backups**: ${CLAUDE_PARENT_DIR}/backups/
@@ -1767,7 +1762,7 @@ main() {
         log "Installation Summary:"
         echo "  ${CYAN}►${NC} Location: $CLAUDE_PARENT_DIR"
         echo "  ${CYAN}►${NC} CLAUDE.md: $CLAUDE_PARENT_DIR/CLAUDE.md"
-        echo "  ${CYAN}►${NC} MCP Config: $CLAUDE_PARENT_DIR/mcp.json"
+        echo "  ${CYAN}►${NC} MCP Config: $CLAUDE_PARENT_DIR/.mcp.json"
         echo "  ${CYAN}►${NC} Report: $CLAUDE_PARENT_DIR/installation-report.md"
         echo ""
         
