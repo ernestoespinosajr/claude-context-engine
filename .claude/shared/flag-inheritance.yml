@@ -1,0 +1,166 @@
+# Flag Inheritance System
+# Context Engineering System v2.0
+# Command flag inheritance and integration
+
+Universal_Always:
+  # Core flags available on all commands
+  
+  ## Thinking Modes
+  - `--think`: Enable basic analytical thinking for multi-file analysis
+  - `--think-hard`: Enable deeper architecture-level thinking
+  - `--ultrathink`: Enable maximum depth system-level analysis
+  
+  ## Token Optimization
+  - `--uc`: Activate UltraCompressed mode (70% token reduction)
+  - `--compress`: Standard compression (50% token reduction)
+  
+  ## Execution Control
+  - `--plan`: Show execution plan before running
+  - `--dry-run`: Preview changes without execution
+  - `--watch`: Continuous monitoring with updates
+  - `--interactive`: Step-by-step guided process
+  
+  ## Quality Control
+  - `--validate`: Enhanced safety checks
+  - `--security`: Security-focused validation
+  - `--strict`: Zero-tolerance quality mode
+
+Universal_Flags:
+  # Execution & Planning
+  "--plan":
+    Description: "Show execution plan before implementation"
+    Usage: "All commands"
+    Token_Impact: "Minimal (+100-200 tokens)"
+    
+  "--think":
+    Description: "Enable basic analytical thinking"
+    Usage: "All commands"
+    Token_Impact: "Light (+200-500 tokens)"
+    
+  "--think-hard":
+    Description: "Enable deep analytical thinking"
+    Usage: "Complex operations"
+    Token_Impact: "Medium (+500-1500 tokens)"
+    
+  "--ultrathink":
+    Description: "Enable maximum depth analysis"
+    Usage: "Critical operations only"
+    Token_Impact: "Heavy (+1500-5000 tokens)"
+
+  # Token Efficiency Flags
+  "--uc":
+    Description: "Activate UltraCompressed mode"
+    Usage: "All commands"
+    Token_Impact: "Negative (-70% reduction)"
+    Auto_Trigger: "Context usage >75%"
+    
+  "--compress":
+    Description: "Enable context compression"
+    Usage: "All commands" 
+    Token_Impact: "Negative (-40% reduction)"
+    
+  "--batch":
+    Description: "Batch similar operations"
+    Usage: "Multi-step processes"
+    Token_Impact: "Negative (-20% overhead reduction)"
+    
+  "--cache":
+    Description: "Use MCP caching system"
+    Usage: "MCP-enabled commands"
+    Token_Impact: "Negative (-30% MCP overhead)"
+
+  # Interaction Modes
+  "--interactive":
+    Description: "Enable interactive mode with prompts"
+    Usage: "All commands"
+    Token_Impact: "Variable (+context-dependent)"
+    
+  "--watch":
+    Description: "Continuous monitoring mode"
+    Usage: "context-status, long-running operations"
+    Token_Impact: "Medium (+ongoing usage)"
+    
+  "--verbose":
+    Description: "Detailed output with explanations"
+    Usage: "All commands"
+    Token_Impact: "Medium (+30% increase)"
+    
+  "--quiet":
+    Description: "Minimal output, results only"
+    Usage: "All commands"
+    Token_Impact: "Negative (-50% output reduction)"
+
+  # Quality & Validation
+  "--validate":
+    Description: "Strict validation at all quality gates"
+    Usage: "execute-context, critical operations"
+    Token_Impact: "Medium (+validation overhead)"
+    
+  "--test":
+    Description: "Execute testing validation"
+    Usage: "execute-context"
+    Token_Impact: "Medium (+test execution)"
+    
+  "--benchmark":
+    Description: "Performance measurement & analysis"
+    Usage: "Performance-focused operations"
+    Token_Impact: "Light (+metrics collection)"
+    
+  "--security":
+    Description: "Security-focused analysis"
+    Usage: "All commands"
+    Token_Impact: "Medium (+security validation)"
+
+MCP_Integration_Flags:
+  "--mcp-context7":
+    Description: "Use Context7 for advanced context management"
+    Token_Impact: "Medium (MCP overhead + context optimization)"
+    Cache_TTL: "3600 seconds"
+    
+  "--mcp-sequential":
+    Description: "Use Sequential for structured thinking"
+    Token_Impact: "Medium (MCP overhead + structured analysis)"
+    Cache_TTL: "Session duration"
+    
+  "--mcp-magic":
+    Description: "Use Magic for automation & optimization"
+    Token_Impact: "Medium (MCP overhead + automation benefits)"
+    Cache_TTL: "1800 seconds"
+    
+  "--mcp-puppeteer":
+    Description: "Use Puppeteer for UI testing & validation"
+    Token_Impact: "Medium (MCP overhead + UI testing)"
+    Cache_TTL: "Session only"
+
+Personas_As_Flags:
+  "--persona-architect":
+    Description: "Activate architecture specialist"
+    Focus: "System design, patterns, scalability"
+    
+  "--persona-security":
+    Description: "Activate security specialist"
+    Focus: "Security analysis, vulnerabilities, compliance"
+    
+  "--persona-performance":
+    Description: "Activate performance specialist"
+    Focus: "Optimization, benchmarking, efficiency"
+    
+  "--persona-testing":
+    Description: "Activate testing specialist"
+    Focus: "Test strategy, QA, validation"
+    
+  "--persona-devops":
+    Description: "Activate DevOps specialist"
+    Focus: "Deployment, CI/CD, operations"
+    
+  "--persona-frontend":
+    Description: "Activate frontend specialist"
+    Focus: "UI/UX, user experience, frontend tech"
+    
+  "--persona-backend":
+    Description: "Activate backend specialist"
+    Focus: "Server logic, APIs, data management"
+    
+  "--persona-mobile":
+    Description: "Activate mobile specialist"
+    Focus: "Mobile development, React Native, native features" 

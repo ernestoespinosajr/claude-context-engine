@@ -1,0 +1,92 @@
+# Research Patterns & Flows
+# Context Engineering System v2.0
+# Standardized research methodologies and documentation
+
+Mandatory_Research_Flows:
+  # Core research strategies for all commands
+  
+  ## Project Analysis
+  - Analyze project structure and architecture
+  - Identify technology stack and frameworks
+  - Understand development patterns and conventions
+  - Detect existing patterns and best practices
+  - Map dependencies and component relationships
+  
+  ## Documentation Research
+  - Check project documentation for guidelines
+  - Review code comments for context
+  - Analyze pull requests and issue history
+  - Examine test cases for expected behavior
+  - Understand project requirements and objectives
+  
+  ## Code Investigation
+  - Review relevant source files
+  - Analyze implementation patterns
+  - Understand data flow and state management
+  - Examine error handling and validation
+  - Check optimization techniques
+
+Evidence_Based_Recommendations:
+  # Guidelines for making evidence-based recommendations
+  
+  ## Quality Standards
+  - All recommendations must be supported by evidence
+  - Reference specific code, patterns, or documentation
+  - Explain reasoning behind recommendations
+  - Provide alternatives when applicable
+  - Note trade-offs and implications
+  
+  ## Documentation Requirements
+  - Document research methodology
+  - Provide references to relevant files
+  - Include code examples when helpful
+  - Note any assumptions made
+  - Document decision criteria
+
+Research_Methodologies:
+  # Standard research approaches
+  
+  ## Top-Down Analysis
+  - Start with high-level architecture
+  - Break down into components and modules
+  - Examine component interactions
+  - Identify data flow patterns
+  - Map to specific implementation
+  
+  ## Bottom-Up Analysis
+  - Start with specific implementation details
+  - Identify common patterns
+  - Group related functionality
+  - Map to higher-level components
+  - Understand architectural decisions
+  
+  ## Comparative Analysis
+  - Compare against similar implementations
+  - Identify best practices from industry standards
+  - Evaluate against known design patterns
+  - Contrast with alternative approaches
+  - Assess performance implications
+
+Research_Documentation:
+  # How to document research findings
+  
+  ## Research Summary
+  - Key findings and insights
+  - Identified patterns and practices
+  - Notable constraints or limitations
+  - Technical debt and concerns
+  - Optimization opportunities
+  
+  ## Detailed Analysis
+  - Component-by-component examination
+  - Performance and quality metrics
+  - Security considerations
+  - Maintainability assessment
+  - Scalability evaluation
+  
+  ## Recommendations
+  - Evidence-based improvement suggestions
+  - Implementation strategies
+  - Prioritization guidance
+  - Risk assessment
+  - Expected outcomes 
