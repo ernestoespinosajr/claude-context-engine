@@ -131,6 +131,66 @@ Only modify files directly related to current feature, and add dependencies only
 - Feature name must match exactly the name used during planning phase
 - Failed features are moved to `workflow/in-progress/paused/` if execution is halted
 
+## Interactive Task Execution
+The implementation MUST follow these guidelines:
+
+1. **Initial Setup**:
+   - At the beginning, display active flags and personas
+   - Show the list of tasks from the PRP
+   - Clearly indicate the current task being worked on
+
+2. **For Each Task**:
+   - Display: `📋 TASK [X/Y]: [Task Name] (Complexity: [1-10])`
+   - Show description and acceptance criteria
+   - Indicate: `🔄 Starting task execution...`
+
+3. **During Task Execution**:
+   - Provide regular updates on progress
+   - Show intermediate steps and decisions
+   - Use emoji indicators for status: 🔄 (in progress), ✅ (completed), ⚠️ (warning), ❌ (error)
+
+4. **Task Completion**:
+   - Display: `✅ COMPLETED: [Task Name]`
+   - Summarize what was accomplished
+   - Show how acceptance criteria were met
+   - Update the PRP file with completion status
+
+5. **User Interaction**:
+   - After each task, ask: `Continue to next task? (yes/no/details)`
+   - If "no", mark the feature as paused and move to `workflow/in-progress/paused/`
+   - If "details", provide more information about the next task
+   - Only proceed to the next task with user confirmation
+
+6. **Final Completion**:
+   - When all tasks are complete, display a summary
+   - Show which tasks were completed and any that were skipped
+   - MOVE the file to `workflow/completed/successful/`
+   - Provide clear instructions for next steps
+
+## Required PRP Updates
+During execution, the PRP file MUST be updated with:
+
+```markdown
+## Task Status
+
+### Task 1: [Task Name]
+- **Status**: Completed | In Progress | Paused
+- **Completion Date**: [Date if completed]
+- **Notes**: [Any implementation notes]
+- **Challenges**: [Any challenges encountered]
+- **Solutions**: [How challenges were addressed]
+
+### Task 2: [Task Name]
+- **Status**: Completed | In Progress | Paused
+...
+```
+
+## User Feedback
+At the beginning of the response, ALWAYS include:
+1. A confirmation of which flags and personas are active
+2. A brief explanation of how they will influence the implementation process
+3. A clear indication that the file has been moved to the in-progress directory
+
 @include shared/research-patterns.yml#Mandatory_Research_Flows
 
 @include shared/universal-constants.yml#Standard_Messages_Templates 

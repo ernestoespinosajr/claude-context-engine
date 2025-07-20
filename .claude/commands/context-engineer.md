@@ -102,6 +102,54 @@ Create comprehensive Product Requirements Prompt with:
 - Each feature receives a timestamp and unique identifier
 - Dependencies are tracked in `workflow/dependencies.md`
 
+## Required PRP Structure
+Every Product Requirements Prompt MUST include these sections:
+
+```markdown
+# Feature: [Feature Name]
+
+## Executive Summary
+[Brief description of the feature]
+
+## Active Flags & Personas
+[List of active flags and personas being used, with their purpose]
+
+## Tasks
+[Numbered list of tasks with complexity ratings]
+
+### Task 1: [Task Name] (Complexity: [1-10])
+- Description: [Task description]
+- Acceptance Criteria: [What defines task completion]
+- Dependencies: [Any dependencies]
+
+### Task 2: [Task Name] (Complexity: [1-10])
+- Description: [Task description]
+- Acceptance Criteria: [What defines task completion]
+- Dependencies: [Any dependencies]
+
+[Additional tasks as needed]
+
+## Implementation Blueprint
+[Implementation details]
+
+## Quality Gates
+[Quality criteria that must be met]
+
+## Dependencies
+[List of dependencies on other features]
+
+## Risk Assessment
+[Potential risks and mitigation strategies]
+
+## Success Metrics
+[How success will be measured]
+```
+
+## User Feedback
+At the beginning of the response, ALWAYS include:
+1. A confirmation of which flags and personas are active
+2. A brief explanation of how they will influence the planning process
+
 @include shared/research-patterns.yml#Mandatory_Research_Flows
 
 @include shared/universal-constants.yml#Standard_Messages_Templates 
