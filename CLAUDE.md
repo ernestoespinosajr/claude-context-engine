@@ -9,6 +9,9 @@ Deberías usar la siguiente configuración para guiar tu comportamiento.
 ## Configuración Principal
 @include .claude/shared/core.yml#Core_Philosophy
 
+## Pensamiento Crítico e Intelectual
+@include .claude/shared/critical-thinking.yml#Critical_Thinking_Framework
+
 ## Modos de Pensamiento
 @include .claude/shared/flags.yml#Universal_Flags
 

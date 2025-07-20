@@ -14,6 +14,7 @@ Purpose: "[Action][Subject] in $ARGUMENTS"
 Analyze feature requirements and create comprehensive implementation plans using advanced Context Engineering principles.
 
 @include shared/flag-inheritance.yml#Universal_Always
+@include shared/critical-thinking.yml#Critical_Thinking_Framework
 
 Examples:
 - `@context-engineer.md "Add user authentication with JWT tokens"` - Feature planning
@@ -27,6 +28,7 @@ Examples:
 - **Scope Analysis**: Understand feature requirements and complexity
 - **Context Gathering**: Collect relevant information for 11-layer architecture
 - **Template Selection**: Choose appropriate templates based on technology stack
+- **Critical Evaluation**: Cuestionar suposiciones y analizar alternativas
 
 ### 2. Context Engineering (11-Layer Architecture)
 
@@ -75,21 +77,26 @@ Create comprehensive Product Requirements Prompt with:
 - Dependencies
 - Risk Assessment
 - Success Metrics
+- Critical Analysis & Alternatives
 
 ### 4. Dependency Analysis
 - Check for feature dependencies and conflicts
 - Update dependency mapping
 - Validate implementation order
+- Challenge dependency assumptions
 
 ### 5. Template Application
 - Apply language-specific templates
 - Customize for framework patterns
 - Add validation rules
+- Question template appropriateness
 
 ### 6. Plan Validation
 - Verify completeness
 - Check for missing requirements
 - Validate technical feasibility
+- Identify potential logical flaws
+- Present alternative approaches
 
 ## Output
 - Creates feature PRP file in `workflow/planned/[feature-name].md`
@@ -114,6 +121,9 @@ Every Product Requirements Prompt MUST include these sections:
 ## Active Flags & Personas
 [List of active flags and personas being used, with their purpose]
 
+## Critical Analysis
+[Análisis crítico de la propuesta, cuestionando suposiciones y presentando alternativas]
+
 ## Tasks
 [Numbered list of tasks with complexity ratings]
 
@@ -121,11 +131,13 @@ Every Product Requirements Prompt MUST include these sections:
 - Description: [Task description]
 - Acceptance Criteria: [What defines task completion]
 - Dependencies: [Any dependencies]
+- Alternative Approaches: [Enfoques alternativos a considerar]
 
 ### Task 2: [Task Name] (Complexity: [1-10])
 - Description: [Task description]
 - Acceptance Criteria: [What defines task completion]
 - Dependencies: [Any dependencies]
+- Alternative Approaches: [Enfoques alternativos a considerar]
 
 [Additional tasks as needed]
 
@@ -143,12 +155,17 @@ Every Product Requirements Prompt MUST include these sections:
 
 ## Success Metrics
 [How success will be measured]
+
+## Alternative Perspectives
+[Perspectivas alternativas y contraargumentos a considerar]
 ```
 
 ## User Feedback
 At the beginning of the response, ALWAYS include:
 1. A confirmation of which flags and personas are active
 2. A brief explanation of how they will influence the planning process
+3. Al menos un cuestionamiento crítico sobre la característica solicitada
+4. Una perspectiva alternativa que el usuario debería considerar
 
 @include shared/research-patterns.yml#Mandatory_Research_Flows
 
