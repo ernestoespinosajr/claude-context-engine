@@ -1,6 +1,6 @@
-# Context Engineer Command
+# Feature Command - Complex Features & System Changes
 
-**Purpose**: Analyze feature requirements and create comprehensive implementation plans using advanced Context Engineering principles.
+**Purpose**: Handle complex features, architectural changes, and system-wide implementations using the full 11-layer Context Engineering architecture.
 
 ---
 
@@ -9,17 +9,18 @@
 ## Command Execution
 Execute: immediate. --plan→show plan first
 Legend: Generated based on symbols used in command
-Purpose: "[Action][Subject] in $ARGUMENTS"
+Purpose: "[Build][Feature] in $ARGUMENTS"
 
-Analyze feature requirements and create comprehensive implementation plans using advanced Context Engineering principles.
+Handle complex features, architectural changes, and system-wide implementations using the full 11-layer Context Engineering architecture.
 
 @include shared/flag-inheritance.yml#Universal_Always
 @include shared/critical-thinking.yml#Critical_Thinking_Framework
 
 Examples:
-- `@context-engineer.md "Add user authentication with JWT tokens"` - Feature planning
-- `@context-engineer.md "Optimize database queries" --persona-performance` - Performance-focused planning
-- `@context-engineer.md "Implement secure payment gateway" --persona-security --mcp-context7` - Security-focused with enhanced context
+- `@feature "implement real-time collaboration system"` - Complex multi-user feature
+- `@feature "redesign entire authentication architecture"` - System architecture change
+- `@feature "integrate machine learning recommendations"` - Advanced AI integration
+- `@feature "build multi-tenant SaaS platform"` - Platform-level feature
 
 ## Process
 
@@ -27,8 +28,7 @@ Examples:
 - **Project Detection**: Analyze project structure, language, and framework
 - **Scope Analysis**: Understand feature requirements and complexity
 - **Context Gathering**: Collect relevant information for 11-layer architecture
-- **Template Selection**: Choose appropriate templates based on technology stack
-- **Critical Evaluation**: Cuestionar suposiciones y analizar alternativas
+- **Critical Evaluation**: Question assumptions and analyze alternatives
 
 ### 2. Context Engineering (11-Layer Architecture)
 
@@ -85,13 +85,7 @@ Create comprehensive Product Requirements Prompt with:
 - Validate implementation order
 - Challenge dependency assumptions
 
-### 5. Template Application
-- Apply language-specific templates
-- Customize for framework patterns
-- Add validation rules
-- Question template appropriateness
-
-### 6. Plan Validation
+### 5. Plan Validation
 - Verify completeness
 - Check for missing requirements
 - Validate technical feasibility
@@ -103,11 +97,29 @@ Create comprehensive Product Requirements Prompt with:
 - Updates `workflow/dependencies.md` with new relationships
 - Generates context quality report
 
+## Automatic Logbook Updates
+
+When creating a complex feature plan, automatically add entry to `workflow/logbook.md`:
+
+```markdown
+## Recently Planned (Last 10)
+- **[feature-name]** | [Brief description] | Created: [date] | Type: Complex Feature | Complexity: [1-10]
+```
+
+Update logbook sections:
+- Increment "Planned" count in Quick Overview
+- Add to "By Type" → Complex Features counter
+- Add to appropriate complexity range (typically 7-10)
+- Update "Last Activity" timestamp
+- Add dependencies to Dependencies Overview
+- Note any architectural decisions in Project Evolution
+
 ## Important File Handling
 - The feature file is created in `workflow/planned/` directory
 - Feature names are sanitized (lowercase, dashes instead of spaces)
 - Each feature receives a timestamp and unique identifier
 - Dependencies are tracked in `workflow/dependencies.md`
+- Logbook is automatically updated with new planning activity
 
 ## Required PRP Structure
 Every Product Requirements Prompt MUST include these sections:
@@ -122,7 +134,7 @@ Every Product Requirements Prompt MUST include these sections:
 [List of active flags and personas being used, with their purpose]
 
 ## Critical Analysis
-[Análisis crítico de la propuesta, cuestionando suposiciones y presentando alternativas]
+[Critical analysis of the proposal, questioning assumptions and presenting alternatives]
 
 ## Tasks
 [Numbered list of tasks with complexity ratings]
@@ -131,13 +143,13 @@ Every Product Requirements Prompt MUST include these sections:
 - Description: [Task description]
 - Acceptance Criteria: [What defines task completion]
 - Dependencies: [Any dependencies]
-- Alternative Approaches: [Enfoques alternativos a considerar]
+- Alternative Approaches: [Alternative approaches to consider]
 
 ### Task 2: [Task Name] (Complexity: [1-10])
 - Description: [Task description]
 - Acceptance Criteria: [What defines task completion]
 - Dependencies: [Any dependencies]
-- Alternative Approaches: [Enfoques alternativos a considerar]
+- Alternative Approaches: [Alternative approaches to consider]
 
 [Additional tasks as needed]
 
@@ -157,16 +169,17 @@ Every Product Requirements Prompt MUST include these sections:
 [How success will be measured]
 
 ## Alternative Perspectives
-[Perspectivas alternativas y contraargumentos a considerar]
+[Alternative perspectives and counterarguments to consider]
 ```
 
-## User Feedback
-At the beginning of the response, ALWAYS include:
+## User Feedback Requirements
+
+At the beginning of EVERY response, include:
 1. A confirmation of which flags and personas are active
 2. A brief explanation of how they will influence the planning process
-3. Al menos un cuestionamiento crítico sobre la característica solicitada
-4. Una perspectiva alternativa que el usuario debería considerar
+3. At least one critical questioning about the requested feature
+4. An alternative perspective that the user should consider
 
 @include shared/research-patterns.yml#Mandatory_Research_Flows
 
-@include shared/universal-constants.yml#Standard_Messages_Templates 
+@include shared/universal-constants.yml#Standard_Messages_Templates

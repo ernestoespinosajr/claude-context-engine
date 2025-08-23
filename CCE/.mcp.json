@@ -1,0 +1,47 @@
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "description": "Sequential thinking assistance for complex problem solving"
+    },
+    "puppeteer": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "description": "Browser automation and web interaction capabilities"
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": ["mcp-server-fetch"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "description": "Up-to-date code documentation for LLMs and AI code editors"
+    },
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/sse"]
+    },
+    "mcpServers": {
+    "stripe": {
+      "url": "https://mcp.stripe.com"
+    }
+  },
+  "supabase": {
+    "command": "npx",
+    "args": [
+      "-y",
+      "@supabase/mcp-server-supabase@latest",
+      "--read-only",
+      "--project-ref=boiuaecheodzuodhrasa_test"
+    ],
+    "env": {
+      "SUPABASE_ACCESS_TOKEN": "sbp_test_f9b882a053f523227062dc01ddb33e4e123045"
+    }
+  },
+  "vercel": {
+      "url": "https://mcp.vercel.com"
+    }
+  }
+}

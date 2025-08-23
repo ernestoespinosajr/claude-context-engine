@@ -1,143 +1,190 @@
 # Context Engineering System
 
-![Version](https://img.shields.io/badge/version-2.0-blue)
+![Version](https://img.shields.io/badge/version-2.5-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-> Sistema avanzado para ingeniería de contexto basado en arquitectura de 11 capas, optimización de tokens y flujo de trabajo para desarrollo dirigido por características.
+> **The smart way to manage development with Claude Code CLI**
+
+**What it solves:** Complex tasks need deep context, simple tasks need speed. Most systems give you one or the other.
+
+**Our solution:** Automatic intelligence that gives each task exactly the right amount of context - from lightweight 3-layer for bug fixes to full 11-layer for system architecture changes.
+
+**Key insight:** A central project logbook provides instant context awareness, preventing duplicate work and enabling intelligent recommendations based on project history.
 
 <p align="center">
   <img src="https://via.placeholder.com/800x400?text=Context+Engineering+System" alt="Context Engineering System" width="600">
 </p>
 
-## 🚀 Características principales
+## 🚀 Main Features
 
-- **Arquitectura de 11 capas de contexto** para gestión óptima de información
-- **Sistema avanzado de personas** con especialistas en seguridad, rendimiento, etc.
-- **Integración MCP** con módulos Context7, Sequential, Magic y Puppeteer
-- **Optimización de tokens** con modo UltraCompressed (70% de reducción)
-- **Gestión automatizada de flujo de trabajo** desde planificación hasta completitud
-- **Validación de calidad** con puertas de calidad multinivel
+- **Smart Context Scaling** - 3/6/11-layer context based on task complexity
+- **Automatic Project Intelligence** - Central logbook provides instant context awareness
+- **Simplified 5-Command System** - ask → issue/quick-feature/feature → start
+- **Historical Pattern Recognition** - Learns from previous successes and failures
+- **Advanced persona system** with specialists in security, performance, etc.
+- **MCP integration** with Context7, Sequential, Magic, and Puppeteer modules
+- **Zero Duplication Prevention** - Identifies existing work before creating new tasks
 
-## 📋 Requisitos previos
+## 📋 Prerequisites
 
-- Claude Desktop o Claude Code CLI
+- Claude Desktop or Claude Code CLI
 - Git
 - Bash 3.0+
 
-## 💻 Instalación
+## 💻 Installation
+
+**Simple one-command installation:**
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/usuario/context-engineering-system.git
+# Clone the repository
+git clone https://github.com/user/context-engineering-system.git
 
-# Navegar al directorio
+# Navigate to the directory
 cd context-engineering-system
 
-# Instalar en tu proyecto
-./install.sh /ruta/a/tu-proyecto
+# Install to your project (one command!)
+./install.sh /path/to/your-project
 ```
 
-El instalador:
-1. Crea la estructura de directorios necesaria en tu proyecto
-2. Configura los comandos para Claude Code CLI
-3. Instala las plantillas de características
-4. Configura el sistema de flujo de trabajo
+**What it does:**
+- Copies the complete Context Engineering System to your project
+- Sets up the 5-command workflow (ask, issue, quick-feature, feature, start)  
+- Creates the intelligent workflow structure with automatic logbook
+- Ready to use immediately with Claude Code CLI
 
-## 🔧 Uso
-
-El Context Engineering System está diseñado para funcionar dentro del ecosistema de Claude Code CLI mediante comandos:
-
-### Comandos principales
-
-```
-@context-engineer.md "[descripción de la característica]"
-```
-Analiza y crea un plan de implementación completo utilizando los principios de ingeniería de contexto. Guarda el plan en `workflow/planned/`.
-
-```
-@execute-context.md "[nombre-característica]"
-```
-Implementa una característica planificada con validación continua y desarrollo aislado. Mueve el archivo de `workflow/planned/` a `workflow/in-progress/active/`.
-
-```
-@context-status.md "[nombre-característica]"
-```
-Monitorea la salud de características, dependencias y calidad del contexto.
-
-### Uso con flags
-
-Los comandos admiten flags para funcionalidades adicionales:
-
-```
-@context-engineer.md "Implementar autenticación de usuarios" --persona-security --mcp-context7
+**Installation examples:**
+```bash
+./install.sh .                    # Install in current directory
+./install.sh ~/my-project         # Install in specific project
+./install.sh /workspace/app        # Install in workspace
 ```
 
-Esto activará la persona de seguridad y utilizará el módulo MCP Context7 para mejor gestión de contexto.
+## 🔧 Usage
 
-### Personas disponibles
+The Context Engineering System uses a simple 5-command approach that scales context based on task complexity:
 
-- `--persona-security`: Especialista en seguridad y autenticación
-- `--persona-performance`: Especialista en optimización y rendimiento
-- `--persona-frontend`: Especialista en interfaces de usuario y UX
-- `--persona-backend`: Especialista en APIs y servicios
-- `--persona-architect`: Especialista en arquitectura de sistemas
-- `--persona-data`: Especialista en bases de datos y modelado
-- `--persona-mobile`: Especialista en desarrollo móvil
-- `--persona-deployment`: Especialista en DevOps y despliegue
-- `--persona-testing`: Especialista en pruebas y QA
+### Workflow Commands
 
-### Módulos MCP
-
-- `--mcp-context7`: Mejora la gestión de contexto con Context7
-- `--mcp-sequential`: Habilita pensamiento secuencial para problemas complejos
-- `--mcp-magic`: Activa capacidades avanzadas de generación de código
-- `--mcp-puppeteer`: Permite automatización y interacción web
-
-## 📁 Flujo de trabajo de archivos
-
-1. **Planificación**: `@context-engineer.md` crea un archivo en `workflow/planned/[nombre-característica].md`
-2. **Implementación**: `@execute-context.md` MUEVE (no duplica) el archivo a `workflow/in-progress/active/[nombre-característica].md`
-3. **Finalización**: Al completar, el sistema MUEVE el archivo a `workflow/completed/successful/[nombre-característica].md`
-
-La característica clave de este sistema es que los archivos se MUEVEN entre directorios, nunca se duplican. Esto mantiene una estructura limpia y evita inconsistencias.
-
-## 📂 Estructura del proyecto
-
+**1. Smart Analysis**
 ```
-proyecto/
-├── .claude/                 # Configuración para Claude Code CLI
-│   ├── commands/            # Comandos disponibles
-│   └── shared/              # Archivos compartidos de configuración
-├── workflow/                # Directorio de flujo de trabajo
-│   ├── planned/             # Características planificadas
-│   ├── in-progress/         # Características en desarrollo
-│   │   ├── active/          # En desarrollo activo
-│   │   └── paused/          # Pausadas temporalmente
-│   ├── completed/           # Características implementadas
-│   │   ├── successful/      # Implementaciones exitosas
-│   │   └── archived/        # Características obsoletas
-│   ├── templates/           # Plantillas de características
-│   └── dependencies.md      # Registro de dependencias
-└── ...                      # Archivos del proyecto
+@ask "[task description]"
+```
+- Checks project logbook for similar work
+- Analyzes complexity and suggests approach
+- Prevents duplication and identifies reusable components
+- Recommends the right command for your task
+
+**2. Task Creation** (Choose based on @ask recommendation)
+```
+@issue "[bug description]"        # Simple tasks (3-layer context)
+@quick-feature "[feature]"         # Medium features (6-layer context) 
+@feature "[complex feature]"       # System changes (11-layer context)
 ```
 
-## 🤝 Contribuir
+**3. Universal Execution**
+```
+@start "[task-name]"
+```
+- Executes any planned task with appropriate context level
+- Updates project logbook automatically
+- Handles complexity detection and scaling
 
-Para contribuir al desarrollo de este sistema:
+### Recommended Workflow
 
-1. Haz un fork del repositorio
-2. Crea una rama para tu característica (`git checkout -b feature/amazing-feature`)
-3. Haz commit de tus cambios (`git commit -m 'Add some amazing feature'`)
-4. Haz push a la rama (`git push origin feature/amazing-feature`)
-5. Abre un Pull Request
+1. **Always start with @ask** for unfamiliar tasks
+2. **Follow the recommendation** - use suggested command
+3. **Execute with @start** when ready to implement
 
-## 📄 Licencia
+```bash
+# Example workflow
+@ask "add user authentication with biometrics"
+# → Recommends: @feature (complex, security-focused)
+@feature "add user authentication with biometrics" --persona-security
+@start "user-authentication-biometrics"
+```
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+### Available Personas
 
-## 📚 Documentación adicional
+- `--persona-security`: Security and authentication specialist
+- `--persona-performance`: Optimization and performance specialist
+- `--persona-frontend`: User interface and UX specialist
+- `--persona-backend`: APIs and services specialist
+- `--persona-architect`: Systems architecture specialist
+- `--persona-data`: Database and modeling specialist
+- `--persona-mobile`: Mobile development specialist
+- `--persona-deployment`: DevOps and deployment specialist
+- `--persona-testing`: Testing and QA specialist
 
-- [Guía de arquitectura de 11 capas](docs/context-engine-glossary.md)
-- [Referencia de comandos](docs/commands-reference.md)
-- [Matriz de flags](docs/flags-matrix.md)
-- [Guía de métricas de tokens](docs/token-metrics.md)
+### MCP Modules
+
+- `--mcp-context7`: Improves context management with Context7
+- `--mcp-sequential`: Enables sequential thinking for complex problems
+- `--mcp-magic`: Activates advanced code generation capabilities
+- `--mcp-puppeteer`: Enables web automation and interaction
+
+## 📁 File Workflow
+
+1. **Planning**: Analysis commands create a file in `workflow/planned/[feature-name].md`
+2. **Implementation**: `@start` MOVES (doesn't duplicate) the file to `workflow/in-progress/[feature-name].md`
+3. **Completion**: Upon completion, the system MOVES the file to `workflow/completed/` with status prefix:
+   - Success: `done-[feature-name].md`
+   - Failure: `fail-[feature-name].md`
+
+**Key Innovation**: The system maintains a central `logbook.md` that provides instant project context, preventing duplicate work and enabling intelligent recommendations. Files move (never duplicate) between directories with automatic status tracking.
+
+## 🧠 Project Intelligence
+
+The system's **logbook.md** acts as a central intelligence hub:
+
+- **📊 Real-time Statistics**: Success rates, complexity trends, active work
+- **🔍 Pattern Recognition**: Learns what approaches work vs. what fails  
+- **🚫 Duplication Prevention**: Spots similar work before you create it
+- **📈 Progress Tracking**: Visual insight into project evolution
+- **🎯 Smart Recommendations**: @ask uses logbook data for intelligent guidance
+
+**Example logbook entry:**
+```markdown
+## In Progress (3)
+- **user-auth-biometrics** | Biometric login | Updated: 2025-01-23 | 75% complete
+- **dark-mode-toggle** | UI theme switching | Updated: 2025-01-22 | 40% complete
+
+## Recently Completed - Success (5 most recent)  
+- **done-login-validation** | Input fixes | Completed: 2025-01-20 | Fixed 3 security issues
+```
+
+## 📂 Project Structure
+
+```
+project/
+├── .claude/                 # Configuration for Claude Code CLI
+│   ├── commands/            # Available commands (ask, issue, quick-feature, feature, start)
+│   └── shared/              # Shared configuration files
+├── workflow/                # Simplified workflow directory
+│   ├── planned/             # Tasks ready for implementation
+│   ├── in-progress/         # Tasks currently in development
+│   ├── completed/           # All completed tasks (done-* or fail-*)
+│   ├── logbook.md           # Automatic project activity log and intelligence hub
+│   └── dependencies.md      # Dependency registry
+└── ...                      # Project files
+```
+
+## 🤝 Contributing
+
+To contribute to the development of this system:
+
+1. Fork the repository
+2. Create a branch for your feature (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is under the MIT License - see the [LICENSE](LICENSE) file for more details.
+
+## 📚 Additional Documentation
+
+- [11-layer architecture guide](docs/context-engine-glossary.md)
+- [Commands reference](docs/commands-reference.md)
+- [Flags matrix](docs/flags-matrix.md)
+- [Token metrics guide](docs/token-metrics.md)
