@@ -219,15 +219,35 @@ MCP_Integration_Flags:
     Token_Impact: "Medium (MCP overhead + structured analysis)"
     Cache_TTL: "Session duration"
     
-  "--mcp-magic":
-    Description: "Use Magic for automation & optimization"
-    Token_Impact: "Medium (MCP overhead + automation benefits)"
-    Cache_TTL: "1800 seconds"
-    
   "--mcp-puppeteer":
     Description: "Use Puppeteer for UI testing & validation"
     Token_Impact: "Medium (MCP overhead + UI testing)"
     Cache_TTL: "Session only"
+    
+  "--mcp-fetch":
+    Description: "Use Fetch for web content retrieval and analysis"
+    Token_Impact: "Light (web fetch overhead)"
+    Cache_TTL: "1800 seconds"
+    
+  "--mcp-linear":
+    Description: "Use Linear for project management integration"
+    Token_Impact: "Light (Linear API overhead)"
+    Cache_TTL: "900 seconds"
+    
+  "--mcp-stripe":
+    Description: "Use Stripe for payment system integration"
+    Token_Impact: "Light (Stripe API overhead)"
+    Cache_TTL: "1200 seconds"
+    
+  "--mcp-supabase":
+    Description: "Use Supabase for database operations (read-only)"
+    Token_Impact: "Medium (database query overhead)"
+    Cache_TTL: "600 seconds"
+    
+  "--mcp-vercel":
+    Description: "Use Vercel for deployment and hosting integration"
+    Token_Impact: "Light (Vercel API overhead)"
+    Cache_TTL: "900 seconds"
 
 Flag_Combination_Rules:
   Efficiency_Combinations:

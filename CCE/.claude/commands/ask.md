@@ -84,12 +84,58 @@ Using smart analysis to determine task category:
 **Reasoning**: [Detailed explanation of why this classification and command]
 ```
 
-#### Persona & Subagent Suggestions
-Based on task analysis, recommend:
-- **Primary Persona**: Most relevant specialist (e.g., --persona-security for auth)
-- **Secondary Persona**: Supporting specialist if needed
-- **Subagent Alternative**: When isolated task execution would be better
-- **Hybrid Approach**: Combination of approaches for complex scenarios
+#### Complete Command Construction
+Based on task analysis, build the optimal command with:
+
+**Persona Selection Logic:**
+- **Security Tasks**: `--persona-security` (auth, permissions, encryption, vulnerability fixes)
+- **Performance Tasks**: `--persona-performance` (optimization, caching, database tuning)
+- **UI/UX Tasks**: `--persona-frontend` (interface changes, user experience, styling)
+- **API/Backend Tasks**: `--persona-backend` (services, APIs, server-side logic)
+- **Architecture Tasks**: `--persona-architect` (system design, structural changes)
+- **Database Tasks**: `--persona-data` (schema changes, data modeling, migrations)
+- **Mobile Tasks**: `--persona-mobile` (mobile-specific implementations)
+- **Deployment Tasks**: `--persona-deployment` (CI/CD, infrastructure, DevOps)
+- **Testing Tasks**: `--persona-testing` (test implementation, QA processes)
+
+**MCP Module Selection Logic:**
+- **Complex Analysis Needed**: `--mcp-sequential` (multi-step reasoning, complex problem solving)
+- **Context Management**: `--mcp-context7` (when task needs enhanced context awareness)
+- **Web Interaction**: `--mcp-puppeteer` (web automation, browser testing, scraping)
+- **Research Required**: `--mcp-fetch` (web content analysis, external documentation)
+- **Project Management**: `--mcp-linear` (issue tracking, project coordination)
+- **Payment Integration**: `--mcp-stripe` (payment processing, financial operations)
+- **Database Operations**: `--mcp-supabase` (database analysis, backend insights)
+- **Deployment Tasks**: `--mcp-vercel` (hosting, deployment management)
+
+**Flag Combination Examples:**
+```bash
+# Authentication feature (complex, security-focused, needs sequential thinking)
+@feature "user-authentication-biometrics" --persona-security --mcp-sequential
+
+# Performance optimization (performance-focused, needs context awareness)
+@issue "optimize-database-queries" --persona-performance --mcp-context7 --mcp-supabase
+
+# UI component (frontend-focused, simple implementation)
+@quick-feature "dark-mode-toggle" --persona-frontend
+
+# API integration (backend-focused, complex logic, needs research)
+@feature "payment-gateway-integration" --persona-backend --mcp-sequential --mcp-stripe --mcp-fetch
+
+# Web automation (puppeteer for web interaction, testing for validation)
+@feature "automated-e2e-testing" --persona-testing --mcp-puppeteer
+
+# Deployment feature (DevOps-focused, deployment integration)
+@feature "ci-cd-pipeline-setup" --persona-deployment --mcp-vercel --mcp-linear
+
+# Research-intensive feature (needs external documentation and analysis)
+@feature "external-api-integration" --persona-backend --mcp-fetch --mcp-sequential
+```
+
+**Command Selection Matrix:**
+- **@issue**: Complexity 1-3, single component, bug fixes, simple additions
+- **@quick-feature**: Complexity 4-6, UI changes, medium features, configuration
+- **@feature**: Complexity 7-10, system changes, architecture, integrations
 
 #### Historical Context Integration
 ```markdown
@@ -155,6 +201,20 @@ The response MUST follow this structure:
 
 ```markdown
 # Task Analysis: [Task Description]
+
+## 📋 Copy-Paste Command (Ready to Execute)
+
+```bash
+@[issue|quick-feature|feature] "[exact-task-name]" [--persona-X] [--mcp-X] [--flags]
+```
+
+**Why this command?**
+- `@[command]`: [Reason for choosing this command level]
+- `[--persona-X]`: [Why this persona/specialist is needed]
+- `[--mcp-X]`: [Why this MCP module enhances the task]
+- `[--flags]`: [Any additional flags and their purpose]
+
+**Reference Materials**: [If any existing similar tasks found: `workflow/completed/done-[similar-task].md`]
 
 ## 🎯 Quick Recommendation
 **Command**: `@[issue|quick-feature|feature] "[task-name]" [--flags]`
@@ -224,12 +284,49 @@ Every @ask response MUST include a section showing:
 4. "What are the hidden complexities not immediately obvious?"
 5. "How does this fit with our existing architecture?"
 
+### Copy-Paste Command Requirements
+The MOST IMPORTANT part of every @ask response is providing a ready-to-execute command:
+
+**MANDATORY COMMAND FORMAT:**
+```bash
+@[issue|quick-feature|feature] "[exact-task-name]" [--persona-X] [--mcp-X] [--additional-flags]
+```
+
+**Command Construction Checklist:**
+1. ✅ **Exact Task Name**: Use clear, descriptive kebab-case names
+2. ✅ **Appropriate Command Level**: @issue (1-3), @quick-feature (4-6), @feature (7-10)
+3. ✅ **Relevant Persona**: Based on primary skill domain needed
+4. ✅ **MCP Modules**: Include if task complexity requires enhanced capabilities
+5. ✅ **Reference Materials**: Link to similar completed tasks if found
+6. ✅ **Explanation**: Brief explanation of each flag's purpose
+
+**Examples of Well-Constructed Commands:**
+```bash
+# Security feature with complex reasoning needed
+@feature "implement-2fa-authentication" --persona-security --mcp-sequential
+
+# Performance issue with database analysis needed
+@issue "fix-memory-leak-dashboard" --persona-performance --mcp-context7 --mcp-supabase
+
+# UI enhancement with no additional flags needed
+@quick-feature "add-loading-spinner-forms" --persona-frontend
+
+# Complex system integration with research and testing
+@feature "real-time-notifications-websocket" --persona-backend --persona-frontend --mcp-sequential --mcp-fetch --mcp-puppeteer
+
+# Payment integration with Stripe and research
+@feature "subscription-billing-system" --persona-backend --mcp-stripe --mcp-fetch --mcp-sequential
+
+# Deployment automation with Vercel integration
+@feature "auto-deployment-pipeline" --persona-deployment --mcp-vercel --mcp-linear
+```
+
 ### User Feedback Requirements
 At the beginning of EVERY response, include:
 1. Brief confirmation of what task is being analyzed
 2. High-level complexity assessment (Simple/Medium/Complex)
 3. Whether similar work was found in the project history
-4. Primary recommendation with reasoning
+4. **Copy-paste ready command with full explanation**
 5. Any critical considerations or warnings
 
 @include shared/research-patterns.yml#Mandatory_Research_Flows

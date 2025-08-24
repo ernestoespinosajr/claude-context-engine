@@ -1,6 +1,6 @@
 # Context Engineering System
 
-![Version](https://img.shields.io/badge/version-2.5.2-blue)
+![Version](https://img.shields.io/badge/version-2.5.5-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 > **The smart way to manage development with Claude Code CLI**
@@ -26,7 +26,7 @@
 - **Duplication Prevention** - Project structure awareness prevents redundant work
 - **Historical Pattern Recognition** - Learns from previous successes and failures
 - **Advanced persona system** with specialists in security, performance, etc.
-- **MCP integration** with Context7, Sequential, Magic, and Puppeteer modules
+- **MCP integration** with 8 specialized modules: Context7, Sequential, Puppeteer, Fetch, Linear, Stripe, Supabase, and Vercel
 
 ## 📋 Prerequisites
 
@@ -103,8 +103,8 @@ The Context Engineering System uses a simple 5-command approach that scales cont
 ```bash
 # Example workflow
 @ask "add user authentication with biometrics"
-# → Recommends: @feature (complex, security-focused)
-@feature "add user authentication with biometrics" --persona-security
+# → Recommends: @feature (complex, security-focused, needs sequential thinking)
+@feature "add user authentication with biometrics" --persona-security --mcp-sequential
 @start "user-authentication-biometrics"
 ```
 
@@ -122,10 +122,17 @@ The Context Engineering System uses a simple 5-command approach that scales cont
 
 ### MCP Modules
 
-- `--mcp-context7`: Improves context management with Context7
-- `--mcp-sequential`: Enables sequential thinking for complex problems
-- `--mcp-magic`: Activates advanced code generation capabilities
-- `--mcp-puppeteer`: Enables web automation and interaction
+**Core Analysis & Context:**
+- `--mcp-context7`: Advanced context management and optimization
+- `--mcp-sequential`: Structured thinking for complex problem solving
+- `--mcp-puppeteer`: Web automation, testing, and browser interaction
+
+**Integration & Services:**
+- `--mcp-fetch`: Web content retrieval and external documentation analysis
+- `--mcp-linear`: Project management and issue tracking integration
+- `--mcp-stripe`: Payment processing and financial operations
+- `--mcp-supabase`: Database operations and backend insights (read-only)
+- `--mcp-vercel`: Deployment management and hosting integration
 
 ## 📁 File Workflow
 
@@ -189,7 +196,29 @@ This project is under the MIT License - see the [LICENSE](LICENSE) file for more
 
 ## 📋 Changelog
 
-### Version 2.5.2 (Latest)
+### Version 2.5.5 (Latest)
+**MCP Integration Synchronization Update**
+
+**🎯 Key Improvements:**
+- **MCP Flag Validation**: Synchronized all MCP flags with actual available servers in `.mcp.json`
+- **Removed Non-Existent Modules**: Eliminated `--mcp-magic` references (server not available)
+- **Added 5 New MCP Integrations**: `--mcp-fetch`, `--mcp-linear`, `--mcp-stripe`, `--mcp-supabase`, `--mcp-vercel`
+- **Enhanced @ask Command**: Now provides copy-paste ready commands with accurate MCP recommendations
+- **Updated Documentation**: All workflow examples now use only verified, working MCP servers
+
+**📈 Benefits:**
+- 100% accurate MCP flag recommendations in @ask command
+- No more failed commands due to non-existent MCP servers
+- Expanded integration capabilities with 8 total MCP modules
+- Better task-to-MCP matching for optimal workflow enhancement
+
+**🔧 What Changed:**
+- **Removed**: All references to `--mcp-magic` (non-existent server)
+- **Added**: Documentation for `fetch`, `linear`, `stripe`, `supabase`, `vercel` MCP modules
+- **Updated**: All command examples in `ask.md`, `mcp.yml`, and `flags.yml`
+- **Enhanced**: MCP selection logic with proper use cases and token impact assessments
+
+### Version 2.5.2
 **Logbook Optimization Update**
 
 **🎯 Key Improvements:**

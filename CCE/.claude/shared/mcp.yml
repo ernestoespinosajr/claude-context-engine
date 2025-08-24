@@ -30,16 +30,6 @@ MCP_Integration:
       Token_Budget: "Medium-Heavy impact (thinking overhead)"
       Cache_TTL: "Session duration"
       
-    Magic:
-      Purpose: "Intelligent automation & workflow optimization"
-      Capabilities:
-        - "Pattern detection & automation"
-        - "Workflow optimization suggestions"
-        - "Intelligent task batching"
-        - "Predictive operation suggestions"
-      Token_Budget: "Medium impact (automation benefits)"
-      Cache_TTL: "1800 seconds (30 minutes)"
-      
     Puppeteer:
       Purpose: "UI testing, validation & browser automation"
       Capabilities:
@@ -49,6 +39,56 @@ MCP_Integration:
         - "Performance testing"
       Token_Budget: "Medium impact (UI testing overhead)"
       Cache_TTL: "Session only (no persistence)"
+      
+    Fetch:
+      Purpose: "Web content retrieval and analysis"
+      Capabilities:
+        - "URL content fetching with markdown conversion"
+        - "Image processing and analysis"
+        - "Web scraping and data extraction"
+        - "Content caching for efficiency"
+      Token_Budget: "Light impact (web fetch overhead)"
+      Cache_TTL: "1800 seconds (30 minutes)"
+      
+    Linear:
+      Purpose: "Project management and issue tracking integration"
+      Capabilities:
+        - "Issue creation and management"
+        - "Project timeline tracking"
+        - "Team collaboration features"
+        - "Sprint and milestone management"
+      Token_Budget: "Light impact (Linear API overhead)"
+      Cache_TTL: "900 seconds (15 minutes)"
+      
+    Stripe:
+      Purpose: "Payment system integration and financial operations"
+      Capabilities:
+        - "Payment processing integration"
+        - "Subscription management"
+        - "Financial reporting and analytics"
+        - "Invoice and billing operations"
+      Token_Budget: "Light impact (Stripe API overhead)"
+      Cache_TTL: "1200 seconds (20 minutes)"
+      
+    Supabase:
+      Purpose: "Database operations and backend services (read-only)"
+      Capabilities:
+        - "Database query and analysis"
+        - "User authentication insights"
+        - "Real-time data monitoring"
+        - "Storage and file operations"
+      Token_Budget: "Medium impact (database query overhead)"
+      Cache_TTL: "600 seconds (10 minutes)"
+      
+    Vercel:
+      Purpose: "Deployment and hosting platform integration"
+      Capabilities:
+        - "Deployment status and management"
+        - "Performance monitoring"
+        - "Domain and DNS management"
+        - "Build and CI/CD integration"
+      Token_Budget: "Light impact (Vercel API overhead)"
+      Cache_TTL: "900 seconds (15 minutes)"
 
 Token_Economics:
   Budget_Allocation:
@@ -60,17 +100,17 @@ Token_Economics:
     Light_MCP:
       Cost: "10-20% token overhead"
       Capabilities: "Single MCP for specific enhancement"
-      Usage_Pattern: "Context7 for optimization, Puppeteer for testing"
+      Usage_Pattern: "Context7 for optimization, Puppeteer for testing, Fetch for research"
       
     Medium_MCP:
       Cost: "25-40% token overhead"
       Capabilities: "2-3 MCPs for complex operations"
-      Usage_Pattern: "Context7+Sequential for analysis, Magic+Puppeteer for automation"
+      Usage_Pattern: "Context7+Sequential for analysis, Puppeteer+Fetch for validation"
       
     Full_MCP_Stack:
       Cost: "50-80% token overhead"
-      Capabilities: "All MCPs for maximum capability"
-      Usage_Pattern: "Critical operations requiring all capabilities"
+      Capabilities: "Multiple MCPs for maximum capability"
+      Usage_Pattern: "Critical operations requiring multiple specialized capabilities"
       Justification_Required: true
 
 Cache_Management:
@@ -132,44 +172,44 @@ Workflows:
     Light_Enhancement:
       MCPs: "Context7 for optimization"
       Use_Case: "Standard feature planning with context optimization"
-      Command: "/context-engineer 'feature' --mcp-context7"
+      Command: "@feature 'feature-name' --mcp-context7"
       
     Medium_Enhancement:
       MCPs: "Context7 + Sequential"
       Use_Case: "Complex feature analysis requiring structured thinking"
-      Command: "/context-engineer 'complex feature' --mcp-context7 --mcp-sequential --think-hard"
+      Command: "@feature 'complex-feature' --mcp-context7 --mcp-sequential --think-hard"
       
-    Full_Enhancement:
-      MCPs: "Context7 + Sequential + Magic"
-      Use_Case: "Enterprise-level feature planning with automation"
-      Command: "/context-engineer 'enterprise feature' --mcp-context7 --mcp-sequential --mcp-magic --ultrathink"
+    Research_Enhancement:
+      MCPs: "Fetch + Sequential"
+      Use_Case: "Feature planning requiring external research"
+      Command: "@feature 'research-intensive-feature' --mcp-fetch --mcp-sequential"
       
   Execution_Enhanced:
     Standard_Execution:
       MCPs: "Puppeteer for testing"
       Use_Case: "Feature implementation with UI validation"
-      Command: "/execute-context feature --mcp-puppeteer --test"
+      Command: "@start feature-name --mcp-puppeteer --test"
       
-    Optimized_Execution:
-      MCPs: "Magic + Puppeteer"
-      Use_Case: "Automated implementation with testing"
-      Command: "/execute-context feature --mcp-magic --mcp-puppeteer --batch"
+    Research_Execution:
+      MCPs: "Fetch + Sequential"
+      Use_Case: "Implementation requiring external research and analysis"
+      Command: "@start feature-name --mcp-fetch --mcp-sequential --batch"
       
     Enterprise_Execution:
-      MCPs: "Context7 + Sequential + Magic + Puppeteer"
+      MCPs: "Context7 + Sequential + Puppeteer"
       Use_Case: "Mission-critical implementation with full validation"
-      Command: "/execute-context critical-feature --mcp-context7 --mcp-sequential --mcp-magic --mcp-puppeteer --validate"
+      Command: "@start critical-feature --mcp-context7 --mcp-sequential --mcp-puppeteer --validate"
       
   Status_Enhanced:
-    Health_Check:
-      MCPs: "Magic for pattern analysis"
-      Use_Case: "Intelligent system health assessment"
-      Command: "/context-status --mcp-magic --health"
+    Database_Health_Check:
+      MCPs: "Supabase for database analysis"
+      Use_Case: "Database system health assessment"
+      Command: "check project status --mcp-supabase --health"
       
-    Deep_Analysis:
-      MCPs: "Context7 + Sequential + Magic"
-      Use_Case: "Comprehensive system analysis with insights"
-      Command: "/context-status --mcp-context7 --mcp-sequential --mcp-magic --deep"
+    Deployment_Analysis:
+      MCPs: "Vercel + Context7"
+      Use_Case: "Comprehensive deployment and system analysis"
+      Command: "check project status --mcp-vercel --mcp-context7 --deep"
 
 Quality_Control:
   MCP_Health_Monitoring:
