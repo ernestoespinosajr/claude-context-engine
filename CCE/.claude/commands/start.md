@@ -273,12 +273,61 @@ Each task file gets enhanced with execution metadata:
 **Lessons Learned**: [Key insights for future similar tasks]
 ```
 
+## MANDATORY EXECUTION WORKFLOW
+
+### Step 1: Pre-Execution Validation
+BEFORE starting ANY task, you MUST:
+
+1. **Read workflow/logbook.md** - Check Task Log, project structure, and existing components
+2. **Locate task file** in workflow/planned/ directory
+3. **Move task file** from workflow/planned/ to workflow/in-progress/
+4. **Update logbook.md** Task Log entry status from "pending" to "in-progress"
+
+**Status Update Examples**:
+```markdown
+`@user-auth-biometrics` | in-progress | /workflow/in-progress/user-auth-biometrics.md | Add biometric login system
+`@issue-login-ios-bug` | in-progress | /workflow/in-progress/issue-login-ios-bug.md | Fix login button not responding on iOS  
+`@dark-mode-toggle` | in-progress | /workflow/in-progress/dark-mode-toggle.md | Add theme switching to settings
+```
+
+### Step 2: Phase-by-Phase Validation Process
+After completing EACH implementation phase, you MUST:
+
+1. **Present completed phase** to user with clear description of what was accomplished
+2. **Ask for validation**: "Would you like me to: **test**, **continue**, or **pause**?"
+3. **WAIT for user response** - Never proceed without user validation
+4. **Update task file** with ✅ completion marker and 1-2 line summary
+5. **Update progress percentage** in task file
+
+### Step 3: Final Documentation & Completion
+Upon reaching 100% completion, you MUST:
+
+1. **Update Task Log** in workflow/logbook.md with final status:
+   - "complete without issues" (fully successful)
+   - "complete with issues to fix" (works but has problems)  
+   - "pending" (incomplete or paused)
+
+**Final Status Examples**:
+```markdown
+`@user-auth-biometrics` | complete without issues | /workflow/completed/done-user-auth-biometrics.md | Add biometric login system
+`@issue-memory-leak` | complete with issues to fix | /workflow/completed/done-issue-memory-leak.md | Fix image loading memory leak - needs optimization
+`@dark-mode-toggle` | pending | /workflow/in-progress/dark-mode-toggle.md | Add theme switching to settings - paused for design review
+```
+2. **Move completed file** from workflow/in-progress/ to workflow/completed/
+3. **Rename file** with "done-" prefix for successful completion
+4. **Update logbook.md** statistics and recent activities
+
 ## Output Requirements
 
 Every @start response MUST include:
 
 ```markdown
 # 🚀 Starting Task: [Task Name]
+
+## Pre-Execution Check ✅
+- Logbook reviewed for context
+- Task file located and moved to in-progress
+- Project structure validated
 
 ## Task Analysis
 - **Type**: [Issue | Quick Feature | Complex Feature]
@@ -287,13 +336,13 @@ Every @start response MUST include:
 - **Active Personas**: [List of personas]
 
 ## Execution Plan
-[Phase-by-phase execution strategy]
+[Phase-by-phase execution strategy with validation points]
 
-## Success Criteria
-[How completion will be measured]
+## Phase 1: [Phase Name]
+[Current implementation work]
 
-## Current Action
-[What's happening right now]
+---
+**Validation Point**: After completing this phase, I will ask for your validation before proceeding.
 ```
 
 ## User Feedback Requirements

@@ -50,17 +50,33 @@ This approach avoids synchronization problems and ensures there's always a singl
 ## Command Usage
 
 ### New Simplified System
-- `@ask "[task description]"` - Analyze task and suggest best approach
-- `@issue "[bug description]"` - Handle bugs and simple tasks (3-layer context)
-- `@quick-feature "[feature description]"` - Medium features and UI/UX changes (6-layer context)
-- `@feature "[feature description]"` - Complex features and system changes (11-layer context)
-- `@start "[task-name]"` - Execute any planned task
+- `@ask "[task description]"` - Analyze task and suggest best approach (always checks logbook first)
+- `@issue "[bug description]"` - Handle bugs and simple tasks (3-layer context) + registers in Task Log
+- `@quick-feature "[feature description]"` - Medium features and UI/UX changes (6-layer context) + registers in Task Log
+- `@feature "[feature description]"` - Complex features and system changes (11-layer context) + registers in Task Log
+- `@start "[task-name]"` - Execute any planned task with mandatory phase validation
 
 ### Status Checking
 To check task status, simply:
+- Check `workflow/logbook.md` Task Log section for complete overview
 - Look at file location in `workflow/` directories
 - Read the task document directly for detailed progress
 - Use `@ask "[task-name] status"` for analysis and recommendations
+
+### Phase Validation Process (@start command)
+
+**CRITICAL**: @start now requires user validation at each phase:
+
+1. **Pre-execution**: Always reads logbook.md for context and project structure
+2. **Phase Completion**: After each implementation phase:
+   - Presents completed work to user
+   - Asks: "test", "continue", or "pause" 
+   - Waits for user response
+   - Updates task file with ✅ and progress summary
+3. **Final Status Update**: Updates Task Log with completion status:
+   - "complete without issues"
+   - "complete with issues to fix" 
+   - "pending"
 
 ## File Naming Convention
 

@@ -23,25 +23,62 @@
 
 ---
 
+## Task Log
+
+*Comprehensive task registry - Always check here before creating new tasks*
+
+**Format**: `@taskname` | Status | Path | Achievement Goal
+
+*No tasks registered yet*
+
+---
+
+## Project Structure
+
+*Always consult before making structural changes*
+
+```
+project/
+├── README.md
+├── CCE/
+│   ├── CLAUDE.md
+│   └── workflow/
+│       ├── README.md
+│       ├── logbook.md
+│       ├── dependencies.md
+│       ├── planned/
+│       ├── in-progress/
+│       └── completed/
+└── [project files to be mapped]
+```
+
+**Components Registry**: *Track all components to prevent duplicates*
+- No components created yet
+
+**Services Registry**: *Track all services to prevent duplicates*  
+- No services created yet
+
+---
+
 ## In Progress Tasks
 
 *No tasks currently in progress*
 
 ---
 
-## Recently Planned (Last 10)
+## Recently Planned (Last 5)
 
 *No tasks planned yet*
 
 ---
 
-## Recently Completed - Successful (Last 10)
+## Recently Completed - Successful (Last 5)
 
 *No successful completions yet*
 
 ---
 
-## Recently Completed - Failed (Last 10)
+## Recently Completed - Failed (Last 5)
 
 *No failed tasks yet*
 

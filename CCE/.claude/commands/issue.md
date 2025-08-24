@@ -223,20 +223,33 @@ Every @issue response MUST include:
 [How we'll know it's fixed]
 ```
 
-## Automatic Logbook Updates
+## MANDATORY TASK LOG REGISTRATION
 
-When creating an issue plan, automatically add entry to `workflow/logbook.md`:
+IMMEDIATELY after creating an issue plan, you MUST update `workflow/logbook.md`:
 
+### Step 1: Register in Task Log Section
+Add entry in **Task Log** section with exact ultra-compact format:
 ```markdown
-## Recently Planned (Last 10)
-- **issue-[name]** | [Brief description] | Created: [date] | Type: Issue | Complexity: [1-10]
+`@issue-login-ios-bug` | pending | /workflow/planned/issue-login-ios-bug.md | Fix login button not responding on iOS
+`@issue-memory-leak` | pending | /workflow/planned/issue-memory-leak.md | Fix image loading memory leak
+`@issue-typo-error-msg` | pending | /workflow/planned/issue-typo-error-msg.md | Correct typo in error message
 ```
 
-Update logbook sections:
+**Format Rules**:
+- Task name: issue-[kebab-case], descriptive but short  
+- Achievement goal: 1-6 words max, what gets fixed
+- No extra spaces, under 50 characters total for goal
+
+### Step 2: Update Logbook Statistics
 - Increment "Planned" count in Quick Overview
 - Add to "By Type" → Issues/Bugs counter
-- Add to appropriate complexity range
+- Add to appropriate complexity range (typically 1-4)
 - Update "Last Activity" timestamp
+
+### Step 3: Check Project Structure
+Before creating the issue plan, scan the **Project Structure** section in logbook.md to verify:
+- Understanding of current component structure
+- No conflicts with existing implementations
 
 ## User Feedback Requirements
 

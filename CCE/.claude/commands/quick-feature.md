@@ -289,21 +289,35 @@ Every @quick-feature response MUST include:
 [How success will be measured]
 ```
 
-## Automatic Logbook Updates
+## MANDATORY TASK LOG REGISTRATION
 
-When creating a quick feature plan, automatically add entry to `workflow/logbook.md`:
+IMMEDIATELY after creating a quick feature plan, you MUST update `workflow/logbook.md`:
 
+### Step 1: Register in Task Log Section
+Add entry in **Task Log** section with exact ultra-compact format:
 ```markdown
-## Recently Planned (Last 10)
-- **[feature-name]** | [Brief description] | Created: [date] | Type: Quick Feature | Complexity: [1-10]
+`@dark-mode-toggle` | pending | /workflow/planned/dark-mode-toggle.md | Add theme switching to settings
+`@export-reports` | pending | /workflow/planned/export-reports.md | Add CSV/PDF export to reports
+`@user-profile-edit` | pending | /workflow/planned/user-profile-edit.md | User profile editing screen
 ```
 
-Update logbook sections:
+**Format Rules**:
+- Task name: kebab-case, descriptive but short
+- Achievement goal: 1-6 words max, user benefit focused  
+- No extra spaces, under 50 characters total for goal
+
+### Step 2: Update Logbook Statistics
 - Increment "Planned" count in Quick Overview
 - Add to "By Type" → Quick Features counter
 - Add to appropriate complexity range (typically 4-6)
 - Update "Last Activity" timestamp
 - Add any dependencies to Dependencies Overview
+
+### Step 3: Check Project Structure
+Before creating the feature plan, scan the **Project Structure** section in logbook.md to ensure:
+- No duplicate components are being created
+- Existing services/components can be reused
+- UI patterns and design system consistency
 
 ## User Feedback Requirements
 

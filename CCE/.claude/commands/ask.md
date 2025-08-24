@@ -200,12 +200,22 @@ The response MUST follow this structure:
 
 ## Important Behaviors
 
-### Before Any Recommendation
-1. **Always check logbook first** for instant project context and similar tasks
-2. **Search existing work** in workflow directories if deeper analysis needed
-3. **Check for similar components** in the codebase  
-4. **Identify reusable patterns** and established practices
-5. **Assess true complexity** beyond surface requirements
+### MANDATORY PRE-ANALYSIS STEPS
+1. **Read workflow/logbook.md FIRST** - Check Task Log, Project Structure, Components Registry
+2. **Prevent Duplication** - Verify similar tasks haven't been completed or are in progress
+3. **Component Reuse** - Identify existing components/services that can be reused
+4. **Pattern Recognition** - Learn from previous similar successful/failed tasks
+5. **Project Context** - Understand current project structure and constraints
+
+### Task Log Integration
+Every @ask response MUST include a section showing:
+```markdown
+## 📋 Project Context Check
+- **Similar Tasks Found**: [None | List of similar tasks with status]
+- **Reusable Components**: [None | List of components that can be reused] 
+- **Project Structure Impact**: [How this task affects existing structure]
+- **Previous Lessons**: [Any relevant lessons from completed tasks]
+```
 
 ### Critical Questions to Address
 1. "Have we solved something similar before?"

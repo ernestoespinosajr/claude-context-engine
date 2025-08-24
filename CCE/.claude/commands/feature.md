@@ -97,22 +97,36 @@ Create comprehensive Product Requirements Prompt with:
 - Updates `workflow/dependencies.md` with new relationships
 - Generates context quality report
 
-## Automatic Logbook Updates
+## MANDATORY TASK LOG REGISTRATION
 
-When creating a complex feature plan, automatically add entry to `workflow/logbook.md`:
+IMMEDIATELY after creating a feature plan, you MUST update `workflow/logbook.md`:
 
+### Step 1: Register in Task Log Section
+Add entry in **Task Log** section with exact ultra-compact format:
 ```markdown
-## Recently Planned (Last 10)
-- **[feature-name]** | [Brief description] | Created: [date] | Type: Complex Feature | Complexity: [1-10]
+`@user-auth-biometrics` | pending | /workflow/planned/user-auth-biometrics.md | Add biometric login system
+`@payment-integration` | pending | /workflow/planned/payment-integration.md | Integrate Stripe payment processing
+`@real-time-notifications` | pending | /workflow/planned/real-time-notifications.md | WebSocket notification system
 ```
 
-Update logbook sections:
+**Format Rules**:
+- Task name: kebab-case, descriptive but short
+- Achievement goal: 1-6 words max, user outcome focused
+- No extra spaces, under 50 characters total for goal
+
+### Step 2: Update Logbook Statistics  
 - Increment "Planned" count in Quick Overview
 - Add to "By Type" → Complex Features counter
 - Add to appropriate complexity range (typically 7-10)
 - Update "Last Activity" timestamp
 - Add dependencies to Dependencies Overview
 - Note any architectural decisions in Project Evolution
+
+### Step 3: Check for Existing Components
+Before creating the feature, scan the **Project Structure** section in logbook.md to ensure:
+- No duplicate components are being created
+- Existing services/components can be reused
+- File structure conflicts are avoided
 
 ## Important File Handling
 - The feature file is created in `workflow/planned/` directory

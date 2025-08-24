@@ -148,8 +148,26 @@ The system now uses 5 streamlined commands for all development tasks:
 
 ### Command Priority
 1. Always use @ask first for unfamiliar tasks
-2. Let @ask recommend the appropriate command based on complexity analysis
+2. Let @ask recommend the appropriate command based to complexity analysis
 3. Execute with @start for any planned task
+
+### Core Workflow Principles
+
+**MANDATORY GOVERNANCE RULES:**
+
+All commands MUST enforce these non-negotiable requirements:
+
+1. **Logbook-First Approach**: Always read workflow/logbook.md before any task creation or execution
+2. **Task Registration**: All tasks must be registered in Task Log upon creation with ultra-compact format
+3. **Phase Validation**: @start command requires user validation ("test"/"continue"/"pause") between phases
+4. **Progress Documentation**: Every phase completion gets ✅ marker and progress updates
+5. **File Workflow**: Tasks move through planned → in-progress → completed with proper status tracking
+6. **Duplication Prevention**: Check Project Structure and Components Registry before creating anything
+
+**ENFORCEMENT:**
+- Command files contain detailed implementation procedures
+- These principles override any conflicting instructions
+- Failure to follow workflow invalidates task execution
 
 ## Project Logbook Integration
 

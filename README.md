@@ -1,6 +1,6 @@
 # Context Engineering System
 
-![Version](https://img.shields.io/badge/version-2.5-blue)
+![Version](https://img.shields.io/badge/version-2.5.1-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 > **The smart way to manage development with Claude Code CLI**
@@ -20,10 +20,13 @@
 - **Smart Context Scaling** - 3/6/11-layer context based on task complexity
 - **Automatic Project Intelligence** - Central logbook provides instant context awareness
 - **Simplified 5-Command System** - ask → issue/quick-feature/feature → start
+- **Phase-by-Phase Validation** - User-controlled validation at each implementation phase
+- **Ultra-Compact Task Tracking** - Token-efficient logbook with comprehensive task registry
+- **Automated Workflow Management** - Files move automatically through planned → in-progress → completed
+- **Duplication Prevention** - Project structure awareness prevents redundant work
 - **Historical Pattern Recognition** - Learns from previous successes and failures
 - **Advanced persona system** with specialists in security, performance, etc.
 - **MCP integration** with Context7, Sequential, Magic, and Puppeteer modules
-- **Zero Duplication Prevention** - Identifies existing work before creating new tasks
 
 ## 📋 Prerequisites
 
@@ -86,8 +89,10 @@ The Context Engineering System uses a simple 5-command approach that scales cont
 @start "[task-name]"
 ```
 - Executes any planned task with appropriate context level
+- **Phase validation** - asks "test/continue/pause" after each phase
+- **Progress tracking** - automatic ✅ markers and summaries
+- **File management** - moves tasks through workflow directories
 - Updates project logbook automatically
-- Handles complexity detection and scaling
 
 ### Recommended Workflow
 
@@ -134,22 +139,22 @@ The Context Engineering System uses a simple 5-command approach that scales cont
 
 ## 🧠 Project Intelligence
 
-The system's **logbook.md** acts as a central intelligence hub:
+The system's **logbook.md** acts as a central intelligence hub with ultra-compact tracking:
 
 - **📊 Real-time Statistics**: Success rates, complexity trends, active work
+- **📋 Task Log Registry**: Comprehensive task tracking with ultra-compact format
+- **🏗️ Project Structure Awareness**: Components and services registry prevents duplicates
 - **🔍 Pattern Recognition**: Learns what approaches work vs. what fails  
-- **🚫 Duplication Prevention**: Spots similar work before you create it
+- **🚫 Duplication Prevention**: Checks existing work before creating new tasks
 - **📈 Progress Tracking**: Visual insight into project evolution
 - **🎯 Smart Recommendations**: @ask uses logbook data for intelligent guidance
 
-**Example logbook entry:**
+**Example Task Log entries:**
 ```markdown
-## In Progress (3)
-- **user-auth-biometrics** | Biometric login | Updated: 2025-01-23 | 75% complete
-- **dark-mode-toggle** | UI theme switching | Updated: 2025-01-22 | 40% complete
-
-## Recently Completed - Success (5 most recent)  
-- **done-login-validation** | Input fixes | Completed: 2025-01-20 | Fixed 3 security issues
+## Task Log
+`@user-auth-biometrics` | in-progress | /workflow/in-progress/user-auth-biometrics.md | Add biometric login system
+`@issue-login-ios-bug` | complete without issues | /workflow/completed/done-issue-login-ios-bug.md | Fix login button not responding on iOS
+`@dark-mode-toggle` | pending | /workflow/planned/dark-mode-toggle.md | Add theme switching to settings
 ```
 
 ## 📂 Project Structure
