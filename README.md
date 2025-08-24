@@ -1,6 +1,6 @@
 # Context Engineering System
 
-![Version](https://img.shields.io/badge/version-2.5.1-blue)
+![Version](https://img.shields.io/badge/version-2.5.2-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 > **The smart way to manage development with Claude Code CLI**
@@ -186,6 +186,28 @@ To contribute to the development of this system:
 ## 📄 License
 
 This project is under the MIT License - see the [LICENSE](LICENSE) file for more details.
+
+## 📋 Changelog
+
+### Version 2.5.2 (Latest)
+**Logbook Optimization Update**
+
+**🎯 Key Improvements:**
+- **Streamlined Logbook Structure**: Removed redundant task breakdown sections that duplicated information already captured in the ultra-compact Task Log
+- **Optimized Task Log Positioning**: Moved the Task Log section after Project Structure for better organization, placing the most frequently updated content in logical order
+- **Enhanced Focus**: Simplified logbook to focus on the essential ultra-compact format: `@taskname` | Status | Path | Achievement Goal
+- **Verified Command Consistency**: Confirmed all 5 commands (@ask, @issue, @quick-feature, @feature, @start) follow identical ultra-compact logbook update behavior
+
+**📈 Benefits:**
+- Faster context loading for Claude Code CLI
+- Cleaner, more focused project intelligence hub
+- Improved logbook maintainability and readability
+- Consistent task tracking across all workflow commands
+
+**🔧 What Changed:**
+- Removed: Redundant "In Progress Tasks", "Recently Planned", "Recently Completed", and "Task Categories Summary" sections
+- Reorganized: Task Log now appears after Project Structure section
+- Optimized: Logbook now focuses on core intelligence without information duplication
 
 ## 📚 Additional Documentation
 
