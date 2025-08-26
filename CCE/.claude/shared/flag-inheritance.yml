@@ -127,8 +127,8 @@ MCP_Integration_Flags:
     Token_Impact: "Medium (MCP overhead + automation benefits)"
     Cache_TTL: "1800 seconds"
     
-  "--mcp-puppeteer":
-    Description: "Use Puppeteer for UI testing & validation"
+  "--mcp-playwright":
+    Description: "Use Playwright for UI testing & validation"
     Token_Impact: "Medium (MCP overhead + UI testing)"
     Cache_TTL: "Session only"
 

@@ -7,11 +7,11 @@
 @include shared/universal-constants.yml#Universal_Legend
 
 ## Command Execution
-Execute: immediate. --plan→show plan first
+Execute: plan-only. Create plan in workflow/planned/ and update logbook
 Legend: Generated based on symbols used in command
-Purpose: "[Build][Feature] in $ARGUMENTS"
+Purpose: "[Plan][Feature] for $ARGUMENTS"
 
-Handle complex features, architectural changes, and system-wide implementations using the full 11-layer Context Engineering architecture.
+Creates comprehensive feature plan using full 11-layer Context Engineering architecture and registers in logbook. Use @start to execute the planned feature.
 
 @include shared/flag-inheritance.yml#Universal_Always
 @include shared/critical-thinking.yml#Critical_Thinking_Framework
@@ -169,6 +169,33 @@ Every Product Requirements Prompt MUST include these sections:
 
 ## Implementation Blueprint
 [Implementation details]
+
+## 🤖 Agent Execution Recommendation
+
+**Recommended Agent**: `[frontend|backend|mobile|full-stack|context-manager|multi-agent-coordinator|technical-writer|ai-engineer]`
+
+**Agent Specialization Benefits**:
+- **Domain Expertise**: [Specific agent capabilities needed for this feature]
+- **Autonomous Implementation**: [Complex workflows the agent can handle independently]
+- **Quality Assurance**: [Built-in validation and best practices the agent provides]
+
+**Agent Dispatch Strategy**:
+```bash
+# After this planning is approved, execute with:
+dispatch [recommended-agent] --context="[feature-name]" [--persona-flags] [--mcp-flags]
+```
+
+**Why Agent vs Command Execution?**
+- ✅ **Complexity Handling**: Feature requires multi-step implementation across multiple files/systems
+- ✅ **Context Management**: Separate agent context prevents main conversation pollution
+- ✅ **Specialized Knowledge**: Agent has deep domain expertise for this feature type
+- ✅ **Autonomous Progress**: Agent can make implementation decisions without constant guidance
+
+**Agent Integration Points**:
+- **Planning Context**: Agent receives this complete feature plan as context
+- **Persona Integration**: Agent automatically applies recommended persona specializations
+- **MCP Configuration**: Agent leverages specified MCP modules for enhanced capabilities
+- **Progress Reporting**: Agent provides milestone updates without cluttering main conversation
 
 ## Quality Gates
 [Quality criteria that must be met]

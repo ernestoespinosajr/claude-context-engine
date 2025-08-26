@@ -30,7 +30,7 @@ MCP_Integration:
       Token_Budget: "Medium-Heavy impact (thinking overhead)"
       Cache_TTL: "Session duration"
       
-    Puppeteer:
+    Playwright:
       Purpose: "UI testing, validation & browser automation"
       Capabilities:
         - "Automated UI testing"
@@ -100,12 +100,12 @@ Token_Economics:
     Light_MCP:
       Cost: "10-20% token overhead"
       Capabilities: "Single MCP for specific enhancement"
-      Usage_Pattern: "Context7 for optimization, Puppeteer for testing, Fetch for research"
+      Usage_Pattern: "Context7 for optimization, Playwright for testing, Fetch for research"
       
     Medium_MCP:
       Cost: "25-40% token overhead"
       Capabilities: "2-3 MCPs for complex operations"
-      Usage_Pattern: "Context7+Sequential for analysis, Puppeteer+Fetch for validation"
+      Usage_Pattern: "Context7+Sequential for analysis, Playwright+Fetch for validation"
       
     Full_MCP_Stack:
       Cost: "50-80% token overhead"
@@ -146,7 +146,7 @@ Cache_Management:
       Pattern_Caching: "Cache automation patterns longer"
       Adaptive_TTL: "Extend for successful patterns"
       
-    Puppeteer:
+    Playwright:
       Default_TTL: "Session only"
       Reasoning: "UI state changes frequently"
       Exception: "Screenshot results may cache briefly"
@@ -186,9 +186,9 @@ Workflows:
       
   Execution_Enhanced:
     Standard_Execution:
-      MCPs: "Puppeteer for testing"
+      MCPs: "Playwright for testing"
       Use_Case: "Feature implementation with UI validation"
-      Command: "@start feature-name --mcp-puppeteer --test"
+      Command: "@start feature-name --mcp-playwright --test"
       
     Research_Execution:
       MCPs: "Fetch + Sequential"
@@ -196,9 +196,9 @@ Workflows:
       Command: "@start feature-name --mcp-fetch --mcp-sequential --batch"
       
     Enterprise_Execution:
-      MCPs: "Context7 + Sequential + Puppeteer"
+      MCPs: "Context7 + Sequential + Playwright"
       Use_Case: "Mission-critical implementation with full validation"
-      Command: "@start critical-feature --mcp-context7 --mcp-sequential --mcp-puppeteer --validate"
+      Command: "@start critical-feature --mcp-context7 --mcp-sequential --mcp-playwright --validate"
       
   Status_Enhanced:
     Database_Health_Check:

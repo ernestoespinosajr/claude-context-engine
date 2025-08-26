@@ -101,12 +101,26 @@ Based on task analysis, build the optimal command with:
 **MCP Module Selection Logic:**
 - **Complex Analysis Needed**: `--mcp-sequential` (multi-step reasoning, complex problem solving)
 - **Context Management**: `--mcp-context7` (when task needs enhanced context awareness)
-- **Web Interaction**: `--mcp-puppeteer` (web automation, browser testing, scraping)
+- **Web Interaction**: `--mcp-playwright` (web automation, browser testing, scraping)
 - **Research Required**: `--mcp-fetch` (web content analysis, external documentation)
 - **Project Management**: `--mcp-linear` (issue tracking, project coordination)
 - **Payment Integration**: `--mcp-stripe` (payment processing, financial operations)
 - **Database Operations**: `--mcp-supabase` (database analysis, backend insights)
 - **Deployment Tasks**: `--mcp-vercel` (hosting, deployment management)
+
+**Agent Selection Logic:**
+
+@include shared/agent-architecture.yml#Agent_Recommendation_Logic
+
+**Agent Specialization Mapping:**
+- **Frontend Tasks** → `frontend` agent: React, Vue, Angular, UI/UX, responsive design
+- **Backend Tasks** → `backend` agent: APIs, databases, authentication, server architecture
+- **Mobile Tasks** → `mobile` agent: React Native, native features, cross-platform apps
+- **Full-Stack Tasks** → `full-stack` agent: End-to-end web applications, integration
+- **Context Management** → `context-manager` agent: Information architecture, knowledge management
+- **Multi-Agent Coordination** → `multi-agent-coordinator` agent: Complex workflow orchestration
+- **Technical Documentation** → `technical-writer` agent: Documentation creation and management
+- **AI System Implementation** → `ai-engineer` agent: AI architecture and model deployment
 
 **Flag Combination Examples:**
 ```bash
@@ -122,8 +136,8 @@ Based on task analysis, build the optimal command with:
 # API integration (backend-focused, complex logic, needs research)
 @feature "payment-gateway-integration" --persona-backend --mcp-sequential --mcp-stripe --mcp-fetch
 
-# Web automation (puppeteer for web interaction, testing for validation)
-@feature "automated-e2e-testing" --persona-testing --mcp-puppeteer
+# Web automation (playwright for web interaction, testing for validation)
+@feature "automated-e2e-testing" --persona-testing --mcp-playwright
 
 # Deployment feature (DevOps-focused, deployment integration)
 @feature "ci-cd-pipeline-setup" --persona-deployment --mcp-vercel --mcp-linear
@@ -216,13 +230,38 @@ The response MUST follow this structure:
 
 **Reference Materials**: [If any existing similar tasks found: `workflow/completed/done-[similar-task].md`]
 
+## 🤖 Agent Recommendation
+
+After completing the planning phase above, this task would benefit from specialized agent execution:
+
+**Recommended Agent**: `[frontend|backend|mobile|full-stack|context-manager|multi-agent-coordinator|technical-writer|ai-engineer]`
+
+**Why this agent?**
+- **Domain Expertise**: [Specific specializations needed from agent]
+- **Autonomous Benefits**: [Complex workflows agent can handle independently]
+- **Context Management**: [How agent prevents context pollution during implementation]
+
+**Agent Dispatch Command**:
+```bash
+# After planning is complete, dispatch to specialized agent:
+dispatch [agent-name] --context="[task-name]" [--persona-flags] [--mcp-flags]
+```
+
+**Agent Integration Benefits**:
+- ✅ **Deep Specialization**: Agent has 1000+ lines of domain-specific expertise
+- ✅ **Autonomous Execution**: Handles multi-step implementation without constant oversight
+- ✅ **Clean Context**: Separate execution context prevents planning conversation pollution
+- ✅ **Consistent Quality**: Agent enforces team standards and best practices automatically
+
 ## 🎯 Quick Recommendation
-**Command**: `@[issue|quick-feature|feature] "[task-name]" [--flags]`
-**Reasoning**: [Brief explanation]
+**Planning**: `@[issue|quick-feature|feature] "[task-name]" [--flags]`
+**Execution**: `dispatch [agent-name] --context="[task-name]"`
+**Reasoning**: [Brief explanation of hybrid approach benefits]
 
 ## 🔍 Analysis Summary
 - **Complexity**: [1-10]
 - **Category**: [Bug Fix | Quick Feature | Complex Feature]
+- **Domain**: [Frontend | Backend | Mobile | Full-Stack | Context Management | Multi-Agent Coordination | Technical Writing | AI Engineering]
 - **Estimated Time**: [Time estimate]
 - **Risk Level**: [Low | Medium | High]
 
@@ -230,18 +269,18 @@ The response MUST follow this structure:
 [Results from previous work search - what exists, what can be reused]
 
 ## 🧠 Recommended Approach
-[Detailed recommendation with persona suggestions]
+[Detailed recommendation with persona suggestions and agent specialization]
 
 ## 🔀 Alternative Options
-[2-3 alternative approaches with trade-offs]
+[2-3 alternative approaches with trade-offs, including agent vs command-only execution]
 
 ## ⚠️ Critical Considerations
-[Important factors to consider before starting]
+[Important factors to consider before starting, including agent vs command decision factors]
 
 ## 🚀 Next Steps
-1. [Specific next steps if recommendation is accepted]
-2. [What to prepare before starting]
-3. [Dependencies to verify]
+1. **Planning Phase**: [Execute recommended command for analysis and planning]
+2. **Agent Dispatch**: [When to dispatch recommended agent for execution]
+3. **Dependencies**: [What to prepare before starting]
 ```
 
 ## Smart Features
@@ -312,7 +351,7 @@ The MOST IMPORTANT part of every @ask response is providing a ready-to-execute c
 @quick-feature "add-loading-spinner-forms" --persona-frontend
 
 # Complex system integration with research and testing
-@feature "real-time-notifications-websocket" --persona-backend --persona-frontend --mcp-sequential --mcp-fetch --mcp-puppeteer
+@feature "real-time-notifications-websocket" --persona-backend --persona-frontend --mcp-sequential --mcp-fetch --mcp-playwright
 
 # Payment integration with Stripe and research
 @feature "subscription-billing-system" --persona-backend --mcp-stripe --mcp-fetch --mcp-sequential

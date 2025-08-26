@@ -7,11 +7,11 @@
 @include shared/universal-constants.yml#Universal_Legend
 
 ## Command Execution
-Execute: immediate. --plan→show plan first
+Execute: plan-only. Create plan in workflow/planned/ and update logbook
 Legend: Generated based on symbols used in command
-Purpose: "[Fix][Issue] in $ARGUMENTS"
+Purpose: "[Plan][Issue] for $ARGUMENTS"
 
-Streamlined approach for bug fixes and small tasks that don't require full context engineering architecture.
+Creates detailed issue plan and registers in logbook. Use @start to execute the planned issue.
 
 @include shared/flag-inheritance.yml#Universal_Always
 @include shared/critical-thinking.yml#Critical_Thinking_Framework
@@ -212,6 +212,33 @@ Every @issue response MUST include:
 
 ## Solution Strategy
 [How we're going to fix it]
+
+## 🤖 Agent Execution Decision
+
+**Execution Approach**: `[command|agent]`
+
+**For Command Execution** (Simple fixes):
+- ✅ **Direct Implementation**: Use @start for immediate, straightforward fixes
+- ✅ **Single File Changes**: Issue affects only 1-2 files with clear fix
+- ✅ **No Domain Expertise**: Fix doesn't require specialized knowledge
+- ✅ **Quick Validation**: Can be tested and validated quickly
+
+**For Agent Execution** (Complex issues):
+- 🤖 **Recommended Agent**: `[frontend|backend|mobile|full-stack]`
+- 🎯 **Why Agent?**: [Specific complexity requiring specialized expertise]
+- 🔄 **Agent Benefits**: [Multi-step analysis, domain knowledge, autonomous debugging]
+
+**Agent Dispatch Command** (if recommended):
+```bash
+# After this planning is approved, execute with specialized agent:
+dispatch [recommended-agent] --context="issue-[name]" [--persona-flags]
+```
+
+**Decision Factors**:
+- **Issue Complexity**: Simple fix vs requires investigation/analysis
+- **Domain Knowledge**: Generic fix vs requires specialized expertise  
+- **Multi-Step Process**: Single change vs complex debugging workflow
+- **Testing Requirements**: Simple validation vs comprehensive testing
 
 ## Implementation Plan
 [Step-by-step fix approach]

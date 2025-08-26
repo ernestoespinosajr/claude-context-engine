@@ -7,11 +7,11 @@
 @include shared/universal-constants.yml#Universal_Legend
 
 ## Command Execution
-Execute: immediate. --plan→show plan first
+Execute: plan-only. Create plan in workflow/planned/ and update logbook
 Legend: Generated based on symbols used in command
-Purpose: "[Build][Feature] in $ARGUMENTS"
+Purpose: "[Plan][Feature] for $ARGUMENTS"
 
-Balanced approach for features that need more planning than a simple issue but don't require the full 11-layer context architecture.
+Creates detailed feature plan with 6-layer context analysis and registers in logbook. Use @start to execute the planned feature.
 
 @include shared/flag-inheritance.yml#Universal_Always
 @include shared/critical-thinking.yml#Critical_Thinking_Framework
@@ -278,6 +278,33 @@ Every @quick-feature response MUST include:
 
 ## Technical Approach
 [High-level implementation strategy]
+
+## 🤖 Agent Execution Recommendation
+
+**Recommended Agent**: `[frontend|backend|mobile|full-stack|context-manager|multi-agent-coordinator|technical-writer|ai-engineer]`
+
+**Agent Specialization Benefits**:
+- **Domain Expertise**: [Specific domain knowledge the agent brings to this feature]
+- **Pattern Recognition**: [Existing patterns and best practices the agent can apply]
+- **Autonomous Development**: [Multi-component implementation the agent can handle independently]
+- **Quality Integration**: [Built-in quality checks and validations the agent provides]
+
+**Agent Dispatch Strategy**:
+```bash
+# After this planning is approved, execute with specialized agent:
+dispatch [recommended-agent] --context="[feature-name]" [--persona-flags] [--mcp-flags]
+```
+
+**Why Agent for Quick Features?**
+- ✅ **Complexity Management**: Feature involves multiple components or systems
+- ✅ **Domain Specialization**: Requires specific frontend/backend/mobile expertise
+- ✅ **Implementation Efficiency**: Agent can work autonomously through multi-step process
+- ✅ **Context Isolation**: Keeps implementation details separate from planning conversation
+- ✅ **Consistent Quality**: Agent applies established patterns and best practices
+
+**Agent vs Command Decision**:
+- **Use Agent**: Multi-component features, UI/UX work, integration requirements
+- **Use @start**: Single-component changes, configuration updates, simple additions
 
 ## Implementation Phases
 [Logical breakdown of development phases]

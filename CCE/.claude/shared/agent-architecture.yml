@@ -1,0 +1,249 @@
+# Agent Architecture System
+# Context Engineering System v3.0
+# Hybrid Command-Agent approach for autonomous specialized workflows
+
+Agent_System_Overview:
+  Philosophy:
+    Commands: "Interactive planning and analysis phase"
+    Agents: "Autonomous execution with deep specialization"
+    Hybrid_Approach: "Commands delegate to agents for complex implementation"
+    
+  Workflow_Pattern:
+    Planning_Phase: "Use @ask → @feature/@issue/@quick-feature for analysis"
+    Recommendation_Phase: "Commands recommend appropriate specialized agent"
+    Execution_Phase: "Dispatch agent with planning context and persona specializations"
+    
+  Context_Management:
+    Command_Context: "Main conversation for high-level decisions and planning"
+    Agent_Context: "Separate context window for autonomous implementation"
+    Handoff_Context: "Clean transfer of planning results to agent execution"
+
+Specialized_Agents:
+  Core_Development:
+    frontend:
+      Symbol: "🎨"
+      Purpose: "Web frontend development, UI/UX implementation"
+      Specializations:
+        - "React, Next.js, Vue, Angular frameworks"
+        - "Component architecture and state management"
+        - "CSS frameworks, Tailwind, styled-components"
+        - "Frontend build tools and optimization"
+        - "Accessibility and responsive design"
+        - "Browser APIs and PWA features"
+      Context_Focus: "UI patterns, component libraries, user experience"
+      Token_Optimization: "Frontend-specific context, component reuse patterns"
+      MCP_Integration: "Playwright for UI testing and validation"
+      
+    backend:
+      Symbol: "⚙️"
+      Purpose: "Server-side logic, APIs, database architecture"
+      Specializations:
+        - "REST API and GraphQL design"
+        - "Database design, optimization, migrations"
+        - "Authentication, authorization, security"
+        - "Caching strategies and performance"
+        - "Message queues and event-driven systems"
+        - "Microservices and distributed systems"
+      Context_Focus: "API design, database patterns, server architecture"
+      Token_Optimization: "Backend context, service patterns, data flow"
+      MCP_Integration: "Supabase for database operations, Stripe for payments"
+      
+    mobile:
+      Symbol: "📱"
+      Purpose: "Mobile app development, cross-platform solutions"
+      Specializations:
+        - "React Native cross-platform development"
+        - "iOS and Android native features integration"
+        - "Mobile-specific UI/UX patterns and navigation"
+        - "Device APIs: camera, GPS, biometrics, push notifications"
+        - "Mobile performance optimization and battery efficiency"
+        - "App store requirements and deployment"
+        - "Offline-first architecture and sync patterns"
+      Context_Focus: "Mobile patterns, native features, cross-platform solutions"
+      Token_Optimization: "Mobile-specific context, platform considerations"
+      MCP_Integration: "Playwright for mobile web testing and emulation"
+      
+    full_stack:
+      Symbol: "🌐"
+      Purpose: "End-to-end web application development"
+      Specializations:
+        - "Full-stack architecture and integration patterns"
+        - "Frontend-backend communication and state sync"
+        - "Database-to-UI data flow optimization"
+        - "Authentication and user management systems"
+        - "Deployment pipelines and DevOps integration"
+        - "Performance optimization across the stack"
+      Context_Focus: "Integration patterns, data flow, full-system architecture"
+      Token_Optimization: "Cross-stack context, integration focus"
+      MCP_Integration: "Multiple MCPs for comprehensive full-stack testing"
+      
+  Meta_Orchestration:
+    context_manager:
+      Symbol: "🧠"
+      Purpose: "Information architecture and knowledge management"
+      Specializations:
+        - "Context storage, retrieval, and synchronization"
+        - "Multi-agent state management and coordination"
+        - "Knowledge organization and pattern recognition"
+        - "Information architecture and search optimization"
+        - "Data lifecycle management and quality assurance"
+      Context_Focus: "Information architecture, multi-agent synchronization"
+      Token_Optimization: "Context management efficiency, knowledge retrieval"
+      MCP_Integration: "Context7, Sequential for advanced context management"
+    
+    multi_agent_coordinator:
+      Symbol: "🎯"
+      Purpose: "Multi-agent workflow orchestration and coordination"
+      Specializations:
+        - "Complex workflow orchestration and task distribution"
+        - "Inter-agent communication and dependency management"
+        - "Distributed system coordination and resource optimization"
+        - "Performance monitoring and bottleneck resolution"
+        - "Fault tolerance and recovery strategies"
+      Context_Focus: "Multi-agent coordination, workflow optimization"
+      Token_Optimization: "Coordination efficiency, resource management"
+      MCP_Integration: "Sequential, Context7 for complex coordination workflows"
+
+  Business_Product:
+    technical_writer:
+      Symbol: "📝"
+      Purpose: "Technical documentation and knowledge creation"
+      Specializations:
+        - "API documentation and developer resources"
+        - "User guides and technical tutorials"
+        - "Information architecture and content strategy"
+        - "Documentation automation and maintenance"
+        - "Content quality assurance and user experience"
+      Context_Focus: "Technical communication, documentation architecture"
+      Token_Optimization: "Content creation efficiency, information clarity"
+      MCP_Integration: "Fetch, Context7 for comprehensive documentation research"
+
+  Data_AI:
+    ai_engineer:
+      Symbol: "🤖"
+      Purpose: "AI system architecture and implementation"
+      Specializations:
+        - "AI system design and model implementation"
+        - "Production deployment and performance optimization"
+        - "Ethical AI and governance frameworks"
+        - "MLOps integration and continuous monitoring"
+        - "Multi-modal AI systems and advanced architectures"
+      Context_Focus: "AI system architecture, model optimization, ethical AI"
+      Token_Optimization: "AI workflow efficiency, model development optimization"
+      MCP_Integration: "Sequential, Context7, Fetch for AI research and development"
+
+Agent_Recommendation_Logic:
+  Complexity_Analysis:
+    Frontend_Indicators:
+      - "UI, UX, component, interface, design, styling, responsive"
+      - "React, Vue, Angular, CSS, HTML, browser, client-side"
+      - "User experience, accessibility, animation, interaction"
+      
+    Backend_Indicators:
+      - "API, server, database, authentication, authorization"
+      - "REST, GraphQL, SQL, NoSQL, microservices, caching"
+      - "Security, performance, scalability, infrastructure"
+      
+    Mobile_Indicators:
+      - "mobile, React Native, iOS, Android, cross-platform"
+      - "native features, camera, GPS, push notifications, biometrics"
+      - "app store, mobile performance, offline, sync"
+      
+    Full_Stack_Indicators:
+      - "end-to-end, integration, frontend + backend, data flow"
+      - "authentication system, user management, deployment"
+      - "real-time features, WebSockets, full application"
+      
+    Meta_Orchestration_Indicators:
+      - "multi-agent coordination, complex workflows, agent management"
+      - "context management, knowledge sharing, information architecture"
+      - "documentation creation, technical writing, content strategy"
+      - "workflow orchestration, task distribution, system coordination"
+    
+    AI_System_Indicators:
+      - "AI implementation, machine learning, model deployment"
+      - "AI system architecture, model optimization, ethical AI"
+      - "data science, AI integration, intelligent features"
+      - "natural language processing, computer vision, AI automation"
+
+Agent_Dispatch_System:
+  Handoff_Protocol:
+    Context_Transfer:
+      - "Planning results from command phase"
+      - "Complexity analysis and requirements"
+      - "Persona specializations identified"
+      - "MCP requirements and configurations"
+      - "Architecture decisions and constraints"
+      
+    Agent_Initialization:
+      - "Load specialized agent configuration"
+      - "Apply persona specializations automatically"
+      - "Configure appropriate MCP modules"
+      - "Set up agent-specific context optimization"
+      
+    Execution_Autonomy:
+      - "Agents work independently in separate context"
+      - "Multi-step implementation without constant human oversight"
+      - "Progress reporting and milestone updates"
+      - "Error handling and recovery within agent context"
+
+Integration_Patterns:
+  Command_to_Agent_Flow:
+    Step_1: "User uses @ask for task analysis"
+    Step_2: "System analyzes complexity and requirements"
+    Step_3: "@feature/@issue/@quick-feature creates detailed planning"
+    Step_4: "Command recommends appropriate specialized agent"
+    Step_5: "User dispatches agent with planning context"
+    Step_6: "Agent executes autonomously with specialized knowledge"
+    
+  Agent_Combinations:
+    Sequential_Agents:
+      - "backend agent → frontend agent for API-first development"
+      - "mobile agent → backend agent for mobile-specific APIs"
+      
+    Collaborative_Agents:
+      - "frontend + backend agents for simultaneous development"
+      - "mobile + mobile_full_stack for comprehensive mobile solutions"
+      
+    Specialized_Workflows:
+      - "Single agent for focused domain work"
+      - "Multi-agent orchestration for complex systems"
+
+Quality_Assurance:
+  Agent_Validation:
+    Specialization_Depth: "Agents maintain deep domain expertise"
+    Consistency_Enforcement: "Agents follow established team patterns"
+    Best_Practices: "Agents embed institutional knowledge"
+    Error_Prevention: "Agents validate work before completion"
+    
+  Context_Management:
+    Clean_Separation: "Planning context separate from execution context"
+    Focused_Execution: "Agents avoid context pollution"
+    Efficient_Handoff: "Minimal token overhead in context transfer"
+    Progress_Tracking: "Clear progress reporting without context bloat"
+
+Performance_Optimization:
+  Token_Efficiency:
+    Specialized_Context: "Agents load only relevant domain knowledge"
+    Focused_Instructions: "Domain-specific instruction sets"
+    Reduced_Overhead: "No general-purpose context in specialized agents"
+    Optimized_Handoff: "Efficient context transfer protocols"
+    
+  Execution_Speed:
+    Autonomous_Operation: "Reduced human intervention cycles"
+    Domain_Expertise: "Faster decision-making with specialized knowledge"
+    Pattern_Recognition: "Agents recognize and apply established patterns"
+    Streamlined_Workflows: "Optimized for specific domain requirements"
+
+Scaling_Strategy:
+  Agent_Extensibility:
+    New_Domains: "Easy addition of specialized agents (AI/ML, DevOps, etc.)"
+    Team_Customization: "Agents can be customized for team-specific patterns"
+    Cross_Project: "Agents work across different projects with consistent quality"
+    Knowledge_Evolution: "Agent knowledge base can be updated and improved"
+    
+  Workflow_Maturity:
+    Learning_Integration: "System learns optimal agent recommendations over time"
+    Pattern_Recognition: "Improved task-to-agent matching based on success patterns"
+    Efficiency_Gains: "Reduced planning overhead as agent capabilities mature"
+    Team_Adoption: "Gradual adoption from command-heavy to agent-delegated workflows"

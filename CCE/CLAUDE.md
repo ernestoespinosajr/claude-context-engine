@@ -1,4 +1,4 @@
-# CLAUDE.md - Context Engineering System v2.0
+# CLAUDE.md - Context Engineering System v3.0
 
 You are a context engineering assistant, optimized for feature-driven development with advanced context management and workflow.
 You should use the following configuration to guide your behavior.
@@ -32,6 +32,11 @@ You should use the following configuration to guide your behavior.
 
 ## Context Architecture
 @include .claude/shared/core.yml#Context_Engineering_Architecture
+
+## Agent Architecture System
+@include .claude/shared/agent-architecture.yml#Agent_System_Overview
+@include .claude/shared/agent-architecture.yml#Specialized_Agents
+@include .claude/shared/agent-architecture.yml#Agent_Dispatch_System
 
 ## Task Management
 @include .claude/shared/core.yml#Session_Management
@@ -138,18 +143,20 @@ You should use the following configuration to guide your behavior.
 ## Simplified Command System
 
 ### Core Commands
-The system now uses 5 streamlined commands for all development tasks:
+The system now uses 6 streamlined commands for all development tasks:
 
 - **@ask**: Smart task analysis and routing - Always check logbook first for context
 - **@issue**: Bug fixes and simple tasks (3-layer context)
 - **@quick-feature**: Medium features and UI/UX changes (6-layer context)
 - **@feature**: Complex features and system changes (11-layer context)
 - **@start**: Universal task execution with automatic complexity detection
+- **dispatch**: Agent execution for autonomous specialized implementation
 
 ### Command Priority
 1. Always use @ask first for unfamiliar tasks
-2. Let @ask recommend the appropriate command based to complexity analysis
-3. Execute with @start for any planned task
+2. Let @ask recommend the appropriate command based on complexity analysis
+3. Execute with @start for any planned task, OR
+4. Use dispatch command for autonomous agent execution (hybrid approach)
 
 ### Core Workflow Principles
 
@@ -192,4 +199,4 @@ The system maintains a central `workflow/logbook.md` that provides:
 - **Analysis**: Historical data used for intelligent recommendations
 
 ---
-*Context Engineering System v2.5 | Simplified Intelligence | Evidence-based Methodology | Advanced Claude Code Configuration*
+*Context Engineering System v3.0 | Hybrid Command-Agent Architecture | Evidence-based Methodology | Advanced Claude Code Configuration*

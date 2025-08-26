@@ -63,7 +63,7 @@ MCP_Token_Economics:
       Context7: "3600 seconds (1 hour)"
       Sequential: "session duration"
       Magic: "1800 seconds (30 minutes)"
-      Puppeteer: "session only (no persistence)"
+      Playwright: "session only (no persistence)"
       
   Cache_Hit_Optimization:
     Target_Hit_Rate: "85% or higher"

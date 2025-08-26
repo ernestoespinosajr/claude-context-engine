@@ -291,7 +291,7 @@ MCP_Persona_Integration:
     Context7_Persona: "Advanced persona context management"
     Sequential_Persona: "Persona-guided structured thinking"
     Magic_Persona: "Automated persona selection & optimization"
-    Puppeteer_Persona: "UI testing with frontend persona"
+    Playwright_Persona: "UI testing with frontend persona"
     
   Token_Optimization:
     Persona_Caching: "Cache persona-specific contexts"

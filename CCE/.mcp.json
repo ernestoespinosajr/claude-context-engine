@@ -5,14 +5,10 @@
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "description": "Sequential thinking assistance for complex problem solving"
     },
-    "puppeteer": {
-      "command": "npx", 
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
-      "description": "Browser automation and web interaction capabilities"
-    },
     "fetch": {
       "command": "uvx",
-      "args": ["mcp-server-fetch"]
+      "args": ["mcp-server-fetch"],
+      "description": "Web scraping and data fetching from any URL"
     },
     "context7": {
       "command": "npx",
@@ -21,11 +17,13 @@
     },
     "linear": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.linear.app/sse"]
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/sse"],
+      "description": "Linear project management system integration"
     },
     "mcpServers": {
     "stripe": {
-      "url": "https://mcp.stripe.com"
+      "url": "https://mcp.stripe.com",
+      "description": "Secure payment processing and billing integration via Stripe"
     }
   },
   "supabase": {
@@ -36,12 +34,30 @@
       "--read-only",
       "--project-ref=boiuaecheodzuodhrasa_test"
     ],
+    "description": "Managed Postgres database access and real-time data sync via Supabase",
     "env": {
       "SUPABASE_ACCESS_TOKEN": "sbp_test_f9b882a053f523227062dc01ddb33e4e123045"
     }
   },
   "vercel": {
       "url": "https://mcp.vercel.com"
-    }
+    },
+    "playwright": {
+        "command": "npx",
+        "args": [
+          "@playwright/mcp@latest",
+          "--browser=chrome",
+          "--caps=vision,pdf,tabs",
+          "--viewport-size=1920,1080",
+          "--save-session",
+          "--save-trace",
+          "--output-dir=./playwright-output",
+          "--user-data-dir=./playwright-profile",
+          "--ignore-https-errors",
+          "--image-responses=allow",
+          "--proxy-bypass=localhost,127.0.0.1,.local"
+        ],
+        "description": "Browser automation and web interaction capabilities"
+      }
   }
 }

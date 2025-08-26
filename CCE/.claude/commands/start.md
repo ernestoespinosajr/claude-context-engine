@@ -299,13 +299,16 @@ After completing EACH implementation phase, you MUST:
 4. **Update task file** with ✅ completion marker and 1-2 line summary
 5. **Update progress percentage** in task file
 
-### Step 3: Final Documentation & Completion
-Upon reaching 100% completion, you MUST:
+### Step 3: MANDATORY Final Documentation & Completion
+Upon reaching 100% completion, you MUST complete ALL of these steps:
 
-1. **Update Task Log** in workflow/logbook.md with final status:
-   - "complete without issues" (fully successful)
-   - "complete with issues to fix" (works but has problems)  
-   - "pending" (incomplete or paused)
+#### 3.1: Update Task Status in Logbook
+IMMEDIATELY update the Task Log section in workflow/logbook.md:
+- Change status from "in-progress" to completion status:
+  - "complete without issues" (fully successful)
+  - "complete with issues to fix" (works but has problems)  
+  - "pending" (incomplete or paused)
+- Update file path to new completed location
 
 **Final Status Examples**:
 ```markdown
@@ -313,9 +316,46 @@ Upon reaching 100% completion, you MUST:
 `@issue-memory-leak` | complete with issues to fix | /workflow/completed/done-issue-memory-leak.md | Fix image loading memory leak - needs optimization
 `@dark-mode-toggle` | pending | /workflow/in-progress/dark-mode-toggle.md | Add theme switching to settings - paused for design review
 ```
-2. **Move completed file** from workflow/in-progress/ to workflow/completed/
-3. **Rename file** with "done-" prefix for successful completion
-4. **Update logbook.md** statistics and recent activities
+
+#### 3.2: Move and Rename Task File
+1. **Move file** from workflow/in-progress/ to workflow/completed/
+2. **Rename file** with appropriate prefix:
+   - Success: `done-[task-name].md`
+   - Failure: `fail-[task-name].md`
+
+#### 3.3: Update Logbook Statistics
+Update the Quick Overview section in workflow/logbook.md:
+- Decrement "In Progress" count
+- Increment "Completed" count (success or failure)
+- Update "Last Activity" timestamp
+- Recalculate success rate percentage
+
+#### 3.4: Document Completion Details
+Add completion summary to the task file before moving:
+```markdown
+## COMPLETION SUMMARY
+- **Status**: [Complete/Failed/Paused]
+- **Completion Date**: [Date]
+- **Issues Encountered**: [Any problems faced]
+- **Solutions Applied**: [How problems were solved]
+- **Final Notes**: [Key insights or remaining work]
+- **Quality Gates Met**: [Which quality criteria were satisfied]
+```
+
+## ⚠️ CRITICAL ENFORCEMENT RULES
+
+### NON-NEGOTIABLE COMPLETION REQUIREMENTS
+The @start command WILL NOT be considered successfully executed unless ALL of the following are completed:
+
+1. **✅ Task Log Updated**: Status changed to completion status with correct file path
+2. **✅ File Moved**: Task file moved from in-progress/ to completed/ with proper naming
+3. **✅ Statistics Updated**: Logbook statistics decremented/incremented correctly
+4. **✅ Completion Summary Added**: Task file contains completion documentation
+5. **✅ User Validation**: Each phase validated by user before proceeding
+
+**FAILURE TO COMPLETE THESE STEPS = INCOMPLETE EXECUTION**
+
+Any @start execution that skips these mandatory steps must be considered failed and should be restarted with proper completion workflow.
 
 ## Output Requirements
 
@@ -354,6 +394,33 @@ At the beginning of EVERY @start response, include:
 4. Active personas and their roles
 5. Clear indication that execution is beginning
 6. Any critical considerations or risks identified
+
+## MANDATORY COMPLETION CHECKLIST
+
+At the END of EVERY @start task execution, you MUST provide this completion checklist:
+
+```markdown
+# 🎯 TASK COMPLETION CHECKLIST
+
+## Final Status: [COMPLETED/FAILED/PAUSED]
+
+### Required Actions Completed:
+- [ ] Task status updated in workflow/logbook.md Task Log
+- [ ] File moved from in-progress/ to completed/
+- [ ] File renamed with appropriate prefix (done-/fail-)
+- [ ] Logbook statistics updated (counts, percentages, timestamps)
+- [ ] Completion summary added to task file
+- [ ] All quality gates validated
+
+### Completion Details:
+- **Final Status**: [complete without issues | complete with issues to fix | pending]
+- **Issues Resolved**: [What problems were solved]
+- **Remaining Work**: [Any follow-up tasks needed]
+- **Lessons Learned**: [Key insights for future tasks]
+
+---
+**✅ All mandatory completion steps have been executed as required by the Context Engineering System workflow.**
+```
 
 @include shared/research-patterns.yml#Mandatory_Research_Flows
 
