@@ -1,5 +1,5 @@
 #!/bin/bash
-# Context Engineering System v2.5 - Simple Installation Script
+# Context Engineering System v3.0 - Hybrid Command-Agent Installation Script
 # Copies the CCE structure to any project directory
 
 set -e  # Exit on any error
@@ -23,7 +23,7 @@ print_error() {
 }
 
 show_help() {
-    echo "Context Engineering System v2.5 - Installation"
+    echo "Context Engineering System v3.0 - Installation"
     echo ""
     echo "Usage: $0 PROJECT_DIRECTORY"
     echo ""
@@ -52,8 +52,8 @@ fi
 
 echo -e "${BLUE}"
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║        Context Engineering System v2.5 - Installation       ║"
-echo "║           Simple, Intelligent Development Workflow           ║"
+echo "║        Context Engineering System v3.0 - Installation       ║"
+echo "║        Hybrid Command-Agent Development Architecture         ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
@@ -115,6 +115,7 @@ echo "  @issue       - Handle bugs and simple tasks"
 echo "  @quick-feature - Medium features and UI changes"
 echo "  @feature     - Complex features and system changes"
 echo "  @start       - Execute any planned task"
+echo "  dispatch     - Launch specialized agents for autonomous implementation"
 echo ""
 echo "📖 Documentation: Check workflow/README.md and logbook.md for details"
 echo ""
