@@ -140,6 +140,64 @@ You should use the following configuration to guide your behavior.
 ### Operations Standards
 @include .claude/shared/rules.yml#Operations_Standards
 
+## Universal Context Recovery System
+
+### MANDATORY: Intelligent Context Discovery Hierarchy
+EVERY interaction with Claude Code MUST follow this intelligent discovery sequence:
+
+1. **Logbook Intelligence Check**: Always read `workflow/logbook.md` first (single file, fast scan)
+2. **Pattern Matching**: Match user's question against Task Log entries and project context
+3. **Relationship Analysis**: Check `workflow/dependencies.md` for task interconnections if patterns suggest relationships
+4. **Targeted Context Retrieval**: Read specific task files ONLY when relevant matches found in logbook
+5. **Context-Aware Response**: Provide intelligent response with project context + offer task documentation updates
+
+### Intelligent Context Discovery Flow
+```bash
+# STEP 1: User question → logbook.md (project intelligence hub)
+# STEP 2: Pattern match against Task Log, Components Registry, Project Structure  
+# STEP 3: If relationships suspected → dependencies.md (task interconnections)
+# STEP 4: If specific match found → relevant task file (detailed context)
+# STEP 5: Context-aware response + documentation update prompts
+```
+
+### Intelligent Pattern Matching System
+**Pattern Matching Against Logbook Elements:**
+
+#### Task Log Pattern Matching:
+- **Task Names**: Match user keywords against `tsk###-[task-name]` entries
+- **Technology Keywords**: Match against task descriptions and achievement goals  
+- **Status Keywords**: "in progress", "completed", "failed" → match against task status
+- **Component Keywords**: Match against Components Registry entries
+
+#### Project Structure Pattern Matching:
+- **File/Directory Names**: Match user questions against project structure
+- **Component References**: Link questions to existing components to prevent duplication
+- **Service References**: Connect questions to existing services and APIs
+
+#### Dependencies Pattern Matching:  
+- **Library/Tool Names**: Match against discovered dependencies
+- **Integration Challenges**: Connect problems to known integration patterns
+- **Performance Issues**: Link to performance-critical dependencies
+
+### Context Recovery Patterns
+```bash
+# User mentions problem/fix → Logbook Task Log scan → Pattern match keywords → Find related task → Offer documentation
+# User asks technical question → Logbook pattern matching → Dependencies pattern check → Resume specific context  
+# User reports success/completion → Logbook task lookup → Pattern match completion indicators → Update status
+```
+
+### Pattern Matching Examples:
+```bash
+# User: "How do I fix the login issue?" 
+# Match: "login" → Task Log → "tsk001-user-authentication" → Read task file → Context-aware response
+
+# User: "The payment API is throwing errors"
+# Match: "payment" → Dependencies → "Payment integration challenges" → Related tasks → Full context
+
+# User: "I need to optimize this database query"  
+# Match: "database" + "optimize" → Task Log → "tsk005-database-performance" → Resume context
+```
+
 ## Simplified Command System
 
 ### Core Commands

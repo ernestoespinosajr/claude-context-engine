@@ -15,14 +15,14 @@ Purpose: "[Execute][Task] with [Agent] including full lifecycle management"
 
 ### Basic Dispatch Syntax
 ```bash
-dispatch [agent-name] --context="[task-name]" [--persona-flags] [--mcp-flags]
+dispatch [agent-name] --context="tsk###-[task-name]" [--persona-flags] [--mcp-flags]
 ```
 
 ### Universal Task Execution
 ```bash
 # Execute any planned task with appropriate agent
-dispatch [agent-name] "[task-name]"              # Execute with specific agent
-dispatch auto "[task-name]"                      # Auto-select best agent for task
+dispatch [agent-name] "tsk###-[task-name]"       # Execute with specific agent (references both context ct### and task tsk###)
+dispatch auto "tsk###-[task-name]"               # Auto-select best agent for task
 ```
 
 ### Available Agents
@@ -46,7 +46,7 @@ dispatch auto "[task-name]"                      # Auto-select best agent for ta
 ### Example Dispatch Commands
 ```bash
 # Frontend feature implementation
-dispatch frontend --context="dark-mode-toggle" --persona-frontend --mcp-playwright
+dispatch frontend --context="tsk001-dark-mode-toggle" --persona-frontend --mcp-playwright
 
 # Backend API development  
 dispatch backend --context="user-authentication-api" --persona-security --mcp-supabase
@@ -146,13 +146,115 @@ dispatch multi-agent-coordinator --context="complex-workflow" --mcp-sequential -
 
 ## MANDATORY PRE-EXECUTION WORKFLOW
 
-### Step 1: Pre-Execution Validation
+### Step 0: Intelligent Context Discovery & Task Detection
+FIRST, ALWAYS follow intelligent context discovery hierarchy:
+
+1. **Logbook Intelligence Scan**: Read `workflow/logbook.md` first (project intelligence hub)
+2. **Pattern Matching**: Match user context against Task Log entries, Components Registry, Project Structure
+3. **Relationship Analysis**: Check `workflow/dependencies.md` for task interconnections if patterns suggest relationships  
+4. **Targeted Context Retrieval**: Read specific task files ONLY when relevant matches found in logbook
+5. **Smart Context Recovery**: If patterns suggest user is working on known task, offer to resume with full context
+6. **Issue Documentation**: If user mentions fixes/solutions, prompt to document in relevant task found via logbook
+
+**Intelligent Context Discovery Examples**:
+```bash
+# User says: "I fixed the authentication bug"
+# STEP 1: Read logbook.md → Find "tsk001-user-authentication | in-progress"
+# STEP 2: Read specific task file → Get full context
+# System response: "I found tsk001-user-authentication in logbook as in-progress. Should I document this fix in the execution log?"
+
+# User asks: "How do I handle this database error?"  
+# STEP 1: Read logbook.md → Pattern match "database" → Find related tasks
+# STEP 2: Check dependencies.md → See database dependencies
+# STEP 3: Read relevant task file → Get specific context
+# System response: "I found tsk003-database-optimization in your logbook with database dependencies. Is this related to that task?"
+```
+
+**Intelligent Context Prompts**:
+- "I found [task-name] in your project logbook. Should I update the execution log with this fix?"
+- "Your logbook shows [related-tasks] involving similar technology. Want me to document this solution?"
+- "I see dependencies between [task-A] and [task-B] in your project. Should I update both task files?"
+
+### Step 1: Pre-Execution Validation & Context Setup
 BEFORE dispatching ANY agent, you MUST:
 
 1. **Read workflow/logbook.md** - Check Task Log, project structure, and existing components
-2. **Locate task file** in workflow/planned/ directory
-3. **Move task file** from workflow/planned/ to workflow/in-progress/
-4. **Update logbook.md** Task Log entry status from "pending" to "in-progress"
+2. **Locate task file** in workflow/01-planned/ directory
+3. **Move task file** from workflow/01-planned/ to workflow/02-in-progress/
+4. **Enhance task file** with issue tracking and context persistence sections
+5. **Update logbook.md** Task Log entry status from "pending" to "in-progress"
+
+### Step 1.5: Context Persistence Setup
+When moving task to in-progress, AUTOMATICALLY ADD these sections:
+
+```markdown
+## 🔧 Execution Log & Issue Tracking
+*This section auto-updates during task execution to prevent context loss*
+
+### Problems Encountered & Fixes Applied
+*Document ALL issues found during execution - automatically referenced by system*
+
+| Issue | Root Cause | Solution Applied | Time Invested | Lessons Learned |
+|-------|------------|------------------|---------------|-----------------|
+| [Auto-populated during execution] | [Analysis] | [Fix description] | [Time] | [Insights] |
+
+### Discovered Dependencies
+*Auto-discovered during execution - updates dependencies.md*
+- [New dependencies found during implementation]
+- [Unexpected integrations needed]
+- [Tools/libraries discovered]
+
+### Context Persistence Checkpoints
+*Maintain context across sessions and breaks*
+- **Current Phase**: [Implementation/Testing/Debugging/Completion]
+- **Last Action**: [What was last worked on]
+- **Next Steps**: [What should be done next]
+- **Blockers**: [Current obstacles or questions]
+- **Key Decisions**: [Important decisions made during execution]
+
+### Testing & Validation Issues
+*Track testing problems and solutions*
+- **Test Results**: [Pass/Fail status with details]
+- **Edge Cases Found**: [Unexpected scenarios discovered]
+- **Performance Issues**: [Speed/memory/resource problems]
+- **User Experience Issues**: [UX problems discovered during testing]
+```
+
+### Step 2: Mandatory Issue Documentation During Execution
+DURING task execution, agents MUST:
+
+1. **Real-Time Problem Logging**: Document EVERY issue encountered immediately
+2. **Solution Documentation**: Record ALL fixes and workarounds applied  
+3. **Dependency Discovery**: Log new dependencies/tools/libraries discovered
+4. **Context Checkpoints**: Update current phase and next steps regularly
+5. **Testing Issue Tracking**: Document all testing problems and edge cases
+
+**Mandatory Updates to Task File**:
+```markdown
+## 🔧 Latest Execution Update
+*Last Updated: [Timestamp]*
+*Current Phase: [Implementation/Testing/Debugging]*
+
+### Most Recent Issue Found
+**Problem**: [Description of latest issue]
+**Root Cause**: [Why it happened] 
+**Solution**: [How it was fixed]
+**Time Investment**: [How long it took]
+**Lesson Learned**: [Key insight for future]
+
+### Current Status
+- **Progress**: [% complete or current milestone]
+- **Next Action**: [What needs to be done next]
+- **Blockers**: [Any obstacles]
+- **Tests Status**: [Passing/Failing/Not yet run]
+```
+
+**Auto-Documentation Triggers**:
+- When agent encounters any error → Document immediately
+- When agent applies any fix → Record solution
+- When agent discovers new dependency → Update dependencies.md
+- When agent completes phase → Update context checkpoint
+- When testing reveals issues → Log in testing section
 
 **Status Update Examples**:
 ```markdown
@@ -236,11 +338,11 @@ dispatch backend --context="mobile-app-backend" --extends="mobile-app-ui"
 ```markdown
 ## File Transition Log
 
-**Start**: `workflow/planned/[task-name].md`
-**Execution**: `workflow/in-progress/[task-name].md`
+**Start**: `workflow/01-planned/tsk###-[task-name].md`
+**Execution**: `workflow/02-in-progress/tsk###-[task-name].md`
 **Completion**: 
-  - Success: `workflow/completed/done-[task-name].md`
-  - Failure: `workflow/completed/fail-[task-name].md`
+  - Success: `workflow/03-completed/tsk###-[task-name]-completed.md`
+  - Failure: `workflow/03-completed/tsk###-[task-name]-failed.md`
 
 **Status Updates**: Real-time updates to task file during execution
 **Dependency Updates**: Automatic dependency resolution tracking

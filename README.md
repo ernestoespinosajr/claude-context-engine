@@ -1,6 +1,6 @@
 # Context Engineering System
 
-![Version](https://img.shields.io/badge/version-2.5.5-blue)
+![Version](https://img.shields.io/badge/version-3.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 > **The smart way to manage development with Claude Code CLI**
@@ -17,16 +17,26 @@
 
 ## 🚀 Main Features
 
+### 🧠 **Intelligent Context Discovery System (NEW!)**
+- **Logbook-First Intelligence** - Always starts with project intelligence hub for instant context awareness
+- **Smart Pattern Matching** - Matches user questions against task logs, components, and dependencies
+- **Context Recovery** - Never lose context across sessions with intelligent task detection
+- **Auto-Issue Documentation** - Automatically documents problems and fixes during execution
+- **Dependency Discovery** - Real-time discovery and tracking of project dependencies
+
+### 🎯 **Professional File Organization**
+- **Dual Coding System** - `ct###-` context files + `tsk###-` task files for instant recognition
+- **Numbered Workflow Directories** - 00-Context → 01-Planned → 02-In-Progress → 03-Completed
+- **Context Persistence** - Permanent reference files that maintain project knowledge
+- **Status Suffix Convention** - Clean completion tracking with `-completed/-failed` suffixes
+
+### ⚡ **Core System Features**
 - **Hybrid Command-Agent Architecture** - Interactive planning with autonomous execution
 - **Smart Context Scaling** - 3/6/11-layer context based on task complexity  
-- **Specialized Agent System** - 5 domain-expert agents for autonomous implementation
-- **Automatic Project Intelligence** - Central logbook provides instant context awareness
+- **8 Specialized Agents** - Domain-expert agents for autonomous implementation
 - **Enhanced Command System** - ask → issue/quick-feature/feature → dispatch agent
 - **Phase-by-Phase Validation** - User-controlled validation at each implementation phase
-- **Ultra-Compact Task Tracking** - Token-efficient logbook with comprehensive task registry
-- **Automated Workflow Management** - Files move automatically through planned → in-progress → completed
-- **Duplication Prevention** - Project structure awareness prevents redundant work
-- **Historical Pattern Recognition** - Learns from previous successes and failures
+- **Self-Documenting Workflow** - Automatic issue tracking and knowledge capture
 - **Advanced persona system** with specialists in security, performance, etc.
 - **MCP integration** with 8 specialized modules: Context7, Sequential, Playwright, Fetch, Linear, Stripe, Supabase, and Vercel
 
@@ -207,15 +217,35 @@ This extensible architecture allows teams to add domain-specific agents as their
 - `--mcp-supabase`: Database operations and backend insights (read-only)
 - `--mcp-vercel`: Deployment management and hosting integration
 
-## 📁 File Workflow
+## 📁 Enhanced File Workflow & Context System
 
-1. **Planning**: Analysis commands create a file in `workflow/planned/[feature-name].md`
-2. **Implementation**: `dispatch` MOVES (doesn't duplicate) the file to `workflow/in-progress/[feature-name].md`
-3. **Completion**: Upon completion, the system MOVES the file to `workflow/completed/` with status prefix:
-   - Success: `done-[feature-name].md`
-   - Failure: `fail-[feature-name].md`
+### 🔄 **Intelligent Context-First Workflow**
+1. **Context Analysis**: `@ask` creates `00-Context/ct###-[task-name].md` with comprehensive analysis
+2. **Task Planning**: Planning commands create `01-planned/tsk###-[task-name].md` referencing context
+3. **Execution**: `dispatch` MOVES file to `02-in-progress/tsk###-[task-name].md` with issue tracking
+4. **Completion**: System MOVES to `03-completed/tsk###-[task-name]-completed.md` with full documentation
 
-**Key Innovation**: The system maintains a central `logbook.md` that provides instant project context, preventing duplicate work and enabling intelligent recommendations. Files move (never duplicate) between directories with automatic status tracking.
+### 🧠 **Context Discovery Hierarchy**
+```bash
+User Question → logbook.md (intelligence hub) → dependencies.md (relationships) → specific task files → context-aware response
+```
+
+### 🎯 **Professional File Organization**
+```
+workflow/
+├── 00-Context/        # ct###-* (permanent analysis files)
+├── 01-planned/        # tsk###-* (planning phase)  
+├── 02-in-progress/    # tsk###-* (active development with issue tracking)
+└── 03-completed/      # tsk###-*-completed/failed (final status)
+```
+
+### 📊 **Automatic Documentation**
+- **Issue Tracking**: Problems and fixes documented in real-time during execution
+- **Dependency Discovery**: Auto-discovered dependencies update dependencies.md
+- **Context Persistence**: Never lose context across sessions with intelligent recovery
+- **Pattern Learning**: System learns from every fix and documents insights
+
+**Key Innovation**: The system maintains a central `logbook.md` that provides instant project intelligence, while automatically documenting every issue, fix, and discovery during task execution. Context files provide permanent reference while task files move through lifecycle.
 
 ## 🧠 Project Intelligence
 
@@ -232,9 +262,14 @@ The system's **logbook.md** acts as a central intelligence hub with ultra-compac
 **Example Task Log entries:**
 ```markdown
 ## Task Log
-`@user-auth-biometrics` | in-progress | /workflow/in-progress/user-auth-biometrics.md | Add biometric login system
-`@issue-login-ios-bug` | complete without issues | /workflow/completed/done-issue-login-ios-bug.md | Fix login button not responding on iOS
-`@dark-mode-toggle` | pending | /workflow/planned/dark-mode-toggle.md | Add theme switching to settings
+`tsk001-user-auth-biometrics` | in-progress | /workflow/02-in-progress/tsk001-user-auth-biometrics.md | Add biometric login system | ct001-user-auth-biometrics
+`tsk002-login-ios-bug` | completed | /workflow/03-completed/tsk002-login-ios-bug-completed.md | Fix login button not responding on iOS | ct002-login-ios-bug  
+`tsk003-dark-mode-toggle` | pending | /workflow/01-planned/tsk003-dark-mode-toggle.md | Add theme switching to settings | ct003-dark-mode-toggle
+
+## Context Files
+`ct001-user-auth-biometrics` | 2025-01-29 | /workflow/00-Context/ct001-user-auth-biometrics.md | Analysis Complete
+`ct002-login-ios-bug` | 2025-01-29 | /workflow/00-Context/ct002-login-ios-bug.md | Analysis Complete
+`ct003-dark-mode-toggle` | 2025-01-29 | /workflow/00-Context/ct003-dark-mode-toggle.md | Analysis Complete
 ```
 
 ## 📂 Project Structure
@@ -242,14 +277,16 @@ The system's **logbook.md** acts as a central intelligence hub with ultra-compac
 ```
 project/
 ├── .claude/                 # Configuration for Claude Code CLI
-│   ├── commands/            # Available commands (ask, issue, quick-feature, feature, start)
+│   ├── commands/            # Available commands (ask, issue, quick-feature, feature, dispatch)
+│   ├── agents/              # 8 specialized agents for autonomous execution
 │   └── shared/              # Shared configuration files
-├── workflow/                # Simplified workflow directory
-│   ├── planned/             # Tasks ready for implementation
-│   ├── in-progress/         # Tasks currently in development
-│   ├── completed/           # All completed tasks (done-* or fail-*)
-│   ├── logbook.md           # Automatic project activity log and intelligence hub
-│   └── dependencies.md      # Dependency registry
+├── workflow/                # Intelligent workflow directory with dual coding
+│   ├── 00-Context/          # ct###-* Context analysis files (permanent reference)
+│   ├── 01-planned/          # tsk###-* Task planning files (moves through lifecycle)
+│   ├── 02-in-progress/      # tsk###-* Active development with issue tracking
+│   ├── 03-completed/        # tsk###-*-completed/failed Final status with full docs
+│   ├── logbook.md           # Project intelligence hub with context discovery
+│   └── dependencies.md      # Auto-discovered dependency tracking
 └── ...                      # Project files
 ```
 
@@ -269,7 +306,47 @@ This project is under the MIT License - see the [LICENSE](LICENSE) file for more
 
 ## 📋 Changelog
 
-### Version 3.0.1 (Latest) - Unified Dispatch System
+### Version 3.1.0 (Latest) - Intelligent Context Discovery & Self-Documenting Workflow
+**Revolutionary Context Management with Zero Context Loss**
+
+**🎯 Major Breakthrough:**
+- **Intelligent Context Discovery System**: Logbook-first intelligence hierarchy that never loses context
+- **Professional Dual Coding System**: `ct###-` context files + `tsk###-` task files for instant recognition  
+- **Numbered Workflow Directories**: 00-Context → 01-Planned → 02-In-Progress → 03-Completed
+- **Self-Documenting Execution**: Automatic issue tracking and dependency discovery during task execution
+- **Context Persistence**: Never lose context across sessions with intelligent pattern matching
+- **Enhanced Dependencies Tracking**: Real-time discovery and documentation of all project dependencies
+
+**🧠 Game-Changing Intelligence Features:**
+- **Logbook-First Context Recovery**: Always starts with project intelligence hub for instant awareness
+- **Smart Pattern Matching**: Matches user questions against task logs, components, and dependencies  
+- **Auto-Issue Documentation**: Problems and fixes automatically documented during execution
+- **Dependency Discovery**: Real-time detection and tracking of technical/integration dependencies
+- **Context Persistence Checkpoints**: Maintains context across all sessions and interruptions
+- **Professional File Organization**: Sequential numbering with clear type recognition
+
+**📈 Revolutionary Workflow Benefits:**
+- **Zero Context Loss**: Intelligent context recovery prevents lost productivity from session breaks
+- **Self-Healing Documentation**: System automatically captures every issue, fix, and discovery
+- **Project Intelligence**: Centralized logbook provides instant project overview and pattern recognition
+- **Professional Organization**: Clean file structure with dual coding system for enterprise projects  
+- **Context-Aware Responses**: Every interaction leverages full project history and context
+- **Automated Learning**: System learns from every fix and documents insights for future reference
+
+**🔧 Technical Improvements:**
+- **Enhanced Logbook Structure**: Dual tracking for context files and task files with relationships
+- **Improved Dependencies.md**: Auto-discovery tables for technical, integration, and tool dependencies
+- **Context Recovery System**: Universal pattern matching and intelligent context restoration
+- **Issue Tracking Templates**: Built-in problem/solution documentation during task execution
+- **Professional Naming Convention**: Sequential numbering with status suffixes for clean organization
+
+**💼 Enterprise-Ready Features:**
+- **Professional Project Management**: Sequential task/context numbering for large-scale projects
+- **Comprehensive Documentation**: Every fix, decision, and discovery automatically captured
+- **Team Collaboration Ready**: Clear file organization and complete context tracking for teams
+- **Scalable Architecture**: Handles dozens of concurrent tasks with organized workflow structure
+
+### Version 3.0.1 - Unified Dispatch System
 **Streamlined Command Architecture with Complete Workflow Integration**
 
 **🎯 Major Breakthrough:**

@@ -7,11 +7,11 @@
 @include shared/universal-constants.yml#Universal_Legend
 
 ## Command Execution
-Execute: plan-only. Create plan in workflow/planned/ and update logbook
+Execute: plan-only. Create plan in workflow/01-planned/ and update logbook
 Legend: Generated based on symbols used in command
 Purpose: "[Plan][Issue] for $ARGUMENTS"
 
-Creates detailed issue plan and registers in logbook. Use @start to execute the planned issue.
+Creates detailed issue plan and registers in logbook. References context from 00-Context/ if available. Use dispatch to execute with specialized agent.
 
 @include shared/flag-inheritance.yml#Universal_Always
 @include shared/critical-thinking.yml#Critical_Thinking_Framework
@@ -48,6 +48,18 @@ Examples:
 - **Documentation**: What needs to be updated after the fix
 
 ## Process
+
+### 0. Context Integration (Priority 1)
+#### Context File Reference
+- **Automatic Lookup**: Check for matching context file `workflow/00-Context/ct###-[task-name].md`
+- **Context Integration**: If found, reference all analysis from context file
+- **Gap Analysis**: Identify any additional technical details needed beyond context analysis
+- **Consistency Check**: Ensure issue plan aligns with context recommendations
+
+#### Logbook Consultation
+- **Task Log Review**: Check logbook.md for similar completed issues
+- **Pattern Recognition**: Learn from previous similar issue resolution patterns
+- **Component Reuse**: Identify existing solutions that can be leveraged
 
 ### 1. Issue Analysis & Triage
 - **Problem Identification**: Clearly understand what needs to be fixed
@@ -99,11 +111,23 @@ Examples:
 
 ## File Handling
 
+### Task Code Assignment
+- **Sequential Numbering**: Check `workflow/01-planned/` directory to determine next available tsk### number
+- **Context Reference**: Link to corresponding context file if created by @ask command
+- **Logbook Registration**: Update logbook.md Task Log with new entry
+
 ### Issue Documentation
-Create lightweight issue file in `workflow/planned/issue-[name].md`:
+Create lightweight issue file in `workflow/01-planned/tsk###-[name].md`:
 
 ```markdown
-# Issue: [Issue Name]
+# Issue Plan: [Issue Name]
+*Task ID: tsk###-[task-name]*
+*Context Reference: ct###-[task-name] (if applicable)*
+*Created: [Date]*
+*Planning by: @issue command*
+
+## Context Summary
+[Reference from ct###-[task-name].md if available, or brief analysis]
 
 ## Problem Summary
 [Brief description of the issue]
@@ -112,11 +136,11 @@ Create lightweight issue file in `workflow/planned/issue-[name].md`:
 - **Current**: [What happens now]
 - **Expected**: [What should happen]
 
-## Root Cause
+## Root Cause Analysis
 [What is actually causing the problem]
 
 ## Solution Approach
-[How we plan to fix it]
+[How we plan to fix it - aligned with context recommendations if available]
 
 ## Implementation Steps
 1. [Step 1]
@@ -132,18 +156,23 @@ Create lightweight issue file in `workflow/planned/issue-[name].md`:
 - **Potential Issues**: [What could go wrong]
 - **Rollback Plan**: [How to undo if needed]
 
-## Success Criteria
+## Quality Gates
 - [ ] Issue is resolved
 - [ ] No regression in existing functionality
 - [ ] Appropriate tests added/updated
 - [ ] Documentation updated if needed
+
+## Agent Recommendations
+- **Recommended Agent**: [Based on context analysis]
+- **Dispatch Command**: `dispatch [agent] --context="tsk###-[task-name]" [--persona-flags]`
 ```
 
 ### Workflow Integration
-- **Planning**: Issue files start in `workflow/planned/`
-- **Execution**: Move to `workflow/in-progress/` during @start
-- **Completion**: Move to `workflow/completed/` with status prefix when done
-- **Naming**: `issue-[descriptive-name].md` format
+- **Context**: Context files remain in `workflow/00-Context/` (permanent reference)
+- **Planning**: Task files start in `workflow/01-planned/`
+- **Execution**: Move to `workflow/02-in-progress/` during dispatch
+- **Completion**: Move to `workflow/03-completed/` with status suffix when done
+- **Naming**: `tsk###-[descriptive-name].md` format with sequential numbering
 
 ## Quality Gates
 

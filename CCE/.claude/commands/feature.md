@@ -7,11 +7,11 @@
 @include shared/universal-constants.yml#Universal_Legend
 
 ## Command Execution
-Execute: plan-only. Create plan in workflow/planned/ and update logbook
+Execute: plan-only. Create plan in workflow/01-planned/ and update logbook
 Legend: Generated based on symbols used in command
 Purpose: "[Plan][Feature] for $ARGUMENTS"
 
-Creates comprehensive feature plan using full 11-layer Context Engineering architecture and registers in logbook. Use @start to execute the planned feature.
+Creates comprehensive feature plan using full 11-layer Context Engineering architecture and registers in logbook. References context from 00-Context/ if available. Use dispatch to execute with specialized agent.
 
 @include shared/flag-inheritance.yml#Universal_Always
 @include shared/critical-thinking.yml#Critical_Thinking_Framework

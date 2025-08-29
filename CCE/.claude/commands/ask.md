@@ -24,7 +24,12 @@ Examples:
 
 ## Process
 
-### 1. Task Intelligence & Analysis
+### 1. Context File Creation
+
+#### Generate Context Code
+- **Sequential Numbering**: Check `workflow/00-Context/` directory to determine next available ct### number
+- **Context File Creation**: Create `workflow/00-Context/ct###-[task-name].md` with comprehensive analysis
+- **Logbook Registration**: Update logbook.md with new context file entry
 
 #### Logbook Analysis (Priority 1)
 - **Quick Scan**: First check `workflow/logbook.md` for instant project overview
@@ -209,6 +214,82 @@ For each analyzed task, provide 2-3 alternative approaches:
 - **Estimated Effort**: [Time/complexity estimate]
 ```
 
+### 5. Context File Structure
+
+#### Context File Template
+Create the context file with this structure:
+
+```markdown
+# Context Analysis: [Task Description]
+*Context ID: ct###-[task-name]*
+*Created: [Date]*
+*Analysis by: @ask command*
+
+## User Requirements & Goals
+- **Primary Goal**: [Main objective]
+- **User Story**: [As a... I want... So that...]
+- **Acceptance Criteria**: [Success conditions]
+
+## Business Context
+- **Business Value**: [Why this task matters]
+- **User Impact**: [How users benefit]
+- **Priority Level**: [High/Medium/Low]
+
+## Technical Constraints & Dependencies
+- **Technology Stack**: [Relevant technologies]
+- **System Dependencies**: [What this task depends on]
+- **Integration Points**: [Systems/components affected]
+- **Database Changes**: [Schema modifications needed]
+
+## Complexity Analysis
+- **Overall Complexity Score**: [1-10]
+- **Technical Complexity**: [1-10]
+- **Integration Complexity**: [1-10] 
+- **Testing Complexity**: [1-10]
+- **Time Investment**: [1-10]
+- **Context Layer Recommendation**: [3/6/11-layer]
+
+## Recommended Approach
+- **Command Route**: [@issue/@quick-feature/@feature]
+- **Agent Recommendation**: [Specialized agent]
+- **Persona Flags**: [Required personas]
+- **MCP Modules**: [Required MCP integrations]
+
+## Success Criteria & Acceptance Criteria
+- **Functional Requirements**: [What it must do]
+- **Non-Functional Requirements**: [Performance, security, etc.]
+- **Testing Requirements**: [How to validate]
+
+## Risk Assessment
+- **Technical Risks**: [Development challenges]
+- **Integration Risks**: [System interaction risks]  
+- **Performance Risks**: [Performance impacts]
+- **User Experience Risks**: [UX considerations]
+
+## Alternative Approaches
+### Approach 1: [Recommended]
+- **Method**: [Description]
+- **Pros**: [Advantages]
+- **Cons**: [Trade-offs]
+- **Effort**: [Estimate]
+
+### Approach 2: [Alternative]  
+- **Method**: [Description]
+- **Pros**: [Advantages]
+- **Cons**: [Trade-offs]
+- **Effort**: [Estimate]
+
+## Historical Context
+- **Similar Previous Work**: [Links to related tasks]
+- **Reusable Components**: [Existing components to leverage]
+- **Lessons Learned**: [Insights from similar tasks]
+
+## Next Steps
+1. **Planning Command**: [Exact command to run]
+2. **Agent Dispatch**: [Agent specialization recommendation]
+3. **Dependencies**: [Prerequisites]
+```
+
 ## Output Format
 
 The response MUST follow this structure:
@@ -219,16 +300,18 @@ The response MUST follow this structure:
 ## 📋 Copy-Paste Command (Ready to Execute)
 
 ```bash
-@[issue|quick-feature|feature] "[exact-task-name]" [--persona-X] [--mcp-X] [--flags]
+@[issue|quick-feature|feature] "ct###-[exact-task-name]" [--persona-X] [--mcp-X] [--flags]
 ```
 
 **Why this command?**
 - `@[command]`: [Reason for choosing this command level]
+- `ct###-[task-name]`: [Context file ID for seamless integration]
 - `[--persona-X]`: [Why this persona/specialist is needed]
 - `[--mcp-X]`: [Why this MCP module enhances the task]
 - `[--flags]`: [Any additional flags and their purpose]
 
-**Reference Materials**: [If any existing similar tasks found: `workflow/completed/done-[similar-task].md`]
+**Context File Created**: `workflow/00-Context/ct###-[task-name].md`
+**Reference Materials**: [If any existing similar tasks found: `workflow/03-completed/tsk###-[similar-task]-completed.md`]
 
 ## 🤖 Agent Recommendation
 
@@ -244,7 +327,7 @@ After completing the planning phase above, this task would benefit from speciali
 **Agent Dispatch Command**:
 ```bash
 # After planning is complete, dispatch to specialized agent:
-dispatch [agent-name] --context="[task-name]" [--persona-flags] [--mcp-flags]
+dispatch [agent-name] --context="ct###-[task-name]" [--persona-flags] [--mcp-flags]
 ```
 
 **Agent Integration Benefits**:

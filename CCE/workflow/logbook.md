@@ -36,9 +36,10 @@ project/
 │       ├── README.md
 │       ├── logbook.md
 │       ├── dependencies.md
-│       ├── planned/
-│       ├── in-progress/
-│       └── completed/
+│       ├── 00-Context/        # Context analysis files (ct###-*)
+│       ├── 01-planned/         # Task planning files (tsk###-*)
+│       ├── 02-in-progress/     # Active development files (tsk###-*)
+│       └── 03-completed/       # Completed tasks (tsk###-*-completed/failed)
 └── [project files to be mapped]
 ```
 
@@ -54,9 +55,11 @@ project/
 
 *Comprehensive task registry - Always check here before creating new tasks*
 
-**Format**: `@taskname` | Status | Path | Achievement Goal
+**Format**: `tsk###-taskname` | Status | Path | Achievement Goal | Context Link
 
-*No tasks registered yet*
+**Context Files**: `ct###-taskname` | Created | Path | Analysis Status
+
+*No tasks or context files registered yet*
 
 ---
 
