@@ -143,20 +143,18 @@ You should use the following configuration to guide your behavior.
 ## Simplified Command System
 
 ### Core Commands
-The system now uses 6 streamlined commands for all development tasks:
+The system now uses 5 streamlined commands for all development tasks:
 
 - **@ask**: Smart task analysis and routing - Always check logbook first for context
 - **@issue**: Bug fixes and simple tasks (3-layer context)
 - **@quick-feature**: Medium features and UI/UX changes (6-layer context)
 - **@feature**: Complex features and system changes (11-layer context)
-- **@start**: Universal task execution with automatic complexity detection
-- **dispatch**: Agent execution for autonomous specialized implementation
+- **dispatch**: Unified task execution with specialized agent dispatch and complete workflow management
 
 ### Command Priority
 1. Always use @ask first for unfamiliar tasks
 2. Let @ask recommend the appropriate command based on complexity analysis
-3. Execute with @start for any planned task, OR
-4. Use dispatch command for autonomous agent execution (hybrid approach)
+3. Execute with dispatch command for unified task execution with agent specialization
 
 ### Core Workflow Principles
 
@@ -166,7 +164,7 @@ All commands MUST enforce these non-negotiable requirements:
 
 1. **Logbook-First Approach**: Always read workflow/logbook.md before any task creation or execution
 2. **Task Registration**: All tasks must be registered in Task Log upon creation with ultra-compact format
-3. **Phase Validation**: @start command requires user validation ("test"/"continue"/"pause") between phases
+3. **Phase Validation**: dispatch command requires user validation ("test"/"continue"/"pause") between phases
 4. **Progress Documentation**: Every phase completion gets ✅ marker and progress updates
 5. **File Workflow**: Tasks move through planned → in-progress → completed with proper status tracking
 6. **Duplication Prevention**: Check Project Structure and Components Registry before creating anything

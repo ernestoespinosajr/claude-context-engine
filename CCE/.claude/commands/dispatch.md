@@ -1,21 +1,28 @@
-# Dispatch Command - Agent Execution System
+# Dispatch Command - Unified Task Execution & Agent System
 **Version**: Context Engineering System v3.0  
-**Purpose**: Dispatch specialized agents for autonomous implementation based on planning context
+**Purpose**: Universal task execution with specialized agent dispatch, complete workflow management, and intelligent task lifecycle
 
 ---
 
-**IMPORTANT**: This command should only be used AFTER completing the planning phase with @ask/@feature/@issue/@quick-feature commands.
+**IMPORTANT**: This command handles complete task execution from start to finish - use AFTER completing the planning phase with @ask/@feature/@issue/@quick-feature commands.
 
 ## Command Execution
-Execute: immediate agent dispatch with context handoff  
-Legend: 🤖 Generated based on agent specialization  
-Purpose: "[Dispatch][Agent] for autonomous implementation of planned task"
+Execute: immediate task execution with intelligent agent dispatch and complete workflow management  
+Legend: 🤖 Generated based on task complexity and agent specialization  
+Purpose: "[Execute][Task] with [Agent] including full lifecycle management"
 
 ## Usage
 
 ### Basic Dispatch Syntax
 ```bash
 dispatch [agent-name] --context="[task-name]" [--persona-flags] [--mcp-flags]
+```
+
+### Universal Task Execution
+```bash
+# Execute any planned task with appropriate agent
+dispatch [agent-name] "[task-name]"              # Execute with specific agent
+dispatch auto "[task-name]"                      # Auto-select best agent for task
 ```
 
 ### Available Agents
@@ -137,6 +144,36 @@ dispatch multi-agent-coordinator --context="complex-workflow" --mcp-sequential -
 - Mobile-first social platforms
 - IoT mobile applications
 
+## MANDATORY PRE-EXECUTION WORKFLOW
+
+### Step 1: Pre-Execution Validation
+BEFORE dispatching ANY agent, you MUST:
+
+1. **Read workflow/logbook.md** - Check Task Log, project structure, and existing components
+2. **Locate task file** in workflow/planned/ directory
+3. **Move task file** from workflow/planned/ to workflow/in-progress/
+4. **Update logbook.md** Task Log entry status from "pending" to "in-progress"
+
+**Status Update Examples**:
+```markdown
+`@user-auth-biometrics` | in-progress | /workflow/in-progress/user-auth-biometrics.md | Add biometric login system
+`@issue-login-ios-bug` | in-progress | /workflow/in-progress/issue-login-ios-bug.md | Fix login button not responding on iOS  
+`@dark-mode-toggle` | in-progress | /workflow/in-progress/dark-mode-toggle.md | Add theme switching to settings
+```
+
+### Step 2: Task Type Recognition & Agent Selection
+The system automatically detects task type by analyzing:
+
+**File Location & Naming Patterns**:
+- `issue-*.md` → Issue/Bug Fix (3-layer context)
+- `*.md` in planned/ (no prefix) → Quick Feature (6-layer context)  
+- Complex features → Full Feature (11-layer context)
+
+**Content Analysis**:
+- **Issue Indicators**: "fix", "bug", "broken", error messages, specific platform issues
+- **Quick Feature Indicators**: Single component, UI changes, specific functionality
+- **Complex Feature Indicators**: Multiple systems, architectural changes, cross-cutting concerns
+
 ## Context Handoff Process
 
 ### 1. Planning Context Transfer
@@ -191,6 +228,67 @@ dispatch frontend --context="chat-ui" --api-contract="chat-api"
 dispatch mobile --context="mobile-app-ui"
 # If backend API needed:
 dispatch backend --context="mobile-app-backend" --extends="mobile-app-ui"
+```
+
+## File Lifecycle Management
+
+### Universal File Handling
+```markdown
+## File Transition Log
+
+**Start**: `workflow/planned/[task-name].md`
+**Execution**: `workflow/in-progress/[task-name].md`
+**Completion**: 
+  - Success: `workflow/completed/done-[task-name].md`
+  - Failure: `workflow/completed/fail-[task-name].md`
+
+**Status Updates**: Real-time updates to task file during execution
+**Dependency Updates**: Automatic dependency resolution tracking
+**Progress Logging**: Detailed execution log for future reference
+**Logbook Updates**: Automatic updates to workflow/logbook.md on status changes
+```
+
+### Step 3: MANDATORY Final Documentation & Completion
+Upon reaching 100% completion, you MUST complete ALL of these steps:
+
+#### 3.1: Update Task Status in Logbook
+IMMEDIATELY update the Task Log section in workflow/logbook.md:
+- Change status from "in-progress" to completion status:
+  - "complete without issues" (fully successful)
+  - "complete with issues to fix" (works but has problems)  
+  - "pending" (incomplete or paused)
+- Update file path to new completed location
+
+**Final Status Examples**:
+```markdown
+`@user-auth-biometrics` | complete without issues | /workflow/completed/done-user-auth-biometrics.md | Add biometric login system
+`@issue-memory-leak` | complete with issues to fix | /workflow/completed/done-issue-memory-leak.md | Fix image loading memory leak - needs optimization
+`@dark-mode-toggle` | pending | /workflow/in-progress/dark-mode-toggle.md | Add theme switching to settings - paused for design review
+```
+
+#### 3.2: Move and Rename Task File
+1. **Move file** from workflow/in-progress/ to workflow/completed/
+2. **Rename file** with appropriate prefix:
+   - Success: `done-[task-name].md`
+   - Failure: `fail-[task-name].md`
+
+#### 3.3: Update Logbook Statistics
+Update the Quick Overview section in workflow/logbook.md:
+- Decrement "In Progress" count
+- Increment "Completed" count (success or failure)
+- Update "Last Activity" timestamp
+- Recalculate success rate percentage
+
+#### 3.4: Document Completion Details
+Add completion summary to the task file before moving:
+```markdown
+## COMPLETION SUMMARY
+- **Status**: [Complete/Failed/Paused]
+- **Completion Date**: [Date]
+- **Issues Encountered**: [Any problems faced]
+- **Solutions Applied**: [How problems were solved]
+- **Final Notes**: [Key insights or remaining work]
+- **Quality Gates Met**: [Which quality criteria were satisfied]
 ```
 
 ## Quality Gates and Validation
@@ -279,6 +377,35 @@ agent logs [agent-name] --task="[task-name]"
 agent health [agent-name]
 ```
 
+## Phase-by-Phase Validation Process
+
+### Step 2: Mandatory User Validation
+After completing EACH implementation phase, you MUST:
+
+1. **Present completed phase** to user with clear description of what was accomplished
+2. **Ask for validation**: "Would you like me to: **test**, **continue**, or **pause**?"
+3. **WAIT for user response** - Never proceed without user validation
+4. **Update task file** with ✅ completion marker and 1-2 line summary
+5. **Update progress percentage** in task file
+
+### Interactive Execution Patterns
+```markdown
+🎯 TASK EXECUTION: [Task Name] with [Agent]
+
+## Current Status
+- **Phase**: [Current implementation phase]
+- **Progress**: [X/Y tasks completed]
+- **Next Action**: [What's happening next]
+- **Agent Status**: [Agent progress and current focus]
+
+## Continue?
+- `test` - Test current implementation and continue
+- `continue` - Continue to next phase  
+- `pause` - Pause and save current progress
+- `details` - Show detailed progress and next steps
+- `escalate` - Increase complexity level and re-plan
+```
+
 ## Best Practices
 
 ### When to Dispatch Agents
@@ -317,6 +444,88 @@ agent health [agent-name]
 - Unclear success criteria
 - Ambiguous architecture decisions
 - Conflicting or contradictory constraints
+
+## ⚠️ CRITICAL ENFORCEMENT RULES
+
+### NON-NEGOTIABLE COMPLETION REQUIREMENTS
+The dispatch command WILL NOT be considered successfully executed unless ALL of the following are completed:
+
+1. **✅ Task Log Updated**: Status changed to completion status with correct file path
+2. **✅ File Moved**: Task file moved from in-progress/ to completed/ with proper naming
+3. **✅ Statistics Updated**: Logbook statistics decremented/incremented correctly
+4. **✅ Completion Summary Added**: Task file contains completion documentation
+5. **✅ User Validation**: Each phase validated by user before proceeding
+6. **✅ Agent Quality Gates**: All agent-specific quality requirements met
+
+**FAILURE TO COMPLETE THESE STEPS = INCOMPLETE EXECUTION**
+
+Any dispatch execution that skips these mandatory steps must be considered failed and should be restarted with proper completion workflow.
+
+## Output Requirements
+
+Every dispatch response MUST include:
+
+```markdown
+# 🤖 Dispatching Agent: [Agent Name] for Task: [Task Name]
+
+## Pre-Execution Check ✅
+- Logbook reviewed for context
+- Task file located and moved to in-progress
+- Project structure validated
+- Agent specialized for task domain
+
+## Task Analysis
+- **Type**: [Issue | Quick Feature | Complex Feature]
+- **Context Level**: [3-Layer | 6-Layer | 11-Layer]  
+- **Estimated Complexity**: [1-10]
+- **Active Agent**: [Agent specialization and role]
+- **Active Personas**: [List of personas]
+- **MCP Modules**: [Active MCP integrations]
+
+## Agent Execution Plan
+[Phase-by-phase execution strategy with validation points]
+
+## Phase 1: [Phase Name] - Agent Implementation
+[Current agent implementation work with specialization]
+
+---
+**Validation Point**: After completing this phase, I will ask for your validation before proceeding.
+```
+
+## MANDATORY COMPLETION CHECKLIST
+
+At the END of EVERY dispatch task execution, you MUST provide this completion checklist:
+
+```markdown
+# 🎯 AGENT TASK COMPLETION CHECKLIST
+
+## Final Status: [COMPLETED/FAILED/PAUSED]
+
+### Required Actions Completed:
+- [ ] Task status updated in workflow/logbook.md Task Log
+- [ ] File moved from in-progress/ to completed/
+- [ ] File renamed with appropriate prefix (done-/fail-)
+- [ ] Logbook statistics updated (counts, percentages, timestamps)
+- [ ] Completion summary added to task file
+- [ ] All agent quality gates validated
+- [ ] Agent specialization requirements met
+
+### Agent-Specific Completion:
+- [ ] Domain expertise applied successfully
+- [ ] Agent patterns and best practices followed
+- [ ] Integration testing completed for agent scope
+- [ ] Agent documentation and examples provided
+
+### Completion Details:
+- **Final Status**: [complete without issues | complete with issues to fix | pending]
+- **Agent Performance**: [How agent specialization contributed to success]
+- **Issues Resolved**: [What problems were solved]
+- **Remaining Work**: [Any follow-up tasks needed]
+- **Lessons Learned**: [Key insights for future agent dispatches]
+
+---
+**✅ All mandatory dispatch completion steps have been executed as required by the Context Engineering System workflow.**
+```
 
 ## Integration with Command System
 
