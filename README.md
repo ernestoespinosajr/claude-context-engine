@@ -74,6 +74,31 @@ cd context-engineering-system
 ./install.sh /workspace/app        # Install in workspace
 ```
 
+## 🚀 First-Time Setup (Essential!)
+
+**After installation, run this ONE command to transform your project:**
+
+```bash
+# This analyzes your project and populates the system with real intelligence
+dispatch context-manager --context="tsk000-initial-project-context" --persona-architect --mcp-context7
+```
+
+### What This Bootstrap Task Does:
+- **🔍 Analyzes your entire project** - Structure, dependencies, technology stack
+- **📊 Populates logbook.md** - Replaces templates with your actual project information  
+- **📋 Updates dependencies.md** - Real dependency tracking instead of placeholders
+- **🧩 Maps existing components** - Catalogs your current codebase elements
+- **🎓 First user experience** - Learn the system by seeing it work on your project
+- **⚡ Immediate value** - Instant project intelligence ready for use
+
+### After Bootstrap Completion:
+- **Intelligent context recovery** - System knows your actual project structure
+- **Smart recommendations** - Based on your real technology stack  
+- **Component reuse detection** - Prevents duplicate work on existing elements
+- **Ready for real tasks** - System configured specifically for your project
+
+**Why run this first?** The bootstrap task transforms the Context Engineering System from generic templates to intelligent, project-specific knowledge that provides immediate value.
+
 ## 🔧 Usage
 
 The Context Engineering System uses a **hybrid command-agent approach** combining interactive planning with autonomous execution:
@@ -134,20 +159,28 @@ dispatch [agent] --context="[task-name]" [--persona-flags] [--mcp-flags]
 ### Revolutionary Hybrid Workflow
 
 ```bash
-# Complete example: Authentication feature
+# Step 0: First-time setup (run once after installation)
+dispatch context-manager --context="tsk000-initial-project-context" --persona-architect --mcp-context7
+# → Analyzes your project and populates system with real intelligence
+# → Transforms templates to project-specific knowledge
+
+# Step 1: Normal workflow example - Authentication feature
 @ask "implement biometric authentication for mobile app"
-# → Analysis: Complex mobile feature requiring security expertise
+# → Analysis: Complex mobile feature requiring security expertise  
+# → Creates: 00-Context/ct001-biometric-authentication-mobile.md
 # → Recommendation: Use mobile agent with security persona
 
-@feature "biometric-authentication" --persona-security --persona-mobile
-# → Creates comprehensive planning document
+@feature "ct001-biometric-authentication-mobile" --persona-security --persona-mobile
+# → References context analysis and creates: 01-planned/tsk001-biometric-authentication-mobile.md
+# → Comprehensive planning document with context integration
 # → Recommends: mobile agent for implementation
 
-dispatch mobile --context="biometric-authentication" --persona-security --mcp-sequential
+dispatch mobile --context="tsk001-biometric-authentication-mobile" --persona-security --mcp-sequential
 # → Mobile agent autonomously implements the complete feature with full workflow management
+# → Moves to: 02-in-progress/tsk001-biometric-authentication-mobile.md (with issue tracking)
 # → Handles logbook updates, file lifecycle, and phase-by-phase validation
 # → Provides React Native integration, biometric APIs, security patterns
-# → Includes mandatory completion checklist and documentation
+# → Completion: 03-completed/tsk001-biometric-authentication-mobile-completed.md
 ```
 
 ### Why This Hybrid Approach is Revolutionary

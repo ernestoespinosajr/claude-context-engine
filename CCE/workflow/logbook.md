@@ -59,7 +59,10 @@ project/
 
 **Context Files**: `ct###-taskname` | Created | Path | Analysis Status
 
-*No tasks or context files registered yet*
+### Bootstrap Task (Ready for First-Time Users)
+`tsk000-initial-project-context` | pending | /workflow/01-planned/tsk000-initial-project-context.md | Analyze project and populate system with real intelligence | Built-in bootstrap
+
+*After running tsk000, this logbook will be populated with your actual project information*
 
 ---
 
