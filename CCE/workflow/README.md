@@ -6,32 +6,33 @@ This directory manages the feature-driven development workflow using Context Eng
 
 ```
 workflow/
-├── planned/          # Features ready for implementation
-├── in-progress/      # Features currently in development
-├── completed/        # All completed features (successful or failed)
-├── logbook.md        # Automatic project activity log and quick reference
-└── dependencies.md   # Dependency mapping between features
+├── 01-planned/          # Features ready for implementation
+├── 02-in-progress/      # Features currently in development  
+├── 03-completed/        # All completed features (successful or failed)
+├── logbook.md           # Automatic project activity log and quick reference
+└── dependencies.md      # Dependency mapping between features
 ```
 
 ## Feature Lifecycle
 
-### 1. Planning Phase (`planned/`)
+### 1. Planning Phase (`01-planned/`)
 - Features start here after the analysis commands (`@ask`, `@feature`, `@quick-feature`, `@issue`)
 - Contains the complete PRP (Product Requirements Prompt)
 - Includes research, context, and implementation plan
+- Files use `tsk###-[task-name].md` naming convention
 
-### 2. Development Phase (`in-progress/`)
-- Features are MOVED here during the `@start` command
-- Files move from `planned/` to `in-progress/`, never duplicated
+### 2. Development Phase (`02-in-progress/`)
+- Features are MOVED here during the `dispatch` command
+- Files move from `01-planned/` to `02-in-progress/`, never duplicated
 - Contains progress tracking and real-time updates within the file
 - Task status and progress are managed inside the document
 - Includes validation points and quality gates
 
-### 3. Completion Phase (`completed/`)
+### 3. Completion Phase (`03-completed/`)
 - Features are MOVED here after implementation (successful or failed)
-- Files are renamed with completion status:
-  - `done-[task-name].md` for successful completions
-  - `fail-[task-name].md` for failed/rejected implementations
+- Files are renamed with completion status suffix:
+  - `tsk###-[task-name]-completed.md` for successful completions
+  - `tsk###-[task-name]-failed.md` for failed/rejected implementations
 - Each file contains final documentation, lessons learned, and completion report
 - Serves as knowledge base for future similar features
 
@@ -39,11 +40,11 @@ workflow/
 
 The key point of this workflow system is that feature files are NEVER duplicated:
 
-1. Analysis commands (`@ask`, `@feature`, `@quick-feature`, `@issue`) CREATE the file in `planned/`
-2. `@start` MOVES the file from `planned/` to `in-progress/`
-3. Upon completion, the file is MOVED from `in-progress/` to `completed/` with status prefix:
-   - Successful: `done-[original-name].md`
-   - Failed: `fail-[original-name].md`
+1. Analysis commands (`@ask`, `@feature`, `@quick-feature`, `@issue`) CREATE the file in `01-planned/`
+2. `dispatch` MOVES the file from `01-planned/` to `02-in-progress/`
+3. Upon completion, the file is MOVED from `02-in-progress/` to `03-completed/` with status suffix:
+   - Successful: `tsk###-[original-name]-completed.md`
+   - Failed: `tsk###-[original-name]-failed.md`
 
 This approach avoids synchronization problems and ensures there's always a single source of truth for each feature.
 
@@ -54,7 +55,7 @@ This approach avoids synchronization problems and ensures there's always a singl
 - `@issue "[bug description]"` - Handle bugs and simple tasks (3-layer context) + registers in Task Log
 - `@quick-feature "[feature description]"` - Medium features and UI/UX changes (6-layer context) + registers in Task Log
 - `@feature "[feature description]"` - Complex features and system changes (11-layer context) + registers in Task Log
-- `@start "[task-name]"` - Execute any planned task with mandatory phase validation
+- `dispatch [agent] "tsk###-[task-name]"` - Execute any planned task with specialized agent and mandatory phase validation
 
 ### Status Checking
 To check task status, simply:
@@ -63,9 +64,9 @@ To check task status, simply:
 - Read the task document directly for detailed progress
 - Use `@ask "[task-name] status"` for analysis and recommendations
 
-### Phase Validation Process (@start command)
+### Phase Validation Process (dispatch command)
 
-**CRITICAL**: @start now requires user validation at each phase:
+**CRITICAL**: dispatch now requires user validation at each phase:
 
 1. **Pre-execution**: Always reads logbook.md for context and project structure
 2. **Phase Completion**: After each implementation phase:
@@ -81,12 +82,12 @@ To check task status, simply:
 ## File Naming Convention
 
 ### During Development
-- `[task-name].md` - Files in `planned/` and `in-progress/`
-- `issue-[bug-name].md` - Bug fixes and simple issues
+- `tsk###-[task-name].md` - Files in `01-planned/` and `02-in-progress/`
+- `tsk###-issue-[bug-name].md` - Bug fixes and simple issues
 
 ### Upon Completion
-- `done-[task-name].md` - Successfully completed tasks
-- `fail-[task-name].md` - Failed or rejected tasks
+- `tsk###-[task-name]-completed.md` - Successfully completed tasks
+- `tsk###-[task-name]-failed.md` - Failed or rejected tasks
 
 Each completion file includes:
 - Final implementation status

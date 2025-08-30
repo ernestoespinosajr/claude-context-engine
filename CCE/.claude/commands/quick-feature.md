@@ -131,7 +131,7 @@ Examples:
 ## File Handling
 
 ### Feature Documentation
-Create focused feature file in `workflow/planned/[feature-name].md`:
+Create focused feature file in `workflow/01-planned/tsk###-[feature-name].md`:
 
 ```markdown
 # Quick Feature: [Feature Name]
@@ -198,10 +198,10 @@ Create focused feature file in `workflow/planned/[feature-name].md`:
 ```
 
 ### Workflow Integration
-- **Planning**: Feature files start in `workflow/planned/`
-- **Execution**: Move to `workflow/in-progress/` during @start
-- **Completion**: Move to `workflow/completed/` with status prefix when done
-- **Naming**: `[descriptive-feature-name].md` format (no special prefix)
+- **Planning**: Feature files start in `workflow/01-planned/`
+- **Execution**: Move to `workflow/02-in-progress/` during dispatch
+- **Completion**: Move to `workflow/03-completed/` with status prefix when done
+- **Naming**: `tsk###-[descriptive-feature-name].md` format (tsk### prefix required)
 
 ## Quality Gates
 
@@ -323,9 +323,9 @@ IMMEDIATELY after creating a quick feature plan, you MUST update `workflow/logbo
 ### Step 1: Register in Task Log Section
 Add entry in **Task Log** section with exact ultra-compact format:
 ```markdown
-`@dark-mode-toggle` | pending | /workflow/planned/dark-mode-toggle.md | Add theme switching to settings
-`@export-reports` | pending | /workflow/planned/export-reports.md | Add CSV/PDF export to reports
-`@user-profile-edit` | pending | /workflow/planned/user-profile-edit.md | User profile editing screen
+`tsk###-dark-mode-toggle` | pending | /workflow/01-planned/tsk###-dark-mode-toggle.md | Add theme switching to settings
+`tsk###-export-reports` | pending | /workflow/01-planned/tsk###-export-reports.md | Add CSV/PDF export to reports
+`tsk###-user-profile-edit` | pending | /workflow/01-planned/tsk###-user-profile-edit.md | User profile editing screen
 ```
 
 **Format Rules**:

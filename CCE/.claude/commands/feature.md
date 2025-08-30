@@ -93,7 +93,7 @@ Create comprehensive Product Requirements Prompt with:
 - Present alternative approaches
 
 ## Output
-- Creates feature PRP file in `workflow/planned/[feature-name].md`
+- Creates feature PRP file in `workflow/01-planned/tsk###-[feature-name].md`
 - Updates `workflow/dependencies.md` with new relationships
 - Generates context quality report
 
@@ -104,9 +104,9 @@ IMMEDIATELY after creating a feature plan, you MUST update `workflow/logbook.md`
 ### Step 1: Register in Task Log Section
 Add entry in **Task Log** section with exact ultra-compact format:
 ```markdown
-`@user-auth-biometrics` | pending | /workflow/planned/user-auth-biometrics.md | Add biometric login system
-`@payment-integration` | pending | /workflow/planned/payment-integration.md | Integrate Stripe payment processing
-`@real-time-notifications` | pending | /workflow/planned/real-time-notifications.md | WebSocket notification system
+`tsk###-user-auth-biometrics` | pending | /workflow/01-planned/tsk###-user-auth-biometrics.md | Add biometric login system
+`tsk###-payment-integration` | pending | /workflow/01-planned/tsk###-payment-integration.md | Integrate Stripe payment processing
+`tsk###-real-time-notifications` | pending | /workflow/01-planned/tsk###-real-time-notifications.md | WebSocket notification system
 ```
 
 **Format Rules**:

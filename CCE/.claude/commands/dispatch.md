@@ -221,13 +221,16 @@ When moving task to in-progress, AUTOMATICALLY ADD these sections:
 ```
 
 ### Step 2: Mandatory Issue Documentation During Execution
-DURING task execution, agents MUST:
+DURING task execution, agents MUST document EVERY action immediately:
 
-1. **Real-Time Problem Logging**: Document EVERY issue encountered immediately
-2. **Solution Documentation**: Record ALL fixes and workarounds applied  
-3. **Dependency Discovery**: Log new dependencies/tools/libraries discovered
-4. **Context Checkpoints**: Update current phase and next steps regularly
-5. **Testing Issue Tracking**: Document all testing problems and edge cases
+1. **Real-Time Problem Logging**: Document EVERY issue encountered immediately in task file
+2. **Solution Documentation**: Record ALL fixes and workarounds applied immediately
+3. **Progress Updates**: Update task file with ✅ completion markers after EACH phase
+4. **Dependency Discovery**: Log new dependencies/tools/libraries discovered immediately
+5. **Context Checkpoints**: Update current phase and next steps regularly in task file
+6. **Testing Issue Tracking**: Document all testing problems and edge cases immediately
+
+**CRITICAL**: Agents CANNOT complete a phase without updating the task file with progress documentation
 
 **Mandatory Updates to Task File**:
 ```markdown
@@ -350,8 +353,14 @@ dispatch backend --context="mobile-app-backend" --extends="mobile-app-ui"
 **Logbook Updates**: Automatic updates to workflow/logbook.md on status changes
 ```
 
-### Step 3: MANDATORY Final Documentation & Completion
+### Step 3: MANDATORY Final Documentation & Completion  
 Upon reaching 100% completion, you MUST complete ALL of these steps:
+
+**PRE-COMPLETION VALIDATION**: Before moving to completion, verify task file contains:
+- ✅ All phases marked complete with timestamps
+- ✅ All issues encountered documented with solutions
+- ✅ All testing results and edge cases documented
+- ✅ Final implementation summary with quality gates met
 
 #### 3.1: Update Task Status in Logbook
 IMMEDIATELY update the Task Log section in workflow/logbook.md:
@@ -363,16 +372,16 @@ IMMEDIATELY update the Task Log section in workflow/logbook.md:
 
 **Final Status Examples**:
 ```markdown
-`@user-auth-biometrics` | complete without issues | /workflow/completed/done-user-auth-biometrics.md | Add biometric login system
-`@issue-memory-leak` | complete with issues to fix | /workflow/completed/done-issue-memory-leak.md | Fix image loading memory leak - needs optimization
-`@dark-mode-toggle` | pending | /workflow/in-progress/dark-mode-toggle.md | Add theme switching to settings - paused for design review
+`tsk###-user-auth-biometrics` | complete without issues | /workflow/03-completed/tsk###-user-auth-biometrics-completed.md | Add biometric login system
+`tsk###-issue-memory-leak` | complete with issues to fix | /workflow/03-completed/tsk###-issue-memory-leak-completed.md | Fix image loading memory leak - needs optimization
+`tsk###-dark-mode-toggle` | pending | /workflow/02-in-progress/tsk###-dark-mode-toggle.md | Add theme switching to settings - paused for design review
 ```
 
 #### 3.2: Move and Rename Task File
-1. **Move file** from workflow/in-progress/ to workflow/completed/
-2. **Rename file** with appropriate prefix:
-   - Success: `done-[task-name].md`
-   - Failure: `fail-[task-name].md`
+1. **Move file** from workflow/02-in-progress/ to workflow/03-completed/
+2. **Rename file** with appropriate suffix:
+   - Success: `tsk###-[task-name]-completed.md`
+   - Failure: `tsk###-[task-name]-failed.md`
 
 #### 3.3: Update Logbook Statistics
 Update the Quick Overview section in workflow/logbook.md:
@@ -553,13 +562,17 @@ After completing EACH implementation phase, you MUST:
 The dispatch command WILL NOT be considered successfully executed unless ALL of the following are completed:
 
 1. **✅ Task Log Updated**: Status changed to completion status with correct file path
-2. **✅ File Moved**: Task file moved from in-progress/ to completed/ with proper naming
+2. **✅ File Moved**: Task file moved from in-progress/ to completed/ with proper naming  
 3. **✅ Statistics Updated**: Logbook statistics decremented/incremented correctly
 4. **✅ Completion Summary Added**: Task file contains completion documentation
 5. **✅ User Validation**: Each phase validated by user before proceeding
 6. **✅ Agent Quality Gates**: All agent-specific quality requirements met
+7. **✅ Progress Documentation**: All phases documented with ✅ markers in task file
+8. **✅ Issue Tracking Complete**: All problems/solutions documented in task file
 
 **FAILURE TO COMPLETE THESE STEPS = INCOMPLETE EXECUTION**
+
+**AGENTS MUST STOP AND REQUEST COMPLETION VALIDATION** if any documentation step is missed
 
 Any dispatch execution that skips these mandatory steps must be considered failed and should be restarted with proper completion workflow.
 

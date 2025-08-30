@@ -286,9 +286,9 @@ IMMEDIATELY after creating an issue plan, you MUST update `workflow/logbook.md`:
 ### Step 1: Register in Task Log Section
 Add entry in **Task Log** section with exact ultra-compact format:
 ```markdown
-`@issue-login-ios-bug` | pending | /workflow/planned/issue-login-ios-bug.md | Fix login button not responding on iOS
-`@issue-memory-leak` | pending | /workflow/planned/issue-memory-leak.md | Fix image loading memory leak
-`@issue-typo-error-msg` | pending | /workflow/planned/issue-typo-error-msg.md | Correct typo in error message
+`tsk###-issue-login-ios-bug` | pending | /workflow/01-planned/tsk###-issue-login-ios-bug.md | Fix login button not responding on iOS
+`tsk###-issue-memory-leak` | pending | /workflow/01-planned/tsk###-issue-memory-leak.md | Fix image loading memory leak
+`tsk###-issue-typo-error-msg` | pending | /workflow/01-planned/tsk###-issue-typo-error-msg.md | Correct typo in error message
 ```
 
 **Format Rules**:
